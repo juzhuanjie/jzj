@@ -8,10 +8,8 @@
   <span class="m-n font-thin h4">></span>
   <span class="m-n font-bold h4 text-danger">基本信息</span>
 </div>
-<div class="wrapper-md" ng-controller="AccountCtrl">
-	<script type="text/ng-template" id="myModalContent.html">
-            <div ng-include="'tpl/app.html'"></div>
-          </script>
+<div class="wrapper-md" ng-controller="AccountProfileCtrl">
+	<!--基本信息-->
 	<div class="panel">
 	    <div class="panel-heading font-bold">
 	      基本信息
@@ -21,34 +19,49 @@
 	        <tbody>
 	          <tr>
 	            <td class="col-md-3">用户头像</td>
-	            <td class="col-md-3"><span class="label bg-danger">已设置</span></td>
+	            <td class="col-md-3">
+					<span ng-if="user.Image == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.Image != ''" class="label bg-success">已设置</span>
+	            </td>
 	            <td>
-	              <a href class="active m-r-sm text-info"><span >修改</span></a>
-	              <a class="m-r-sm text-info" ng-click="openLoginPwd()"><span>设置</span></a>
+	              <a class="m-r-sm text-info" ng-click="openSetHeadImage()">
+					<span ng-if="user.Image == ''" class="text-info">设置</span>
+	              	<span ng-if="user.Image != ''" class="text-info">修改</span>
+	              </a>
 	            </td>
 	          </tr>
 	          <tr>
 	            <td class="col-md-3">登录密码</td>
-	            <td class="col-md-3"><span class="label bg-danger">已设置</span></td>
+	            <td class="col-md-3">
+	            	<span ng-if="user.Password == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.Password != ''" class="label bg-success">已设置</span>
+	            </td>
 	            <td>
-	              <a href class="m-r-sm text-info"><span>修改</span></a>
-	              <a href class="m-r-sm text-info"><span>设置</span></a>
+	              <a class="m-r-sm text-info" ng-click="openSetLoginPwd()">
+					<span ng-if="user.Password == ''" class="text-info">设置</span>
+	              	<span ng-if="user.Password != ''" class="text-info">修改</span>
+	              </a>
 	            </td>
 	          </tr>
-	          <tr>
+	           <tr>
 	            <td class="col-md-3">支付密码</td>
-	            <td class="col-md-3"><span class="label bg-danger">已设置</span></td>
-	            <td>
-	              <a href class="m-r-sm text-info"><span>修改</span></a>
+	            <td class="col-md-3">
+					<span ng-if="user.PayedPassword == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.PayedPassword != ''" class="label bg-success">已设置</span>
+	            </td>
+	            <td>	              
+	              <a class="m-r-sm text-info" ng-click="openSetPayPwd()">
+					<span ng-if="user.PayedPassword == ''" class="text-info">设置</span>
+	              	<span ng-if="user.PayedPassword != ''" class="text-info">修改</span>
+	              </a>
 	              <a href class="m-r-sm text-info"><span>找回</span></a>
-	              <a href class="m-r-sm text-info"><span>设置</span></a>
 	            </td>
 	          </tr>
 	        </tbody>
 	      </table>
     	</div>
   	</div>
-
+	<!--联系方式-->
   	<div class="panel">
 	    <div class="panel-heading font-bold">
 	      联系方式
@@ -58,26 +71,41 @@
 	        <tbody>
 	          <tr>
 	            <td class="col-md-3">QQ</td>
-	            <td class="col-md-3"><span class="text-danger">5555XXXX0000</span></td>
+	            <td class="col-md-3">
+	            	<span ng-if="user.Qq == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.Qq != ''" class="text-info">{{user.Qq}}</span>
+	            </td>
 	            <td>
-	              <a href class="active m-r-sm text-info"><span >修改</span></a>
-	              <a href class="m-r-sm text-info"><span>设置</span></a>
+	              <a class="m-r-sm text-info" ng-click="openSetQQ()">
+	              	<span ng-if="user.Qq == ''">设置</span>
+	              	<span ng-if="user.Qq != ''">修改</span>
+	              </a>
 	            </td>
 	          </tr>
 	          <tr>
 	            <td class="col-md-3">邮箱</td>
-	            <td class="col-md-3"><span class="text-danger">555XXX000@QQ.COM</span></td>
+	            <td class="col-md-3">
+	            	<span ng-if="user.Email == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.Email != ''" class="text-info">{{user.Email}}</span>
+	            </td>
 	            <td>
-	              <a href class="m-r-sm text-info"><span>修改</span></a>
-	              <a href class="m-r-sm text-info"><span>设置</span></a>
+	              <a class="m-r-sm text-info" ng-click="openSetEmail()">
+					<span ng-if="user.Email == ''">设置</span>
+	              	<span ng-if="user.Email != ''">修改</span>
+	              </a>
 	            </td>
 	          </tr>
 	          <tr>
 	            <td class="col-md-3">手机</td>
-	            <td class="col-md-3"><span class="text-danger">189XXXX1236</span></td>
+	            <td class="col-md-3">
+					<span ng-if="user.Phone == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.Phone != ''" class="text-info">{{user.Phone}}</span>
+	            </td>
 	            <td>
-	              <a href class="m-r-sm text-info"><span>修改</span></a>
-	              <a href class="m-r-sm text-info"><span>设置</span></a>
+	              <a class="m-r-sm text-info" ng-click="openSetPhone()">
+					<span ng-if="user.Phone == ''" >设置</span>
+	              	<span ng-if="user.Phone != ''" >修改</span>
+	              </a>
 	            </td>
 	          </tr>
 	        </tbody>
@@ -85,21 +113,4 @@
     	</div>
   	</div>
 
-
-
 </div>
-
-
-  	<!-- modal -->
-      <div ng-controller="ModalDemoCtrl" class="panel b-a">
-          <script type="text/ng-template" id="myModalContent.html">
-            <div ng-include="'tpl/app.html'"></div>
-          </script>
-          <div class="panel-heading b-b b-light">Modal</div>
-          <div class="panel-body">
-            <button class="btn btn-success" ng-click="open()">Open me!</button>
-            <button class="btn btn-default" ng-click="open('lg')">Large modal</button>
-            <button class="btn btn-default" ng-click="open('sm')">Small modal</button>
-          </div>
-      </div>
-      <!-- /modal -->

@@ -1,0 +1,18 @@
+
+{
+	"status" : "Success",
+	"msg": "",
+	"data": {
+	    "UserId": 1, 
+	    "UserType": "buyer", 
+	    "Username": "moke", 
+	    "Password": "bdnacn", 
+	    "PayedPassword": "bdnacn", 
+	    "Image": "", 
+	    "Qq": "", 
+	    "Email": "moke@bdnacn.com", 
+	    "Phone": "13800138000"
+	}
+}
+
+

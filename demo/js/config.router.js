@@ -17,12 +17,12 @@ angular.module('app')
       function ($stateProvider,   $urlRouterProvider) {
           
           $urlRouterProvider
-              .otherwise('/app/dashboard-v1');
+              .otherwise('/access/signin');
           $stateProvider
               .state('app', {
                   abstract: true,
                   url: '/app',
-                  templateUrl: 'tpl/app.html'
+                  templateUrl: 'tpl/app.html'                  
               })
               .state('app.dashboard-v1', {
                   url: '/dashboard-v1',
@@ -36,21 +36,57 @@ angular.module('app')
               })
               .state('app.account', {
                   url: '/account',
-                  template: '<div ui-view></div>'
+                  template: '<div ui-view></div>',
+                  resolve: {
+                    deps: ['$ocLazyLoad',
+                        function( $ocLazyLoad){
+                          return $ocLazyLoad.load('angularFileUpload').then(
+                              function(){
+                                 return $ocLazyLoad.load('js/controllers/jzj.account.js');
+                              }
+                          );
+                      }]
+                  }
               })
               .state('app.account.profile', {
                   url: '/profile',
-                  templateUrl: 'tpl/account_profile.html',
-                  resolve: {
-                    deps: ['$ocLazyLoad',
-                      function( $ocLazyLoad ){
-                        return $ocLazyLoad.load(['js/controllers/jzj.account.js']);
-                    }]
-                  }
+                  templateUrl: 'tpl/account_profile.html'
               })
               .state('app.account.cashout', {
                   url: '/cashout',
                   templateUrl: 'tpl/account_cashout.html'
+              })
+              .state('access', {
+                  url: '/access',
+                  template: '<div ui-view class="fade-in-right-big smooth"></div>'
+              })
+              .state('access.signin', {
+                  url: '/signin',
+                  templateUrl: 'tpl/page_signin.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.signin.js'] );
+                      }]
+                  }
+              })
+              .state('access.signup', {
+                  url: '/signup',
+                  templateUrl: 'tpl/page_signup.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.signup.js'] );
+                      }]
+                  }
+              })
+              .state('access.forgotpwd', {
+                  url: '/forgotpwd',
+                  templateUrl: 'tpl/page_forgotpwd.html'
+              })
+              .state('access.404', {
+                  url: '/404',
+                  templateUrl: 'tpl/page_404.html'
               })
       }
     ]
