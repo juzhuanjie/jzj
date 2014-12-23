@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`t_user_membership` (
   `end_date` DATETIME NULL,
   `comment` VARCHAR(2000) NULL,
   `status` VARCHAR(45) NULL,
-  `create_time` DATETIME NULL DEFAULT today,
+  `create_time` DATETIME NULL,
   `created_by` VARCHAR(45) NULL,
   `lastupdated_time` DATETIME NULL,
   `lastupdated_by` VARCHAR(45) NULL,
