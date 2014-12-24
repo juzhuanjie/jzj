@@ -5,7 +5,7 @@
 	"data": {
 	    "UserId": 1, 
 	    "UserBankId": 3, 
-	    "BankType": "1", 
+	    "BankType": 1, 
 	    "AccountName": "444", 
 	    "AccountNumber": "55555", 
 	    "Branch": "", 

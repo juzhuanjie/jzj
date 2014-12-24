@@ -88,6 +88,80 @@ angular.module('app')
                   url: '/404',
                   templateUrl: 'tpl/page_404.html'
               })
+              // buyer
+              .state('app.buyer', {
+                  abstract: true,
+                  url: '/buyer',
+                  templateUrl: 'tpl/buyer.html',
+                  // use resolve to load other dependences
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.account.js','js/directives/jzj.directives.js','vendor/libs/moment.min.js'] );
+                      }]
+                  }
+              })
+              .state('app.buyer.taobao', {
+                  url: '/taobao',
+                  templateUrl:'tpl/buyer_bind_taobao.html'
+              })
+              .state('app.buyer.tmall', {
+                  url: '/tmall',
+                  templateUrl:'tpl/buyer_bind_tmall.html'
+              })
+              .state('app.buyer.jd', {
+                  url: '/jd',
+                  templateUrl:'tpl/buyer_bind_jd.html'
+              })
+              .state('app.buyer.yhd', {
+                  url: '/yhd',
+                  templateUrl:'tpl/buyer_bind_yhd.html'
+              })
+              .state('app.buyer.dangdang', {
+                  url: '/dangdang',
+                  templateUrl:'tpl/buyer_bind_dangdang.html'
+              })
+              .state('app.buyer.amazon', {
+                  url: '/amazon',
+                  templateUrl:'tpl/buyer_bind_amazon.html'
+              })
+              // seller
+              .state('app.seller', {
+                  abstract: true,
+                  url: '/seller',
+                  templateUrl: 'tpl/seller.html',
+                  // use resolve to load other dependences
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.account.js','js/directives/jzj.directives.js','vendor/libs/moment.min.js'] );
+                      }]
+                  }
+              })
+              .state('app.seller.taobao', {
+                  url: '/taobao',
+                  templateUrl:'tpl/seller_bind_taobao.html'
+              })
+              .state('app.seller.tmall', {
+                  url: '/tmall',
+                  templateUrl:'tpl/seller_bind_tmall.html'
+              })
+              .state('app.seller.jd', {
+                  url: '/jd',
+                  templateUrl:'tpl/seller_bind_jd.html'
+              })
+              .state('app.seller.yhd', {
+                  url: '/yhd',
+                  templateUrl:'tpl/seller_bind_yhd.html'
+              })
+              .state('app.seller.dangdang', {
+                  url: '/dangdang',
+                  templateUrl:'tpl/seller_bind_dangdang.html'
+              })
+              .state('app.seller.amazon', {
+                  url: '/amazon',
+                  templateUrl:'tpl/seller_bind_amazon.html'
+              })
       }
     ]
   );

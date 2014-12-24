@@ -1,5 +1,5 @@
 'use strict';
-
+//Promise Get的公共请求方式
 app.factory('promiseGet', ['$http','$q', function($http,$q){
 	return function(url){
 		var deferred = $q.defer();
@@ -18,7 +18,7 @@ app.factory('promiseGet', ['$http','$q', function($http,$q){
 		return deferred.promise;
 	};
 }]);
-
+//Promise Post的公共请求方式
 app.factory('promisePost', ['$http','$q', function($http,$q){
 	return function(url,para){
 		var deferred = $q.defer();
@@ -37,20 +37,20 @@ app.factory('promisePost', ['$http','$q', function($http,$q){
 		return deferred.promise;
 	};
 }]);
-
+//restAPI Get的公共请求方式
 app.factory('restAPIGet', ['$resource', function($resource){
 	return function(url){
 		return $resource(url);
 	};
 }]);
-
+//restAPI Post的公共请求方式
 app.factory('restAPIPost', ['$resource', function($resource){
 	return function(url,para){
 		return $resource(url, para);
 	};
 }]);
-
-app.factory('AccountProfileService', ['promisePost','promiseGet', function(promisePost,promiseGet){
+//账号信息的基本信息Service
+app.factory('AccountProfile', ['promisePost','promiseGet', function(promisePost,promiseGet){
 	return {
 		getSettings : function(para){
 			return promisePost('data/account_profile.json',para);
@@ -75,8 +75,8 @@ app.factory('AccountProfileService', ['promisePost','promiseGet', function(promi
 		}
 	};
 }]);
-
-app.factory('AccountCashoutService', ['promisePost','promiseGet',function(promisePost,promiseGet){
+//账号信息的提现Service
+app.factory('AccountCashout', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		getZfbSettings : function(para){
 			return promisePost('data/zhifubao.json',para);
@@ -96,5 +96,28 @@ app.factory('AccountCashoutService', ['promisePost','promiseGet',function(promis
 		saveYhSettings : function(para){
 			
 		}
+	};
+}]);
+//账号信息的绑定买手Service
+app.factory('AccountBuyer', ['promisePost','promiseGet',function(promisePost,promiseGet){
+	
+}]);
+//账号信息的绑定店铺Service
+app.factory('AccountSeller', ['promisePost','promiseGet',function(promisePost,promiseGet){
+	
+}]);
+//平台操作Service
+app.factory('Platforms', ['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		getAll : function(){
+			return [
+			    {name: '淘宝', filter:'taobao', color:'#23b7e5'},
+			    {name: '天猫', filter:'tmall', color:'#7266ba'},
+			    {name: '京东', filter:'jd', color:'#fad733'},
+			    {name: '当当', filter:'dangdang', color:'#27c24c'},
+			    {name: '亚马逊', filter:'amazon', color:'#fad733'},
+			    {name: '一号店', filter:'yhd', color:'#23b7e5'},
+			  ];
+		}		
 	};
 }]);

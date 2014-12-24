@@ -138,39 +138,51 @@
 				<h4 class="m-t-none m-b text-center">银行卡开户必须填写<span class="text-danger">真实姓名</span>，和绑定的支付宝姓名一致，绑定后将<span class="text-danger">不能修改账号信息</span></h4>				
 		        <div class="line b-b"></div>
 		          <div class="panel-body">
-			        <div class="form-group">
-						<label>姓名</label>
-						<div class="btn-group">
-						  <input type="text" class="form-control account-bank-username" ng-model="yh.AccountName" ng-disabled="yh.AccountName != '' && yh.AccountName != undefined">
-						</div>
-			        </div>		         
-			        <div class="form-group">
-			        	<label>选择银行</label>
-	                	<div class="btn-group">
-						  <select class="form-control account-bank-name" ng-model="yh.BankType" ng-disabled="yh.BankType != '' && yh.BankType != undefined"><option>选择银行</option></select>
-						</div>
+			        <div class="row m-t m-b">
+			          <div class="col-md-2">
+			            <label>姓名</label>
+			          </div>
+			          <div class="col-md-2">
+			            <input type="text" class="form-control" ng-model="yh.AccountName" ng-disabled="yh.AccountName != '' && yh.AccountName != undefined">
+			          </div>                                               
+			        </div>	         
+			        <div class="row m-t m-b">
+			          <div class="col-md-2">
+			            <label>选择银行</label>
+			          </div>
+			          <div class="col-md-2">
+			            <select class="form-control" ng-model="yh.BankType" ng-disabled="yh.BankType != '' && yh.BankType != undefined"><option>选择银行</option></select>
+			          </div>                                               
 			        </div>
-			        <div class="form-group">
-			        	<label>开户城市</label>
-	                	<div class="btn-group">
-						  <select class="form-control account-bank-city" ng-model="yh.City" ng-disabled="yh.City != '' && yh.City != undefined"><option>选择开户城市</option></select>
-						</div>			        	        		        	
+			        <div class="row m-t m-b">
+			          <div class="col-md-2">
+			            <label>开户城市</label>
+			          </div>
+			          <div class="col-md-2">
+			            <select class="form-control" ng-model="yh.City" ng-disabled="yh.City != '' && yh.City != undefined"><option>选择开户城市</option></select>
+			          </div>                                               
 			        </div>
-			        <div class="form-group">
-			        	<label>开户支行名称</label>
-	                	<div class="btn-group">
-						  <select class="form-control account-branch-bank-name" ng-model="yh.Branch" ng-disabled="yh.Branch != '' && userbank.CaiFuTong.Branch != undefined"><option>选择开户支行名称</option></select>
-						</div>		        	       		        	
+			        <div class="row m-t m-b">
+			          <div class="col-md-2">
+			            <label>开户支行名称</label>
+			          </div>
+			          <div class="col-md-4">
+			            <select class="form-control" ng-model="yh.Branch" ng-disabled="yh.Branch != '' && userbank.CaiFuTong.Branch != undefined"><option>选择开户支行名称</option></select>
+			          </div>                                               
 			        </div>
-			        <div class="form-group">
-			        	<label>银行卡号</label>
-			        	<div class="btn-group">
-						  <input type="text" class="form-control account-bank-number" ng-model="yh.AccountNumber" ng-disabled="yh.AccountNumber != '' && yh.AccountNumber != undefined">
-						</div>	                				        	      		        	
+			        <div class="row m-t m-b">
+			          <div class="col-md-2">
+			            <label>银行卡号</label>
+			          </div>
+			          <div class="col-md-4">
+			            <input type="text" class="form-control" ng-model="yh.AccountNumber" ng-disabled="yh.AccountNumber != '' && yh.AccountNumber != undefined">
+			          </div>                                               
 			        </div>
-			        <div class="form-group">
-			        	<button class="btn btn-danger" ng-disabled="yh.AccountNumber != '' && yh.AccountNumber != undefined">确认</button>
-						<button class="btn btn-default" ng-click="hideDetails()">关闭</button>		        	
+			        <div class="row m-t m-b">
+			        	<div class="col-md-4">
+			        		<button class="btn btn-danger" ng-disabled="yh.AccountNumber != '' && yh.AccountNumber != undefined">确认</button>
+							<button class="btn btn-default" ng-click="hideDetails()">关闭</button>		
+						</div>        	
 			        </div>
 		        </div>	
 	        </div>

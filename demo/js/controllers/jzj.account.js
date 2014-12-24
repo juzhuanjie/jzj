@@ -1,9 +1,8 @@
 'use strict';
-
 /*
 ** 账号信息设置页面相关的Controller
 */
-app.controller('AccountProfileCtrl', ['$scope', '$modal','AccountProfileService', function($scope, $modal, AccountProfileService) {
+app.controller('AccountProfileCtrl', ['$scope', '$modal','AccountProfile', function($scope, $modal, AccountProfile) {
     $scope.user = {
         "UserId": -1, 
         "UserType": "", 
@@ -27,7 +26,7 @@ app.controller('AccountProfileCtrl', ['$scope', '$modal','AccountProfileService'
       });
       modalInstance.result.then(function (data) {        
         $scope.user.Password = data;
-        AccountProfileService.saveLoginPassword({"userId" : 1 ,"password" : data});
+        AccountProfile.saveLoginPassword({"userId" : 1 ,"password" : data});
       });
     };
     $scope.openSetPayPwd = function () {
@@ -42,7 +41,7 @@ app.controller('AccountProfileCtrl', ['$scope', '$modal','AccountProfileService'
       });
       modalInstance.result.then(function (data) {    
         $scope.user.PayedPassword = data;    
-        AccountProfileService.savePayedPassword({"userId" : 1 ,"payedPassword" : $scope.user.PayedPassword});
+        AccountProfile.savePayedPassword({"userId" : 1 ,"payedPassword" : $scope.user.PayedPassword});
       });
     };
     $scope.openSetQQ = function () {
@@ -57,7 +56,7 @@ app.controller('AccountProfileCtrl', ['$scope', '$modal','AccountProfileService'
       });
       modalInstance.result.then(function (data) {    
         $scope.user.Qq = data;    
-        AccountProfileService.saveQQ({"userId" : 1 ,"qq" : $scope.user.Qq});
+        AccountProfile.saveQQ({"userId" : 1 ,"qq" : $scope.user.Qq});
       });
     };
     $scope.openSetEmail = function () {
@@ -72,7 +71,7 @@ app.controller('AccountProfileCtrl', ['$scope', '$modal','AccountProfileService'
       });
       modalInstance.result.then(function (data) {
         $scope.user.Email = data;
-        AccountProfileService.saveEmail({"userId" : 1 ,"email" : $scope.user.Email});       
+        AccountProfile.saveEmail({"userId" : 1 ,"email" : $scope.user.Email});       
       });
     };
     $scope.openSetPhone = function () {
@@ -87,7 +86,7 @@ app.controller('AccountProfileCtrl', ['$scope', '$modal','AccountProfileService'
       });
       modalInstance.result.then(function (data) {  
         $scope.user.Phone = data;      
-        AccountProfileService.savePhone({"userId" : 1 ,"phone" : $scope.user.Phone});
+        AccountProfile.savePhone({"userId" : 1 ,"phone" : $scope.user.Phone});
       });
     };
     $scope.openSetHeadImage = function () {
@@ -103,11 +102,11 @@ app.controller('AccountProfileCtrl', ['$scope', '$modal','AccountProfileService'
       });
       modalInstance.result.then(function (data) {  
         $scope.user.Image = data;      
-        AccountProfileService.saveHeadImage({"userId" : 1 ,"iamge" : $scope.user.Image});        
+        AccountProfile.saveHeadImage({"userId" : 1 ,"iamge" : $scope.user.Image});        
       });
     };
     $scope.$watch('$viewContentLoaded',function(){
-      var promise = AccountProfileService.getSettings({"UserId":1});
+      var promise = AccountProfile.getSettings({"UserId":1});
       promise.then(function(result){
           if(angular.isObject(result)){
               $scope.user = result;
@@ -200,7 +199,7 @@ app.controller('HeadImageUploadCtrl', ['$scope', 'FileUploader', '$modalInstance
     };
 }]);
 //支付宝设置Controller
-app.controller('ZfbCashoutCtrl', ['$scope', 'AccountCashoutService', function($scope,AccountCashoutService){
+app.controller('ZfbCashoutCtrl', ['$scope', 'AccountCashout', function($scope,AccountCashout){
   $scope.zfb = {
       "UserId": -1, 
       "UserBankId": -1, 
@@ -213,7 +212,7 @@ app.controller('ZfbCashoutCtrl', ['$scope', 'AccountCashoutService', function($s
   };
   $scope.isShow = false;
   $scope.$watch('$viewContentLoaded',function(){
-    var promise = AccountCashoutService.getZfbSettings({"UserId":1});
+    var promise = AccountCashout.getZfbSettings({"UserId":1});
     promise.then(function(result){
         if(angular.isObject(result)){
           $scope.zfb = result;
@@ -222,7 +221,7 @@ app.controller('ZfbCashoutCtrl', ['$scope', 'AccountCashoutService', function($s
   });
   $scope.save = function(){
     //TODO: 验证逻辑处理
-    AccountCashoutService.saveZfbSettings($scope.zfb);
+    AccountCashout.saveZfbSettings($scope.zfb);
   };
   $scope.showDetails = function(){
     $scope.isShow = true;
@@ -232,7 +231,7 @@ app.controller('ZfbCashoutCtrl', ['$scope', 'AccountCashoutService', function($s
   };
 }]);
 //财付通设置Controller
-app.controller('CftCashoutCtrl', ['$scope','AccountCashoutService', function($scope,AccountCashoutService){
+app.controller('CftCashoutCtrl', ['$scope','AccountCashout', function($scope,AccountCashout){
   $scope.ctf = {
       "UserId": -1, 
       "UserBankId": -1, 
@@ -245,7 +244,7 @@ app.controller('CftCashoutCtrl', ['$scope','AccountCashoutService', function($sc
   };
   $scope.isShow = false;
   $scope.$watch('$viewContentLoaded',function(){
-    var promise = AccountCashoutService.getCftSettings({"UserId":1});
+    var promise = AccountCashout.getCftSettings({"UserId":1});
     promise.then(function(result){
         if(angular.isObject(result)){
           $scope.ctf = result;
@@ -254,7 +253,7 @@ app.controller('CftCashoutCtrl', ['$scope','AccountCashoutService', function($sc
   });
   $scope.save = function(){
     //TODO: 验证逻辑处理
-    AccountCashoutService.saveZfbSettings($scope.ctf);
+    AccountCashout.saveZfbSettings($scope.ctf);
   };
   $scope.showDetails = function(){
     $scope.isShow = true;
@@ -264,7 +263,7 @@ app.controller('CftCashoutCtrl', ['$scope','AccountCashoutService', function($sc
   };
 }]);
 //银行设置Controller
-app.controller('YhCashoutCtrl', ['$scope','AccountCashoutService', function($scope,AccountCashoutService){
+app.controller('YhCashoutCtrl', ['$scope','AccountCashout', function($scope,AccountCashout){
   $scope.yh = {
       "UserId": -1, 
       "UserBankId": -1, 
@@ -277,7 +276,7 @@ app.controller('YhCashoutCtrl', ['$scope','AccountCashoutService', function($sco
   };
   $scope.isShow = false;  
   $scope.$watch('$viewContentLoaded',function(){
-    var promise = AccountCashoutService.getYhSettings({"UserId":1});
+    var promise = AccountCashout.getYhSettings({"UserId":1});
     promise.then(function(result){
         if(angular.isObject(result)){
           $scope.yh = result;  
@@ -286,7 +285,7 @@ app.controller('YhCashoutCtrl', ['$scope','AccountCashoutService', function($sco
   });
   $scope.save = function(){
     //TODO: 验证逻辑处理
-    AccountCashoutService.saveZfbSettings($scope.yh);
+    AccountCashout.saveZfbSettings($scope.yh);
   };
   $scope.showDetails = function(){
     $scope.isShow = true;
@@ -294,4 +293,32 @@ app.controller('YhCashoutCtrl', ['$scope','AccountCashoutService', function($sco
   $scope.hideDetails = function(){
     $scope.isShow = false;
   };
+}]);
+//绑定买手页父Controller
+app.controller('BuyerCtrl', ['$scope','Platforms', function($scope,Platforms) {
+  $scope.platforms = [];  
+  $scope.$watch('$viewContentLoaded',function(){
+    var result = Platforms.getAll(); 
+    if(angular.isObject(result)){
+      $scope.platforms = result;
+    }
+  });
+}]);
+//绑定买手详细Controller
+app.controller('BuyerBindCtrl', ['$scope', 'AccountBuyer', function($scope, AccountBuyer) {
+  
+}]);
+//绑定卖手店铺父Controller
+app.controller('SellerCtrl', ['$scope','Platforms', function($scope, Platforms) {
+  $scope.platforms = [];  
+  $scope.$watch('$viewContentLoaded',function(){
+    var result = Platforms.getAll(); 
+    if(angular.isObject(result)){
+      $scope.platforms = result;
+    }
+  });
+}]);
+//绑定卖手店铺详细Controller
+app.controller('SellerDetailCtrl', ['$scope', 'AccountSeller', function($scope, AccountSeller) {
+
 }]);
