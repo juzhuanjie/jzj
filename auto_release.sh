@@ -11,6 +11,9 @@ if [ -z $MAVEN_HOME ]; then
    exit 2
 fi
 
+echo "Shutdown tomcat application server..."
+sh $CATALINA_HOME/bin/shutdown.sh
+
 src_home=$HOME/git_src
 
 if [ ! -d $src_home/jzj ]; then
@@ -24,3 +27,5 @@ fi
 cd $src_home/jzj/source/jzj/
 mvn install
 
+echo "Start tomcat application server..."
+sh $CATALINA_HOME/bin/startup.sh
