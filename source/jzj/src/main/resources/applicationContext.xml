@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+   
+    <context:component-scan base-package="com.jzj.spring.service" />
+    
+    <!-- 
+    <context:annotation-config />
+     -->
+    
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+   
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+		<property name="defaultAutoCommit" value="false" />
+
+ 		<property name="initialSize" value="10"/>    
+
+		<property name="maxActive" value="100"/>    
+
+		<property name="maxIdle" value="30"/>    
+
+		<property name="minIdle" value="15"/>  
+		
+		<property name="minEvictableIdleTimeMillis" value="1000"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="5000"></property>
+		
+		<property name="testOnBorrow" value="true"/> 
+        <property name="testWhileIdle" value="true"/> 
+        <property name="validationQuery" value="select 1 from dual"/> 
+		
+	</bean>
+    
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+      <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+      <property name="dataSource" ref="dataSource"/> 
+    </bean> 
+
+<!-- 
+    <bean id="jdbcService" class="com.bdna.spring.service.JdbcServiceImpl">
+      <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+-->
+ 
+  <!-- Scans within the base package of the application for @Components to configure as beans -->
+    
+    <!-- 
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>  
+     -->
+    
+</beans>
