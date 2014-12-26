@@ -1,4 +1,4 @@
-<div ng-controller="SellerBindCtrl">
+<div ng-controller="SellerShopCtrl">
   <!-- header -->
   <div class="wrapper bg-light lter">
     <div class="h4 font-bold text-danger">绑定淘宝店铺<span class="h5 text-muted"> (仅任务对应的买手可见，不会被泄露)</span></div> 
@@ -11,29 +11,29 @@
             <tr>
               <th class="col-md-2">店铺主旺旺ID</th>
               <th class="col-md-6">发件地址</th>
-              <th class="col-md-2">店铺网址</th>
+              <th class="col-md-4">店铺网址</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><span>name</span></td>
-              <td><span>广东省 广州市 天河区 黄埔大道101大厦</span></td>
-              <td><span>店铺网址</span></td>
+            <tr ng-repeat="s in sellerShopBinds">
+              <td><span>{{s.Wangwang}}</span></td>
+              <td><span>{{s.Province}} {{s.City}} {{s.District}}</span></td>
+              <td><span>{{s.Url}}</span></td>
             </tr>            
           </tbody>
         </table>
       </div>
       <div class="line b-b"></div>   
       <div class="">
-        <a href><span class="text-info font-bold"> + 绑定淘宝 </span><small class="text-muted"> (最多允许绑定3个买号)</small></a>
+        <a ng-click="addSellerBind()"><span class="text-info font-bold"> + 绑定淘宝 </span><small class="text-muted"> (最多允许绑定3个买号)</small></a>
       </div>  
-      <div class="b wrapper-md pos-rlt m-t bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
+      <div ng-show="isShow" class="b wrapper-md pos-rlt m-t bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
         <div class="row m-t m-b">
           <div class="col-md-2">
             <label><span class="text-danger">*</span>店铺首页网址</label>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" ng-model="url"/>
           </div>
           <div class="col-md-4">
             <span class="m-t text-muted">(店铺绑定后无法修改)</span>
@@ -44,7 +44,7 @@
             <label><span class="text-danger">*</span>店铺主旺旺ID</label>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" ng-model="wangwang"/>
           </div>
           <div class="col-md-4">
             <span class="m-t text-muted">(店铺主旺旺ID绑定后无法修改)</span>
@@ -55,19 +55,19 @@
             <label><span class="text-danger">*</span>所在地区</label>
           </div>
           <div class="col-md-2">
-            <provincedropdown class="form-control" value="{{provinc}}" ng-change="change()"></provincedropdown>
+            <provincedropdown class="form-control" value="{{province}}" ></provincedropdown>
           </div>          
           <div class="col-md-2">
-            <citydropdown class="form-control" provinc="{{provinc}}" value="{{city}}"></citydropdown>
+            <citydropdown class="form-control" province="{{province}}" value="{{city}}"></citydropdown>
           </div>  
           <div class="col-md-4">
-            <districtdropdown class="form-control" provinc="{{provinc}}" city="{{city}}" value="{{district}}"></districtdropdown>
+            <districtdropdown class="form-control" province="{{province}}" city="{{city}}" value="{{district}}"></districtdropdown>
           </div>                                 
         </div>        
         <div class="row m-t m-b">
           <div class="col-md-12">
-            <button class="btn btn-danger">确认</button>   
-            <button class="btn btn-default">关闭</button>      
+            <button class="btn btn-danger" ng-click="save()">确认</button>   
+            <button class="btn btn-default" ng-click="cancel()">关闭</button>      
           </div>
         </div>
       </div>

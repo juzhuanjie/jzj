@@ -213,10 +213,10 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 						    "PlatformId": 0, 
 						    "AccountLogin": "juzhuanjie", 
 						    "Wangwang": "55555", 
-						    "Province": "", 
-						    "City": "", 
-						    "District": "", 
-						    "ShreetAddress": "", 
+						    "Province": "广东", 
+						    "City": "广州市", 
+						    "District": "天河", 
+						    "ShreetAddress": "员村街道", 
 						    "Phone": "", 
 						    "Screenshot": ""
 						} ,
@@ -226,10 +226,10 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 						    "PlatformId": 0, 
 						    "AccountLogin": "juzhuanjie", 
 						    "Wangwang": "6666666", 
-						    "Province": "", 
-						    "City": "", 
-						    "District": "", 
-						    "ShreetAddress": "", 
+						    "Province": "广东", 
+						    "City": "湛江", 
+						    "District": "霞山区", 
+						    "ShreetAddress": "工农路", 
 						    "Phone": "", 
 						    "Screenshot": ""
 						} 
@@ -243,6 +243,21 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 			//TODO: 统计某个平台下的买号绑定数量，不能拿超过3个
 			var para = { "userId" : userId, "platformId" : platformId };
 			return 2;
+		},
+		newEmpty : function(){
+			return {
+					    "BuyerAccountId": -1, 
+					    "UserId": -1, 
+					    "PlatformId": -1, 
+					    "AccountLogin": "", 
+					    "Wangwang": "", 
+					    "Province": "", 
+					    "City": "", 
+					    "District": "", 
+					    "ShreetAddress": "", 
+					    "Phone": "", 
+					    "Screenshot": ""
+					};
 		}
 	};
 }]);
@@ -258,20 +273,20 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 						    "UserId": 2, 
 						    "PlatformId": 0, 
 						    "Url": "http://juzhuanjie.taobao.com", 
-						    "Wangwang": "55555", 
-						    "Province": "", 
-						    "City": "", 
-						    "District": ""
+						    "Wangwang": "MokeSun", 
+						    "Province": "广东", 
+						    "City": "广州市", 
+						    "District": "天河区"
 						} ,
 						{
 						    "ShopId": 2, 
 						    "UserId": 2, 
 						    "PlatformId": 0, 
 						    "Url": "http://juzhuanjie.tmall.com", 
-						    "Wangwang": "66666666", 
-						    "Province": "", 
-						    "City": "", 
-						    "District": ""
+						    "Wangwang": "SunKanJue", 
+						    "Province": "广东", 
+						    "City": "广州市", 
+						    "District": "白云区"
 						} 
 					];
 		},
@@ -283,6 +298,18 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 			//TODO: 统计某个平台下的店铺绑定数量，不能拿超过3个
 			var para = { "userId" : userId, "platformId" : platformId };
 			return 2;
+		},
+		newEmpty : function(){
+			return {
+					    "ShopId": -1, 
+					    "UserId": -1, 
+					    "PlatformId": -1, 
+					    "Url": "", 
+					    "Wangwang": "", 
+					    "Province": "", 
+					    "City": "", 
+					    "District": ""
+					} ;
 		}
 	};
 }]);
