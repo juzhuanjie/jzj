@@ -8,7 +8,7 @@
   <span class="m-n font-thin h4">></span>
   <span class="m-n font-bold h4 text-danger">基本信息</span>
 </div>
-<div class="wrapper-md" ng-controller="AccountProfileCtrl">
+<div class="wrapper-md" ng-controller="UserCtrl">
 	<!--基本信息-->
 	<div class="panel">
 	    <div class="panel-heading font-bold">
@@ -46,13 +46,13 @@
 	           <tr>
 	            <td class="col-md-3">支付密码</td>
 	            <td class="col-md-3">
-					<span ng-if="user.PayedPassword == ''" class="label bg-danger">未设置</span>
-	              	<span ng-if="user.PayedPassword != ''" class="label bg-success">已设置</span>
+					<span ng-if="user.PayPassword == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.PayPassword != ''" class="label bg-success">已设置</span>
 	            </td>
 	            <td>	              
 	              <a class="m-r-sm text-info" ng-click="openSetPayPwd()">
-					<span ng-if="user.PayedPassword == ''" class="text-info">设置</span>
-	              	<span ng-if="user.PayedPassword != ''" class="text-info">修改</span>
+					<span ng-if="user.PayPassword == ''" class="text-info">设置</span>
+	              	<span ng-if="user.PayPassword != ''" class="text-info">修改</span>
 	              </a>
 	              <a href class="m-r-sm text-info"><span>找回</span></a>
 	            </td>
@@ -98,13 +98,13 @@
 	          <tr>
 	            <td class="col-md-3">手机</td>
 	            <td class="col-md-3">
-					<span ng-if="user.Phone == ''" class="label bg-danger">未设置</span>
-	              	<span ng-if="user.Phone != ''" class="text-info">{{user.Phone}}</span>
+					<span ng-if="user.Mobile == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.Mobile != ''" class="text-info">{{user.Mobile}}</span>
 	            </td>
 	            <td>
 	              <a class="m-r-sm text-info" ng-click="openSetPhone()">
-					<span ng-if="user.Phone == ''" >设置</span>
-	              	<span ng-if="user.Phone != ''" >修改</span>
+					<span ng-if="user.Mobile == ''" >设置</span>
+	              	<span ng-if="user.Mobile != ''" >修改</span>
 	              </a>
 	            </td>
 	          </tr>

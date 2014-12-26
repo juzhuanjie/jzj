@@ -5,10 +5,38 @@
  */
 angular.module('app')
   .run(
-    [          '$rootScope', '$state', '$stateParams',
-      function ($rootScope,   $state,   $stateParams) {
+    [          '$rootScope', '$state', '$stateParams', '$window','$location',
+      function ($rootScope,   $state,   $stateParams,  $window, $location) {
           $rootScope.$state = $state;
-          $rootScope.$stateParams = $stateParams;        
+          $rootScope.$stateParams = $stateParams;
+          $rootScope.global = { userSession : null };
+          function init(){
+            //从浏览器缓存里获取用户session
+            if (angular.isObject(angular.fromJson($window.localStorage.getItem("userSession")))) {
+              $rootScope.global.userSession = angular.fromJson($window.localStorage.getItem("userSession"));
+            }else{
+              $rootScope.global.userSession = null;
+            }
+            console.log($window.localStorage.getItem("userSession"));
+          };  
+          //在注册一个路由事件，监听ui-route stats的改变
+          $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            //如果没有登录就跳到登录页面
+            if(toState.name != "access.signin"  && (angular.isUndefined($rootScope.global.userSession) || $rootScope.global.userSession == null)){
+              //event.preventDefault(); 
+              //$location.path("/access/signin");
+              toState.name = "access.signin";
+              toState.url = "/access/signin";
+              $location.path("/access/signin");
+            }
+          });
+          init();
+      }
+    ]
+  )
+  .config(
+    [ '$httpProvider',  function ($httpProvider) {          
+        $httpProvider.interceptors.push('sessionInjector');
       }
     ]
   )
@@ -17,7 +45,7 @@ angular.module('app')
       function ($stateProvider,   $urlRouterProvider) {
           
           $urlRouterProvider
-              .otherwise('/access/signin');
+              .otherwise('/app/dashboard-v1');
           $stateProvider
               .state('app', {
                   abstract: true,
