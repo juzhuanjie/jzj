@@ -13,6 +13,7 @@ fi
 
 echo "Shutdown tomcat application server..."
 sh $CATALINA_HOME/bin/shutdown.sh
+rm -rf $CATALINA_HOME/work
 
 src_home=$HOME/git_src
 
