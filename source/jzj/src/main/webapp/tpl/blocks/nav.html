@@ -1,0 +1,190 @@
+<!-- list -->
+<ul class="nav">
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span>任务管理</span>
+  </li>  
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-success"></i>
+      <span>已完成的任务</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>已完成的任务</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="apps.note">
+          <b class="badge bg-info pull-right">0</b>
+          <span>天猫任务</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="apps.contact">
+          <b class="badge bg-info pull-right">2</b>
+          <span>淘宝任务</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.weather">
+          <b class="badge bg-info pull-right">1</b>
+          <span>京东任务</span>
+        </a>
+      </li>
+    </ul>
+  </li>  
+  <li ui-sref-active="active">
+    <a ui-sref="app.calendar">
+    <b class="badge bg-info pull-right">0</b>
+      <i class="glyphicon glyphicon glyphicon-flag icon text-info-dker"></i>
+      <span>淘宝任务</span>
+    </a>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.mail.list">
+      <b class="badge bg-info pull-right">9</b>
+      <i class="glyphicon glyphicon glyphicon-flag icon text-info-lter"></i>
+      <span>天猫任务</span>
+    </a>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.mail.list">
+      <b class="badge bg-info pull-right">9</b>
+      <i class="glyphicon glyphicon glyphicon-flag icon text-info-lter"></i>
+      <span>京东任务</span>
+    </a>
+  </li>  
+
+  <li class="line dk"></li>
+
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span>资金记录</span>
+  </li>
+
+  <li ng-class="{active:$state.includes('app.page')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon glyphicon-usd icon"></i>
+      <span>本金记录</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>本金记录</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.page.profile">
+          <span>提现</span>
+        </a>
+      </li>      
+    </ul>
+  </li>
+
+  <li ng-class="{active:$state.includes('app.page')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon glyphicon-usd icon"></i>
+      <span>押金记录</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>押金记录</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.page.profile">
+          <span>提现</span>
+        </a>
+      </li>      
+    </ul>
+  </li>
+
+  <li ng-class="{active:$state.includes('app.page')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon glyphicon-usd icon"></i>
+      <span>佣金记录</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>佣金记录</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.page.profile">
+          <span>提现</span>
+        </a>
+      </li>      
+    </ul>
+  </li>
+  
+  <li ng-class="">
+    <a ui-sref="app.chart">
+      <i class="glyphicon glyphicon-edit"></i>
+      <span>符点记录</span>
+    </a>
+  </li>
+  <li ng-class="">
+    <a ui-sref="app.chart">
+      <i class="glyphicon glyphicon glyphicon-align-left"></i>
+      <span>流量记录</span>
+    </a>
+  </li>
+  <li ng-class="">
+    <a ui-sref="app.chart">
+      <i class="glyphicon glyphicon glyphicon glyphicon-user"></i>
+      <span>会员记录</span>
+    </a>
+  </li>
+
+
+
+
+  <li class="line dk hidden-folded"></li>
+
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">          
+    <span>账号信息</span>
+  </li>  
+  <li>
+    <a ui-sref="app.account.profile">
+      <i class="icon-user icon text-success-lter"></i>
+      <span>基本信息</span>
+    </a>
+  </li>
+  <li>
+    <a ui-sref="app.account.cashout">
+      <i class="icon-question icon"></i>
+      <span>提现账号管理</span>
+    </a>
+  </li>
+  <li>
+    <a ui-sref="app.seller.taobao">
+      <i class="glyphicon glyphicon-plus icon text-info-dker"></i>
+      <span>绑定店铺</span>
+    </a>
+  </li>
+  <li>
+    <a ui-sref="app.buyer.taobao">
+      <i class="glyphicon glyphicon-plus icon text-info-dker"></i>
+      <span>添加买号</span>
+    </a>
+  </li>
+</ul>
+<!-- / list -->

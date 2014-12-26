@@ -1,0 +1,38 @@
+
+<div class="bg-light lter b-b wrapper-md">
+  <span class="m-n font-bold h4 text-danger">
+  <i class="fa fa-home"></i>
+  首页</span>
+  <span class="m-n font-thin h4">></span>
+  <span class="m-n font-bold h4 text-danger">账号信息</span>
+  <span class="m-n font-thin h4">></span>
+  <span class="m-n font-bold h4 text-danger">绑定店铺</span>
+</div>
+<div class="bg-light lter b-b wrapper-md">
+  <h4 class="m-t-none m-b-none text-info">您是<span class="text-danger">VIP会员</span>，已开通<span class="text-danger">XX</span>个平台，发布任务前，请先绑定店铺</h4>
+</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="SellerCtrl">
+  <div class="col w-md dk b-r bg-auto">
+    <div class="wrapper bg hidden-sm hidden-xs" id="email-menu">
+      <div class="wrapper font-bold h4">选择平台</div>
+      <ul class="nav nav-pills nav-stacked nav-sm">
+        <li ng-repeat="platform in platforms" ui-sref-active="active">
+          <a ui-sref="app.seller.{{platform.filter}}">
+            <i class="fa fa-fw fa-circle text-muted" color="{{platform.color}}" label-color ></i>
+            {{platform.name}}
+          </a>
+        </li>
+      </ul>      
+    </div>
+  </div>
+  <div class="col">
+    <div ui-view ></div>
+    <!-- <div class="bg-light lter b-b b-t wrapper-md">
+      <h4 class="m-t-none  text-danger">温馨提示</h4>
+      <p>1. 淘宝/天猫可绑定3个买号，每个买号要求绑定不同的收货信息 （收货人姓名，地址，联系电话均要求不同）。</p>
+      <p>2. 收货信息可填写朋友，家人等任意真实的收货信息。</p>
+      <p>3. 平台填写的收货信息，请务必和淘宝等网站的下单时收货信息保持一致，否则将封闭您的人气符账号。</p>
+      <p>4. 买号提交审核后，平台预计在24小时内完成审核操作，只有审核通过的买号才能接手任务。</p>
+    </div> -->
+  </div>
+</div>

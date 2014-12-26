@@ -1,0 +1,15 @@
+
+{
+	"status" : "Success",
+	"msg": "",
+	"data": {
+	    "UserId": 1, 
+	    "UserBankId": 2, 
+	    "BankType": 0, 
+	    "AccountName": "444", 
+	    "AccountNumber": "55555", 
+	    "Branch": "", 
+	    "City": "", 
+	    "Screenshot": ""
+	}
+}
