@@ -297,7 +297,9 @@ app.controller('BuyerCtrl', ['$scope','platforms', function($scope,platforms) {
 }]);
 //绑定买手详细Controller
 app.controller('BuyerBindCtrl', ['$scope', function($scope) {
-  
+  $scope.provinc = "广东";
+  $scope.city = "广州";
+  $scope.district = "天河区";
 }]);
 //绑定卖手店铺父Controller
 app.controller('SellerCtrl', ['$scope','platforms', function($scope, platforms) {
@@ -311,5 +313,9 @@ app.controller('SellerCtrl', ['$scope','platforms', function($scope, platforms) 
 }]);
 //绑定卖手店铺详细Controller
 app.controller('SellerBindCtrl', ['$scope', function($scope) {
+  
+  $scope.provinc = "河南";
+  $scope.city = "开封";
+  $scope.district = "开封县";
 
 }]);

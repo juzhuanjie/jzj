@@ -106,7 +106,7 @@ app.factory('users', ['promisePost','promiseGet','$rootScope','$window',function
 			//TODO: 用户登录, 返回USERID, SESSIONTOTAN
 			var para = { "username" : email, "password" : password };
 			//登录成功保存session tokan到浏览器缓存
-			var result = { "status" : "Success", "UserId" : 1, "Tokan" : "213541m5n855hf" };
+			var result = { "status" : "Success", "UserId" : 1, "Username" : "moke@bdnacn.com", "Tokan" : "213541m5n855hf" };
 			if(true){
 				$window.localStorage.setItem("userSession", angular.toJson(result));
 				$rootScope.global.userSession = result;

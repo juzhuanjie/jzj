@@ -81,13 +81,13 @@
             <label><span class="text-danger">*</span>所在地区</label>
           </div>
           <div class="col-md-2">
-            <select class="form-control"><option>请选择省份</option></select>
+            <provincedropdown class="form-control" value="{{provinc}}" ></provincedropdown>
           </div>          
           <div class="col-md-2">
-            <select class="form-control"><option>请选择城市</option></select>
+            <citydropdown class="form-control" provinc="{{provinc}}" value="{{city}}"></citydropdown>
           </div>  
           <div class="col-md-4">
-            <select class="form-control"><option>请选择区域</option></select>
+            <districtdropdown class="form-control" provinc="{{provinc}}" city="{{city}}" value="{{district}}"></districtdropdown>
           </div>                                 
         </div>
         <div class="row m-t m-b">
