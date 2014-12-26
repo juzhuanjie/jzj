@@ -25,7 +25,7 @@ else
 fi
 
 cd $src_home/jzj/source/jzj/
-mvn install
+mvn clean install
 
 echo "Start tomcat application server..."
 sh $CATALINA_HOME/bin/startup.sh
