@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 
-    function(              $scope,   $translate,   $localStorage,   $window ) {
+  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 'users', '$state',
+    function(              $scope,   $translate,   $localStorage,   $window , users, $state) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -64,7 +64,12 @@ angular.module('app')
         $translate.use(langKey);
         $scope.lang.isopen = !$scope.lang.isopen;
       };
-
+      $scope.logout = function(){
+        var result = users.logout();
+        if(result){
+          $state.go('access.signin');
+        }
+      };
       function isSmartDevice( $window )
       {
           // Adapted from http://www.detectmobilebrowsers.com
