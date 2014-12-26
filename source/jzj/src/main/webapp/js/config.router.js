@@ -76,12 +76,12 @@ angular.module('app')
                       }]
                   }
               })
-              .state('app.account.profile', {
-                  url: '/profile',
+              .state('app.account.user', {
+                  url: '/user',
                   templateUrl: 'tpl/account_profile.html'
               })
-              .state('app.account.cashout', {
-                  url: '/cashout',
+              .state('app.account.userbank', {
+                  url: '/userbank',
                   templateUrl: 'tpl/account_cashout.html'
               })
               .state('access', {
@@ -125,7 +125,7 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
-                          return uiLoad.load( ['js/controllers/jzj.account.js','js/directives/jzj.directives.js','vendor/libs/moment.min.js'] );
+                          return uiLoad.load( ['js/controllers/jzj.account.js','js/directives/jzj.directives.js','vendor/libs/moment.min.js','vendor/libs/city.min.js'] );
                       }]
                   }
               })
@@ -162,7 +162,7 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
-                          return uiLoad.load( ['js/controllers/jzj.account.js','js/directives/jzj.directives.js','vendor/libs/moment.min.js'] );
+                          return uiLoad.load( ['js/controllers/jzj.account.js','js/directives/jzj.directives.js','vendor/libs/moment.min.js','vendor/libs/city.min.js'] );
                       }]
                   }
               })

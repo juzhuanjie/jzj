@@ -296,8 +296,54 @@ app.controller('BuyerCtrl', ['$scope','platforms', function($scope,platforms) {
   });
 }]);
 //绑定买手详细Controller
-app.controller('BuyerBindCtrl', ['$scope', function($scope) {
-  
+app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts', function($scope,buyerAccounts) {
+  $scope.buyerAccountBinds = [];  
+  $scope.platformId = 1;
+  $scope.wangwang="";
+  $scope.screenshot = "";
+  $scope.accountLogin = "";
+  $scope.province = "";
+  $scope.city = "";
+  $scope.district = "";
+  $scope.shreetAddress = "";
+  $scope.phone = "";
+  $scope.isShow = false;
+  $scope.addBuyerBind = function(){
+    $scope.isShow = true;
+  };
+  $scope.cancel = function(){
+    $scope.isShow = false;
+  };
+  $scope.save = function(){
+    var buyerAccount = buyerAccounts.newEmpty();
+    buyerAccount.Wangwang = $scope.wangwang;
+    buyerAccount.Screenshot = $scope.screenshot;
+    buyerAccount.AccountLogin = $scope.accountLogin;
+    buyerAccount.Province = $scope.province;
+    buyerAccount.City = $scope.city;
+    buyerAccount.District = $scope.district;
+    buyerAccount.ShreetAddress = $scope.shreetAddress;
+    buyerAccount.Phone = $scope.phone;
+    var result = buyerAccounts.add(buyerAccount);
+    if(angular.isObject(result)){
+      $scope.buyerAccountBinds.push(result);
+      $scope.isShow = false;
+      clear();
+    }    
+  };
+  var clear = function(){
+    $scope.wangwang="";
+    $scope.screenshot = "";
+    $scope.accountLogin = "";
+    $scope.province = "";
+    $scope.city = "";
+    $scope.district = "";
+    $scope.shreetAddress = "";
+    $scope.phone = "";
+  };
+  $scope.$watch('$viewContentLoaded',function(){
+    $scope.buyerAccountBinds = buyerAccounts.get(1,2);
+  });
 }]);
 //绑定卖手店铺父Controller
 app.controller('SellerCtrl', ['$scope','platforms', function($scope, platforms) {
@@ -310,6 +356,43 @@ app.controller('SellerCtrl', ['$scope','platforms', function($scope, platforms) 
   });
 }]);
 //绑定卖手店铺详细Controller
-app.controller('SellerBindCtrl', ['$scope', function($scope) {
-
+app.controller('SellerShopCtrl', ['$scope','sellerShops', function($scope,sellerShops) {
+  $scope.sellerShopBinds = [];
+  $scope.platformId = 1;
+  $scope.url = "";
+  $scope.wangwang="";
+  $scope.province = "";
+  $scope.city = "";
+  $scope.district = "";
+  $scope.isShow = false;
+  $scope.addSellerBind = function(){
+    $scope.isShow = true;
+  };
+  $scope.cancel = function(){
+    $scope.isShow = false;
+  };
+  $scope.save = function(){
+    var sellerShop = sellerShops.newEmpty();
+    sellerShop.Url = $scope.url;
+    sellerShop.Wangwang = $scope.wangwang;
+    sellerShop.Province = $scope.province;
+    sellerShop.City = $scope.city;
+    sellerShop.District = $scope.district;
+    var result = sellerShops.add(sellerShop);
+    if(angular.isObject(result)){
+      $scope.sellerShopBinds.push(result);
+      $scope.isShow = false;
+      clear();
+    }    
+  };
+  var clear = function(){
+    $scope.url = "";
+    $scope.wangwang = "";
+    $scope.province = "";
+    $scope.city = "";
+    $scope.district = "";
+  };
+  $scope.$watch('$viewContentLoaded',function(){
+    $scope.sellerShopBinds=sellerShops.get(1,2);
+  });
 }]);
