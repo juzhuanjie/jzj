@@ -10,8 +10,9 @@
           <thead>
             <tr>
               <th class="col-md-2">店铺主旺旺ID</th>
-              <th class="col-md-6">发件地址</th>
-              <th class="col-md-4">店铺网址</th>
+              <th class="col-md-5">发件地址</th>
+              <th class="col-md-3">店铺网址</th>
+              <th class="col-md-2">修改地址</th>
             </tr>
           </thead>
           <tbody>
@@ -19,6 +20,7 @@
               <td><span>{{s.Wangwang}}</span></td>
               <td><span>{{s.Province}} {{s.City}} {{s.District}}</span></td>
               <td><span>{{s.Url}}</span></td>
+              <td><a ng-click="editSellerBind({{s.ShopId}})"><span>修改地址</span></a></td>
             </tr>            
           </tbody>
         </table>
@@ -33,7 +35,7 @@
             <label><span class="text-danger">*</span>店铺首页网址</label>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" ng-model="url"/>
+            <input type="text" class="form-control" ng-model="url" ng-disabled="isEdit"/>
           </div>
           <div class="col-md-4">
             <span class="m-t text-muted">(店铺绑定后无法修改)</span>
@@ -44,7 +46,7 @@
             <label><span class="text-danger">*</span>店铺主旺旺ID</label>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" ng-model="wangwang"/>
+            <input type="text" class="form-control" ng-model="wangwang" ng-disabled="isEdit"/>
           </div>
           <div class="col-md-4">
             <span class="m-t text-muted">(店铺主旺旺ID绑定后无法修改)</span>

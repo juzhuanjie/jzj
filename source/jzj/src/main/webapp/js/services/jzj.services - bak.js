@@ -47,10 +47,22 @@ app.factory('promisePost', ['$http','$q', function($http,$q){
 		var deferred = $q.defer();
 		$http.post(url,para)
 		.success(function(result){
-			if(result.code != undefined){
+			if(result.status=='Success'){
 				deferred.resolve(angular.fromJson(result.data));	
-			}else{			
-				deferred.reject(result);
+			}
+			else if(result.status=='Error'){
+				//TODO: 错误信息处理
+				if(result.errorCode==1){
+					//TODO： Session错误，跳转到登录页面
+				}
+				else if(result.status==2){
+					//TODO：其他错误，弹出错误消息
+				}
+				deferred.reject(result.msg);
+			}
+			else if(result.status == 'Warning'){
+				//TODO: 警告信息处理
+				deferred.resolve(angular.fromJson(result.data));	
 			}
 		})
 		.error(function(reason){
@@ -93,10 +105,15 @@ app.factory('users', ['promisePost','promiseGet','$rootScope','$window',function
 		login : function(email, password){
 			//TODO: 用户登录, 返回USERID, SESSIONTOTAN
 			var para = { "username" : email, "password" : password };
+			//登录成功保存session tokan到浏览器缓存
 			var result = { "status" : "Success", "UserId" : 1, "Username" : "moke@bdnacn.com", "Tokan" : "213541m5n855hf" };
-			$window.localStorage.setItem("userSession", angular.toJson(result));
-			$rootScope.global.userSession = result;
-			return result;		
+			if(true){
+				$window.localStorage.setItem("userSession", angular.toJson(result));
+				$rootScope.global.userSession = result;
+				return result;
+			}else{
+				return { "status" : "Error", "msg" : "邮箱或者密码不正确" };
+			}
 		},
 		logout : function(){
 			//TODO: 退出登录
@@ -162,8 +179,7 @@ app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promise
 					    "Branch": "", 
 					    "City": "", 
 					    "Screenshot": ""
-					}; 
-			//return null; 
+					};  
 		},
 		add : function(userbank){
 			//TODO: 添加一条User Bank记录，可以是支付宝，财付通，银行卡等
@@ -187,22 +203,7 @@ app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promise
 //BuyerAccount 对象数据交互 Service
 app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(buyerAccountId){
-			return  {
-					    "BuyerAccountId": 1, 
-					    "UserId": 2, 
-					    "PlatformId": 0, 
-					    "AccountLogin": "juzhuanjie", 
-					    "Wangwang": "55555", 
-					    "Province": "广东", 
-					    "City": "广州", 
-					    "District": "天河", 
-					    "ShreetAddress": "员村街道", 
-					    "Phone": "", 
-					    "Screenshot": ""
-					};
-		},
-		query : function(userId, platformId){
+		get : function(userId, platformId){
 			//TODO: 获取买号绑定信息，根据userid和platformid，返回的是一个数组
 			var para = { "userId" : userId, "platformId" : platformId };
 			return  [
@@ -213,7 +214,7 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 						    "AccountLogin": "juzhuanjie", 
 						    "Wangwang": "55555", 
 						    "Province": "广东", 
-						    "City": "广州", 
+						    "City": "广州市", 
 						    "District": "天河", 
 						    "ShreetAddress": "员村街道", 
 						    "Phone": "", 
@@ -237,10 +238,6 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 		add : function(buyerAccount){
 			//TODO: 添加买号信息
 			return buyerAccount;
-		},
-		update : function(buyerAccount){
-			//TODO: 添加买号信息
-			return true;
 		},
 		count : function(userId, platformId){
 			//TODO: 统计某个平台下的买号绑定数量，不能拿超过3个
@@ -267,19 +264,7 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 //SellerShop 对象数据交互 Service
 app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(shopId){
-			return  {
-						    "ShopId": 1, 
-						    "UserId": 2, 
-						    "PlatformId": 0, 
-						    "Url": "http://juzhuanjie.taobao.com", 
-						    "Wangwang": "MokeSun", 
-						    "Province": "湖南", 
-						    "City": "长沙", 
-						    "District": "天心区"
-						};
-		},
-		query : function(userId, platformId){
+		get : function(userId, platformId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组
 			var para = { "userId" : userId, "platformId" : platformId };
 			return  [
@@ -290,7 +275,7 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 						    "Url": "http://juzhuanjie.taobao.com", 
 						    "Wangwang": "MokeSun", 
 						    "Province": "广东", 
-						    "City": "广州", 
+						    "City": "广州市", 
 						    "District": "天河区"
 						} ,
 						{
@@ -300,7 +285,7 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 						    "Url": "http://juzhuanjie.tmall.com", 
 						    "Wangwang": "SunKanJue", 
 						    "Province": "广东", 
-						    "City": "广州", 
+						    "City": "广州市", 
 						    "District": "白云区"
 						} 
 					];
@@ -308,9 +293,6 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 		add : function(sellerShop){
 			//TODO: 添加店铺绑定信息
 			return sellerShop;
-		},
-		update : function(sellerShop){
-			return  true;
 		},
 		count : function(userId, platformId){
 			//TODO: 统计某个平台下的店铺绑定数量，不能拿超过3个

@@ -29,11 +29,11 @@
 				<h4 class="m-t-none m-b">第一步：绑定支付宝</h4>
 	            <div class="form-group">
 	            	<label>姓名 <em class="text-muted">(支付宝必须和你财付通、银行卡姓名一致，不可修改)</em></label>
-	                <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="action == 'edit'">
+	                <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="isEdit">
 	            </div>
               	<div class="form-group">
 	            	<label>支付宝账号</label>
-	                <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">
+	                <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="isEdit">
 	            </div>
           	</div>
 	        <div class="line b-b"></div>
@@ -61,7 +61,7 @@
 		        	</div>		        		        	
 		        </div>
 		        <div class="form-group">
-		        	<button class="btn btn-danger" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">确认</button>
+		        	<button class="btn btn-danger" ng-disabled="isEdit">确认</button>
 					<button class="btn btn-default" ng-click="hideDetails()">关闭</button>
 		        </div>
 	        </div>
@@ -85,11 +85,11 @@
 				<h4 class="m-t-none m-b">第一步：绑定财付通</h4>
 	            <div class="form-group">
 	            	<label>姓名 <em class="text-muted">(支付宝必须和你财付通、银行卡姓名一致，不可修改)</em></label>
-	                <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="account.AccountName != '' && account.AccountName != undefined">
+	                <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="isEdit">
 	            </div>
               	<div class="form-group">
 	            	<label>财付通账号</label>
-	                <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">
+	                <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="isEdit">
 	            </div>
           	</div>
 	        <div class="line b-b"></div>
@@ -117,7 +117,7 @@
 		        	</div>		        		        	
 		        </div>
 		        <div class="form-group">
-		        	<button class="btn btn-danger" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">确认</button>
+		        	<button class="btn btn-danger" ng-disabled="isEdit">确认</button>
 					<button class="btn btn-default" ng-click="hideDetails()">关闭</button>
 		        </div>
 	        </div>
@@ -143,7 +143,7 @@
 			            <label>姓名</label>
 			          </div>
 			          <div class="col-md-2">
-			            <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="account.AccountName != '' && account.AccountName != undefined">
+			            <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="isEdit">
 			          </div>                                               
 			        </div>	         
 			        <div class="row m-t m-b">
@@ -151,7 +151,7 @@
 			            <label>选择银行</label>
 			          </div>
 			          <div class="col-md-2">
-			            <select class="form-control" ng-model="account.BankType" ng-disabled="account.BankType != '' && account.BankType != undefined"><option>选择银行</option></select>
+			            <select class="form-control" ng-model="account.BankType" ng-disabled="isEdit"><option>选择银行</option></select>
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
@@ -159,7 +159,7 @@
 			            <label>开户城市</label>
 			          </div>
 			          <div class="col-md-2">
-			            <select class="form-control" ng-model="account.City" ng-disabled="account.City != '' && account.City != undefined"><option>选择开户城市</option></select>
+			            <select class="form-control" ng-model="account.City" ng-disabled="isEdit"><option>选择开户城市</option></select>
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
@@ -167,7 +167,7 @@
 			            <label>开户支行名称</label>
 			          </div>
 			          <div class="col-md-4">
-			            <select class="form-control" ng-model="account.Branch" ng-disabled="account.Branch != '' && userbank.CaiFuTong.Branch != undefined"><option>选择开户支行名称</option></select>
+			            <select class="form-control" ng-model="account.Branch" ng-disabled="isEdit"><option>选择开户支行名称</option></select>
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
@@ -175,12 +175,12 @@
 			            <label>银行卡号</label>
 			          </div>
 			          <div class="col-md-4">
-			            <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">
+			            <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="isEdit">
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
 			        	<div class="col-md-4">
-			        		<button class="btn btn-danger" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">确认</button>
+			        		<button class="btn btn-danger" ng-disabled="isEdit">确认</button>
 							<button class="btn btn-default" ng-click="hideDetails()">关闭</button>		
 						</div>        	
 			        </div>

@@ -20,7 +20,7 @@
               <td><span>{{b.AccountLogin}}</span></td>
               <td><span>{{b.Province}} {{b.City}} {{b.District}} {{b.ShreetAddress}}</span></td>
               <td><span>审核地址</span></td>
-              <td><a href><span>修改地址</span></a></td>
+              <td><a ng-click="editBuyerBind({{s.BuyerAccountId}})"><span>修改地址</span></a></td>
             </tr>            
           </tbody>
         </table>
@@ -36,7 +36,7 @@
             <label><span class="text-danger">*</span>旺旺ID</label>
           </div>
           <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="wangwang"/>
+            <input type="text" class="form-control" ng-model="wangwang" ng-disabled="isEdit"/>
           </div>
           <div class="col-md-6">
             <span class="m-t text-muted">(旺旺ID绑定后无法修改，严禁绑定相似的买号，如：小符01)</span>

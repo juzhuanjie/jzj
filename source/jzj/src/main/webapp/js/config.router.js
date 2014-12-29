@@ -82,7 +82,7 @@ angular.module('app')
               })
               .state('app.account.userbank', {
                   url: '/userbank',
-                  templateUrl: 'tpl/account_cashout.html'
+                  templateUrl: 'tpl/account_userbank.html'
               })
               .state('access', {
                   url: '/access',

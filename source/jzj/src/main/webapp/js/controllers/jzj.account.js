@@ -203,12 +203,16 @@ app.controller('ZhiFuBaoCtrl', ['$scope', 'userBanks', function($scope, userBank
   //TODO: 从全局对象里获取UserId
   var userId = 1;
   var bankType = 1;
-  $scope.account = {};
+  $scope.isEdit = true;
+  $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;
   $scope.$watch('$viewContentLoaded',function(){
     var result = userBanks.get(userId, bankType);
     if(angular.isObject(result)){
       $scope.account = result;  
+      $scope.isEdit = true;
+    }else{
+      $scope.isEdit = false;
     }     
   });
   $scope.save = function(){
@@ -232,13 +236,17 @@ app.controller('CaiFuTongCtrl', ['$scope','userBanks', function($scope,userBanks
   //TODO: 从全局对象里获取UserId
   var userId = 1;
   var bankType = 2;
-  $scope.account = {};
+  $scope.isEdit = true;
+  $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;
   $scope.$watch('$viewContentLoaded',function(){
     var result = userBanks.get(userId, bankType);
     if(angular.isObject(result)){
       $scope.account = result;  
-    } 
+      $scope.isEdit = true;
+    }else{
+      $scope.isEdit = false;
+    }
   });
   $scope.save = function(){
     //TODO: 验证逻辑处理
@@ -261,12 +269,16 @@ app.controller('YinHangKaCtrl', ['$scope','userBanks', function($scope,userBanks
   //TODO: 从全局对象里获取UserId
   var userId = 1;
   var bankType = 3;
-  $scope.account = {};
+  $scope.isEdit = true;
+  $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;  
   $scope.$watch('$viewContentLoaded',function(){
     var result = userBanks.get(userId, bankType);
     if(angular.isObject(result)){
       $scope.account = result;  
+      $scope.isEdit = true;
+    }else{
+      $scope.isEdit = false;
     }
   });
   $scope.save = function(){
@@ -308,28 +320,61 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts', function($scope,bu
   $scope.shreetAddress = "";
   $scope.phone = "";
   $scope.isShow = false;
+  $scope.isEdit = true;
+  $scope.currEditBuyerAccount = null;
   $scope.addBuyerBind = function(){
     $scope.isShow = true;
+    $scope.isEdit = false;
+  };
+  $scope.editBuyerBind = function(buyerAccountId){
+    var buyer = buyerAccounts.get(buyerAccountId);
+    $scope.wangwang = buyer.Wangwang;
+    $scope.screenshot = buyer.Screenshot;
+    $scope.accountLogin = buyer.AccountLogin;
+    $scope.province = buyer.Province;
+    $scope.city = buyer.City;
+    $scope.district = buyer.District;
+    $scope.shreetAddress = buyer.ShreetAddress;
+    $scope.phone = buyer.Phone;
+    $scope.isShow = true;
+    $scope.isEdit = true;
+    $scope.currEditBuyerAccount = buyer;
   };
   $scope.cancel = function(){
     $scope.isShow = false;
   };
   $scope.save = function(){
-    var buyerAccount = buyerAccounts.newEmpty();
-    buyerAccount.Wangwang = $scope.wangwang;
-    buyerAccount.Screenshot = $scope.screenshot;
-    buyerAccount.AccountLogin = $scope.accountLogin;
-    buyerAccount.Province = $scope.province;
-    buyerAccount.City = $scope.city;
-    buyerAccount.District = $scope.district;
-    buyerAccount.ShreetAddress = $scope.shreetAddress;
-    buyerAccount.Phone = $scope.phone;
-    var result = buyerAccounts.add(buyerAccount);
-    if(angular.isObject(result)){
-      $scope.buyerAccountBinds.push(result);
-      $scope.isShow = false;
-      clear();
-    }    
+    if($scope.isEdit){
+      var buyerAccount = $scope.currEditBuyerAccount;
+      buyerAccount.AccountLogin = $scope.accountLogin;
+      buyerAccount.Province = $scope.province;
+      buyerAccount.City = $scope.city;
+      buyerAccount.District = $scope.district;
+      buyerAccount.ShreetAddress = $scope.shreetAddress;
+      buyerAccount.Phone = $scope.phone;
+      var result = buyerAccounts.update(buyerAccount);      
+      if(result){
+        $scope.buyerAccountBinds=buyerAccounts.query(1,2);
+        $scope.isShow = false;
+        clear();
+      } 
+    }else{
+      var buyerAccount = buyerAccounts.newEmpty();
+      buyerAccount.Wangwang = $scope.wangwang;
+      buyerAccount.Screenshot = $scope.screenshot;
+      buyerAccount.AccountLogin = $scope.accountLogin;
+      buyerAccount.Province = $scope.province;
+      buyerAccount.City = $scope.city;
+      buyerAccount.District = $scope.district;
+      buyerAccount.ShreetAddress = $scope.shreetAddress;
+      buyerAccount.Phone = $scope.phone;
+      var result = buyerAccounts.add(buyerAccount);
+      if(angular.isObject(result)){
+        $scope.buyerAccountBinds.push(result);
+        $scope.isShow = false;
+        clear();
+      }  
+    }        
   };
   var clear = function(){
     $scope.wangwang="";
@@ -342,7 +387,7 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts', function($scope,bu
     $scope.phone = "";
   };
   $scope.$watch('$viewContentLoaded',function(){
-    $scope.buyerAccountBinds = buyerAccounts.get(1,2);
+    $scope.buyerAccountBinds = buyerAccounts.query(1,2);
   });
 }]);
 //绑定卖手店铺父Controller
@@ -365,26 +410,53 @@ app.controller('SellerShopCtrl', ['$scope','sellerShops', function($scope,seller
   $scope.city = "";
   $scope.district = "";
   $scope.isShow = false;
+  $scope.isEdit = true;
+  $scope.currEditSellerShop = null;
   $scope.addSellerBind = function(){
     $scope.isShow = true;
+    $scope.isEdit = false;
+  };
+  $scope.editSellerBind = function(shopId){
+    var sellerShop = sellerShops.get(shopId);
+    $scope.url = sellerShop.Url;
+    $scope.wangwang = sellerShop.Wangwang;
+    $scope.province = sellerShop.Province;
+    $scope.city = sellerShop.City;
+    $scope.district = sellerShop.District;
+    $scope.isShow = true;
+    $scope.isEdit = true;
+    $scope.currEditSellerShop = sellerShop;
   };
   $scope.cancel = function(){
     $scope.isShow = false;
   };
   $scope.save = function(){
-    var sellerShop = sellerShops.newEmpty();
-    sellerShop.Url = $scope.url;
-    sellerShop.Wangwang = $scope.wangwang;
-    sellerShop.Province = $scope.province;
-    sellerShop.City = $scope.city;
-    sellerShop.District = $scope.district;
-    var result = sellerShops.add(sellerShop);
-    if(angular.isObject(result)){
-      $scope.sellerShopBinds.push(result);
-      $scope.isShow = false;
-      clear();
-    }    
-  };
+    if($scope.isEdit){
+      var sellerShop = $scope.currEditSellerShop;
+      sellerShop.Province = $scope.province;
+      sellerShop.City = $scope.city;
+      sellerShop.District = $scope.district;
+      var result = sellerShops.update(sellerShop);      
+      if(result){
+        $scope.sellerShopBinds=sellerShops.query(1,2);
+        $scope.isShow = false;
+        clear();
+      } 
+    }else{
+      var sellerShop = sellerShops.newEmpty();
+      sellerShop.Url = $scope.url;
+      sellerShop.Wangwang = $scope.wangwang;
+      sellerShop.Province = $scope.province;
+      sellerShop.City = $scope.city;
+      sellerShop.District = $scope.district;
+      var result = sellerShops.add(sellerShop);
+      if(angular.isObject(result)){
+        $scope.sellerShopBinds.push(result);
+        $scope.isShow = false;
+        clear();
+      }  
+    }        
+  };  
   var clear = function(){
     $scope.url = "";
     $scope.wangwang = "";
@@ -393,6 +465,6 @@ app.controller('SellerShopCtrl', ['$scope','sellerShops', function($scope,seller
     $scope.district = "";
   };
   $scope.$watch('$viewContentLoaded',function(){
-    $scope.sellerShopBinds=sellerShops.get(1,2);
+    $scope.sellerShopBinds=sellerShops.query(1,2);
   });
 }]);

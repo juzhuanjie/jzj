@@ -15,8 +15,8 @@ app.controller('SigninFormController', ['$scope', 'users', '$state', '$rootScope
     $scope.login = function() {
       $scope.authError = null;
       var result = users.login($scope.user.email, $scope.user.password);
-      if (result.status == 'Error') {
-        $scope.authError = result.status.msg;
+      if (result.code != undefined) {
+        $scope.authError = result.message;
       }else{
         $state.go('app.dashboard-v1');
       }
