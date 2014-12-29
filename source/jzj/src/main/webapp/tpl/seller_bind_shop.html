@@ -1,7 +1,7 @@
 <div ng-controller="SellerShopCtrl">
   <!-- header -->
   <div class="wrapper bg-light lter">
-    <div class="h4 font-bold text-danger">绑定淘宝店铺<span class="h5 text-muted"> (仅任务对应的买手可见，不会被泄露)</span></div> 
+    <div class="h4 font-bold text-danger">绑定{{platform.name}}店铺<span class="h5 text-muted"> (仅任务对应的买手可见，不会被泄露)</span></div> 
   </div>
   <!-- / header -->
   <div class="wrapper bg-light lter">
@@ -17,10 +17,10 @@
           </thead>
           <tbody>
             <tr ng-repeat="s in sellerShopBinds">
-              <td><span>{{s.Wangwang}}</span></td>
-              <td><span>{{s.Province}} {{s.City}} {{s.District}}</span></td>
-              <td><span>{{s.Url}}</span></td>
-              <td><a ng-click="editSellerBind({{s.ShopId}})"><span>修改地址</span></a></td>
+              <td><span>{{s.wangwang}}</span></td>
+              <td><span>{{s.province}} {{s.city}} {{s.district}}</span></td>
+              <td><span>{{s.url}}</span></td>
+              <td><a ng-click="editSellerBind({{s.shopId}})"><span>修改地址</span></a></td>
             </tr>            
           </tbody>
         </table>

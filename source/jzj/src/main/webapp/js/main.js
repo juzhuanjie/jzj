@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 'users', '$state',
-    function(              $scope,   $translate,   $localStorage,   $window , users, $state) {
+  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$rootScope','$window', 'users', '$state',
+    function(              $scope,   $translate,   $localStorage,  $rootScope, $window , users, $state) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -65,10 +65,10 @@ angular.module('app')
         $scope.lang.isopen = !$scope.lang.isopen;
       };
       $scope.logout = function(){
-        var result = users.logout();
-        if(result){
-          $state.go('access.signin');
-        }
+        users.logout();
+        $window.localStorage.removeItem("userSession");
+        $rootScope.global.userSession = null;
+        $state.go('access.signin');
       };
       function isSmartDevice( $window )
       {

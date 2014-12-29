@@ -4,20 +4,26 @@
   <i class="fa fa-home"></i>
   首页</span>
   <span class="m-n font-thin h4">></span>
-  <span class="m-n font-bold h4 text-danger">账号信息</span>
-  <span class="m-n font-thin h4">></span>
-  <span class="m-n font-bold h4 text-danger">绑定买号</span>
+  <span class="m-n font-bold h4 text-danger">商家发布任务</span>
 </div>
-<!-- <div class="bg-light lter b-b wrapper-md">
-  <h4 class="m-t-none m-b-none text-danger">绑定买号</h4>
-</div> -->
-<div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="BuyerCtrl">
+<div class="bg-light lter b-b wrapper-md">
+  <div class="row">
+    <div class="col-md-2"><span class="m-n font-bold h4 text-danger">发布任务</span></div>
+    <div class="col-md-1"><span>选择任务类型</span><span>1</span></div>
+    <div class="col-md-1"><span>填写商品信息</span><span>2</span></div>
+    <div class="col-md-1"><span>选择刷单数量</span><span>3</span></div>
+    <div class="col-md-1"><span>选择增值服务</span><span>4</span></div>
+    <div class="col-md-1"><span>支付</span><span>5</span></div>
+    <div class="col-md-1"><span>发布成功</span><span>6</span></div>
+  </div>
+</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="SellerCtrl">
   <div class="col w-md dk b-r bg-auto">
     <div class="wrapper bg hidden-sm hidden-xs" id="email-menu">
       <div class="wrapper font-bold h4">选择平台</div>
       <ul class="nav nav-pills nav-stacked nav-sm">
-        <li ng-repeat="platform in platforms" ng-class="{active:platform.active}" >
-          <a ng-click="selectPlatform({{platform.id}})">
+        <li ng-repeat="platform in platforms" ui-sref-active="active">
+          <a ui-sref="app.seller.{{platform.filter}}">
             <i class="fa fa-fw fa-circle text-muted" color="{{platform.color}}" label-color ></i>
             {{platform.name}}
           </a>
