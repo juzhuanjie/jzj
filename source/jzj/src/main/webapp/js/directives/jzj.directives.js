@@ -39,8 +39,7 @@ angular.module('app').directive('citydropdown', function(){
   		scope.citys = [];
   		function init(){
   			scope.province = attrs.province;
-  			load();
-  			scope.city = attrs.value;  						
+  			load();  			 						
   		};
   		function load(){
   			scope.citys = [];
@@ -51,9 +50,11 @@ angular.module('app').directive('citydropdown', function(){
   					});
   				}
   			});
+  			scope.city = attrs.value; 
   		};
   		scope.$watch('province',function(){
 		    load();
+
 		}); 
 		init();
   	}

@@ -20,39 +20,39 @@
 	          <tr>
 	            <td class="col-md-3">用户头像</td>
 	            <td class="col-md-3">
-					<span ng-if="user.Image == ''" class="label bg-danger">未设置</span>
-	              	<span ng-if="user.Image != ''" class="label bg-success">已设置</span>
+					<span ng-if="user.image == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.image != ''" class="label bg-success">已设置</span>
 	            </td>
 	            <td>
 	              <a class="m-r-sm text-info" ng-click="openSetHeadImage()">
-					<span ng-if="user.Image == ''" class="text-info">设置</span>
-	              	<span ng-if="user.Image != ''" class="text-info">修改</span>
+					<span ng-if="user.image == ''" class="text-info">设置</span>
+	              	<span ng-if="user.image != ''" class="text-info">修改</span>
 	              </a>
 	            </td>
 	          </tr>
 	          <tr>
 	            <td class="col-md-3">登录密码</td>
 	            <td class="col-md-3">
-	            	<span ng-if="user.Password == ''" class="label bg-danger">未设置</span>
-	              	<span ng-if="user.Password != ''" class="label bg-success">已设置</span>
+	            	<span ng-if="user.password == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.password != ''" class="label bg-success">已设置</span>
 	            </td>
 	            <td>
 	              <a class="m-r-sm text-info" ng-click="openSetLoginPwd()">
-					<span ng-if="user.Password == ''" class="text-info">设置</span>
-	              	<span ng-if="user.Password != ''" class="text-info">修改</span>
+					<span ng-if="user.password == ''" class="text-info">设置</span>
+	              	<span ng-if="user.password != ''" class="text-info">修改</span>
 	              </a>
 	            </td>
 	          </tr>
 	           <tr>
 	            <td class="col-md-3">支付密码</td>
 	            <td class="col-md-3">
-					<span ng-if="user.PayPassword == ''" class="label bg-danger">未设置</span>
-	              	<span ng-if="user.PayPassword != ''" class="label bg-success">已设置</span>
+					<span ng-if="user.payPassword == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.payPassword != ''" class="label bg-success">已设置</span>
 	            </td>
 	            <td>	              
 	              <a class="m-r-sm text-info" ng-click="openSetPayPwd()">
-					<span ng-if="user.PayPassword == ''" class="text-info">设置</span>
-	              	<span ng-if="user.PayPassword != ''" class="text-info">修改</span>
+					<span ng-if="user.payPassword == ''" class="text-info">设置</span>
+	              	<span ng-if="user.payPassword != ''" class="text-info">修改</span>
 	              </a>
 	              <a href class="m-r-sm text-info"><span>找回</span></a>
 	            </td>
@@ -72,39 +72,39 @@
 	          <tr>
 	            <td class="col-md-3">QQ</td>
 	            <td class="col-md-3">
-	            	<span ng-if="user.Qq == ''" class="label bg-danger">未设置</span>
-	              	<span ng-if="user.Qq != ''" class="text-info">{{user.Qq}}</span>
+	            	<span ng-if="user.qq == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.qq != ''" class="text-info">{{user.qq}}</span>
 	            </td>
 	            <td>
 	              <a class="m-r-sm text-info" ng-click="openSetQQ()">
-	              	<span ng-if="user.Qq == ''">设置</span>
-	              	<span ng-if="user.Qq != ''">修改</span>
+	              	<span ng-if="user.qq == ''">设置</span>
+	              	<span ng-if="user.qq != ''">修改</span>
 	              </a>
 	            </td>
 	          </tr>
 	          <tr>
 	            <td class="col-md-3">邮箱</td>
 	            <td class="col-md-3">
-	            	<span ng-if="user.Email == ''" class="label bg-danger">未设置</span>
-	              	<span ng-if="user.Email != ''" class="text-info">{{user.Email}}</span>
+	            	<span ng-if="user.email == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.email != ''" class="text-info">{{user.email}}</span>
 	            </td>
 	            <td>
 	              <a class="m-r-sm text-info" ng-click="openSetEmail()">
-					<span ng-if="user.Email == ''">设置</span>
-	              	<span ng-if="user.Email != ''">修改</span>
+					<span ng-if="user.email == ''">设置</span>
+	              	<span ng-if="user.email != ''">修改</span>
 	              </a>
 	            </td>
 	          </tr>
 	          <tr>
 	            <td class="col-md-3">手机</td>
 	            <td class="col-md-3">
-					<span ng-if="user.Mobile == ''" class="label bg-danger">未设置</span>
-	              	<span ng-if="user.Mobile != ''" class="text-info">{{user.Mobile}}</span>
+					<span ng-if="user.mobile == ''" class="label bg-danger">未设置</span>
+	              	<span ng-if="user.mobile != ''" class="text-info">{{user.mobile}}</span>
 	            </td>
 	            <td>
 	              <a class="m-r-sm text-info" ng-click="openSetPhone()">
-					<span ng-if="user.Mobile == ''" >设置</span>
-	              	<span ng-if="user.Mobile != ''" >修改</span>
+					<span ng-if="user.mobile == ''" >设置</span>
+	              	<span ng-if="user.mobile != ''" >修改</span>
 	              </a>
 	            </td>
 	          </tr>

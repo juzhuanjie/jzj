@@ -3,7 +3,8 @@
 ** 账号信息设置页面相关的Controller
 */
 //基本信息Controller
-app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal, users) {
+app.controller('UserCtrl', ['$scope', '$rootScope', '$modal','users', function($scope, $rootScope, $modal, users) {
+    var userId = $rootScope.global.userSession.userId;
     $scope.user = users.newEmpty();
     $scope.openSetLoginPwd = function () {
       var modalInstance = $modal.open({
@@ -11,12 +12,12 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         controller: 'SetPwdCtrl',
         resolve: {
           data: function () {
-            return { "title": "设置登录密码", "password": $scope.user.Password};
+            return { "title": "设置登录密码", "password": $scope.user.password};
           }
         }
       });
       modalInstance.result.then(function (data) {        
-        $scope.user.Password = data;
+        $scope.user.password = data;
         save();
       });
     };
@@ -26,12 +27,12 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         controller: 'SetPwdCtrl',
         resolve: {
           data: function () {
-            return { "title": "设置支付密码", "password": $scope.user.PayPassword};
+            return { "title": "设置支付密码", "password": $scope.user.payPassword};
           }
         }
       });
       modalInstance.result.then(function (data) {    
-        $scope.user.PayPassword = data;    
+        $scope.user.payPassword = data;    
         save();
       });
     };
@@ -41,12 +42,12 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         controller: 'SetValueCtrl',
         resolve: {
           data: function () {
-            return { "title": "设置QQ账号", "value": $scope.user.Qq};
+            return { "title": "设置QQ账号", "value": $scope.user.qq};
           }
         }
       });
       modalInstance.result.then(function (data) {    
-        $scope.user.Qq = data;    
+        $scope.user.qq = data;    
         save();
       });
     };
@@ -56,12 +57,12 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         controller: 'SetValueCtrl',
         resolve: {
           data: function () {
-            return { "title": "设置邮箱地址", "value": $scope.user.Email};
+            return { "title": "设置邮箱地址", "value": $scope.user.email};
           }
         }
       });
       modalInstance.result.then(function (data) {
-        $scope.user.Email = data;
+        $scope.user.email = data;
         save();       
       });
     };
@@ -71,12 +72,12 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         controller: 'SetValueCtrl',
         resolve: {
           data: function () {
-            return { "title": "设置手机号码", "value": $scope.user.Mobile};
+            return { "title": "设置手机号码", "value": $scope.user.mobile};
           }
         }
       });
       modalInstance.result.then(function (data) {  
-        $scope.user.Mobile = data;      
+        $scope.user.mobile = data;      
         save();
       });
     };
@@ -87,31 +88,24 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         size: 'lg',
         resolve: {
           data: function () {
-            return { "title": "上传头像", "image": $scope.user.Image};
+            return { "title": "上传头像", "image": $scope.user.image};
           }
         }
       });
       modalInstance.result.then(function (data) {  
-        $scope.user.Image = data;      
+        $scope.user.image = data;      
         save();        
       });
     };
-    $scope.$watch('$viewContentLoaded',function(){
-      //TODO: 这个要从全局的对象里拿USERID
-      var result = users.get(1);
-      if(!angular.isObject(result)){
-        //TODO: 错误处理
-      }else{
+    $scope.$watch('$viewContentLoaded',function(){      
+      users.get(userId).then(function(result){
         $scope.user = result;
-      }
+      });
     }); 
     var save = function(){
-      var result = users.save($scope.user);
-      if(!angular.isObject(result)){
-        //TODO: 错误处理
-      }else{
+      users.save(userId, $scope.user).then(function(result){
         $scope.user = result;
-      }
+      });      
     }
 }]);
 //设置密码的弹出框Controller处理
@@ -199,26 +193,36 @@ app.controller('HeadImageUploadCtrl', ['$scope', 'FileUploader', '$modalInstance
     };
 }]);
 //支付宝设置Controller
-app.controller('ZhiFuBaoCtrl', ['$scope', 'userBanks', function($scope, userBanks){
-  //TODO: 从全局对象里获取UserId
-  var userId = 1;
+app.controller('ZhiFuBaoCtrl', ['$scope', '$rootScope', 'userBanks', function($scope,$rootScope, userBanks){
+  var userId = $rootScope.global.userSession.userId;
   var bankType = 1;
-  $scope.account = {};
+  $scope.isEdit = true;
+  $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;
   $scope.$watch('$viewContentLoaded',function(){
-    var result = userBanks.get(userId, bankType);
-    if(angular.isObject(result)){
-      $scope.account = result;  
-    }     
+    userBanks.get(userId, bankType).then(function(result){
+      if(result.length > 0){
+        $scope.account = result[0];  
+        $scope.isEdit = true;  
+      }  
+      else{
+        $scope.isEdit = false;
+      }    
+    },function(reason){
+      $scope.isEdit = false;
+    });   
   });
   $scope.save = function(){
     //TODO: 验证逻辑处理
-    var result = userBanks.add($scope.account);
-    if(!angular.isObject(result)){
-      //TODO: 错误处理
-    }else{
+    $scope.account.userId = userId;
+    $scope.account.bankType = bankType;
+    userBanks.add($scope.account).then(function(result){
       $scope.account = result;
-    }
+      $scope.isShow = false;
+      $scope.isEdit = true; 
+    }, function(reason){
+      $scope.isEdit = false; 
+    });
   };
   $scope.showDetails = function(){
     $scope.isShow = true;
@@ -228,26 +232,36 @@ app.controller('ZhiFuBaoCtrl', ['$scope', 'userBanks', function($scope, userBank
   };
 }]);
 //财付通设置Controller
-app.controller('CaiFuTongCtrl', ['$scope','userBanks', function($scope,userBanks){
-  //TODO: 从全局对象里获取UserId
-  var userId = 1;
+app.controller('CaiFuTongCtrl', ['$scope','$rootScope','userBanks', function($scope,$rootScope,userBanks){
+  var userId = $rootScope.global.userSession.userId;
   var bankType = 2;
-  $scope.account = {};
+  $scope.isEdit = true;
+  $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;
   $scope.$watch('$viewContentLoaded',function(){
-    var result = userBanks.get(userId, bankType);
-    if(angular.isObject(result)){
-      $scope.account = result;  
-    } 
+    userBanks.get(userId, bankType).then(function(result){
+      if(result.length > 0){
+        $scope.account = result[0];  
+        $scope.isEdit = true;  
+      }  
+      else{
+        $scope.isEdit = false;
+      }    
+    },function(reason){
+      $scope.isEdit = false;
+    });
   });
   $scope.save = function(){
     //TODO: 验证逻辑处理
-    var result = userBanks.add($scope.account);
-    if(!angular.isObject(result)){
-      //TODO:错误处理
-    }else{
+    $scope.account.userId = userId;
+    $scope.account.bankType = bankType;
+    userBanks.add($scope.account).then(function(result){
       $scope.account = result;
-    }
+      $scope.isShow = false;
+      $scope.isEdit = true; 
+    }, function(reason){
+      $scope.isEdit = false; 
+    });
   };
   $scope.showDetails = function(){
     $scope.isShow = true;
@@ -257,26 +271,36 @@ app.controller('CaiFuTongCtrl', ['$scope','userBanks', function($scope,userBanks
   };
 }]);
 //银行卡设置Controller
-app.controller('YinHangKaCtrl', ['$scope','userBanks', function($scope,userBanks){
-  //TODO: 从全局对象里获取UserId
-  var userId = 1;
+app.controller('YinHangKaCtrl', ['$scope','$rootScope','userBanks', function($scope,$rootScope,userBanks){
+  var userId = $rootScope.global.userSession.userId;
   var bankType = 3;
-  $scope.account = {};
+  $scope.isEdit = true;
+  $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;  
   $scope.$watch('$viewContentLoaded',function(){
-    var result = userBanks.get(userId, bankType);
-    if(angular.isObject(result)){
-      $scope.account = result;  
-    }
+    userBanks.get(userId, bankType).then(function(result){
+      if(result.length > 0){
+        $scope.account = result[0];  
+        $scope.isEdit = true;  
+      }  
+      else{
+        $scope.isEdit = false;
+      }    
+    },function(reason){
+      $scope.isEdit = false;
+    });
   });
   $scope.save = function(){
     //TODO: 验证逻辑处理
-    var result = userBanks.add($scope.account);
-    if(!angular.isObject(result)){
-      //TODO:错误处理
-    }else{
+    $scope.account.userId = userId;
+    $scope.account.bankType = bankType;
+    userBanks.add($scope.account).then(function(result){
       $scope.account = result;
-    }
+      $scope.isShow = false;
+      $scope.isEdit = true; 
+    }, function(reason){
+      $scope.isEdit = false; 
+    });
   };
   $scope.showDetails = function(){
     $scope.isShow = true;
@@ -287,18 +311,32 @@ app.controller('YinHangKaCtrl', ['$scope','userBanks', function($scope,userBanks
 }]);
 //绑定买手页父Controller
 app.controller('BuyerCtrl', ['$scope','platforms', function($scope,platforms) {
+  $scope.currPlatform = {};
   $scope.platforms = [];  
   $scope.$watch('$viewContentLoaded',function(){
     var result = platforms.getAll(); 
     if(angular.isObject(result)){
       $scope.platforms = result;
     }
+    $scope.currPlatform = result[0];
+    $scope.platforms[0].active = true;
   });
+  $scope.selectPlatform = function(platformId){
+    angular.forEach($scope.platforms, function(value){
+      value.active = false;
+      if(value.id == platformId){
+        value.active = true;
+        $scope.currPlatform = value;
+      }
+    });
+    $scope.$broadcast('select_platform', $scope.currPlatform);
+  };
 }]);
 //绑定买手详细Controller
-app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts', function($scope,buyerAccounts) {
-  $scope.buyerAccountBinds = [];  
-  $scope.platformId = 1;
+app.controller('BuyerAccountCtrl', ['$scope','$rootScope','buyerAccounts','platforms', function($scope,$rootScope,buyerAccounts,platforms) {
+  var userId = $rootScope.global.userSession.userId;
+  $scope.platform = {};
+  $scope.buyerAccountBinds = [];
   $scope.wangwang="";
   $scope.screenshot = "";
   $scope.accountLogin = "";
@@ -308,28 +346,70 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts', function($scope,bu
   $scope.shreetAddress = "";
   $scope.phone = "";
   $scope.isShow = false;
+  $scope.isEdit = true;
+  $scope.currEditBuyerAccount = null;
   $scope.addBuyerBind = function(){
     $scope.isShow = true;
+    $scope.isEdit = false;
+    clear();
+  };
+  $scope.editBuyerBind = function(buyerAccountId){
+    buyerAccounts.get(buyerAccountId).then(function(result){
+      $scope.wangwang = result.wangwang;
+      $scope.screenshot = result.screenshot;
+      $scope.accountLogin = result.accountLogin;
+      $scope.province = result.province;
+      $scope.city = result.city;
+      $scope.district = result.district;
+      $scope.shreetAddress = result.shreetAddress;
+      $scope.phone = result.phone;
+      $scope.isShow = true;
+      $scope.isEdit = true;
+      $scope.currEditBuyerAccount = result;
+    });    
   };
   $scope.cancel = function(){
     $scope.isShow = false;
   };
   $scope.save = function(){
-    var buyerAccount = buyerAccounts.newEmpty();
-    buyerAccount.Wangwang = $scope.wangwang;
-    buyerAccount.Screenshot = $scope.screenshot;
-    buyerAccount.AccountLogin = $scope.accountLogin;
-    buyerAccount.Province = $scope.province;
-    buyerAccount.City = $scope.city;
-    buyerAccount.District = $scope.district;
-    buyerAccount.ShreetAddress = $scope.shreetAddress;
-    buyerAccount.Phone = $scope.phone;
-    var result = buyerAccounts.add(buyerAccount);
-    if(angular.isObject(result)){
-      $scope.buyerAccountBinds.push(result);
-      $scope.isShow = false;
-      clear();
-    }    
+
+    if($scope.isEdit){
+      var buyerAccount = $scope.currEditBuyerAccount;
+      buyerAccount.accountLogin = $scope.accountLogin;
+      buyerAccount.province = $scope.province;
+      buyerAccount.city = $scope.city;
+      buyerAccount.district = $scope.district;
+      buyerAccount.shreetAddress = $scope.shreetAddress;
+      buyerAccount.phone = $scope.phone;
+      buyerAccounts.update(buyerAccount.buyerAccountId,buyerAccount).then(function(result){
+        initBuyerAccountList();
+        $scope.isShow = false;
+        clear();
+      },function(reason){
+
+      });  
+    }else{
+      var buyerAccount = buyerAccounts.newEmpty();
+      buyerAccount.userId = userId; 
+      buyerAccount.platformId = $scope.platform.id; 
+      buyerAccount.wangwang = $scope.wangwang;
+      buyerAccount.screenshot = $scope.screenshot;
+      buyerAccount.accountLogin = $scope.accountLogin;
+      buyerAccount.province = $scope.province;
+      buyerAccount.city = $scope.city;
+      buyerAccount.district = $scope.district;
+      buyerAccount.shreetAddress = $scope.shreetAddress;
+      buyerAccount.phone = $scope.phone;
+      buyerAccounts.add(buyerAccount).then(function(result){
+        if(angular.isObject(result)){
+          $scope.buyerAccountBinds.push(result);
+          $scope.isShow = false;
+          clear();
+        } 
+      },function(reason){
+
+      });       
+    }        
   };
   var clear = function(){
     $scope.wangwang="";
@@ -342,49 +422,111 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts', function($scope,bu
     $scope.phone = "";
   };
   $scope.$watch('$viewContentLoaded',function(){
-    $scope.buyerAccountBinds = buyerAccounts.get(1,2);
+    $scope.platform = platforms.getDefault();
+    initBuyerAccountList();    
   });
+  $scope.$on('select_platform',function(event,data){
+    $scope.platform = data;
+    initBuyerAccountList(); 
+    $scope.isEdit = false;
+    $scope.isShow = false;
+    clear();
+  });
+  var initBuyerAccountList = function(){
+    buyerAccounts.query(userId, $scope.platform.id).then(function(result){
+      $scope.buyerAccountBinds = result;
+    });
+  };
 }]);
 //绑定卖手店铺父Controller
 app.controller('SellerCtrl', ['$scope','platforms', function($scope, platforms) {
+  $scope.currPlatform = {};
   $scope.platforms = [];  
   $scope.$watch('$viewContentLoaded',function(){
     var result = platforms.getAll(); 
     if(angular.isObject(result)){
       $scope.platforms = result;
     }
+    $scope.currPlatform = result[0];
+    $scope.platforms[0].active = true;
   });
+  $scope.selectPlatform = function(platformId){
+    angular.forEach($scope.platforms, function(value){
+      value.active = false;
+      if(value.id == platformId){
+        value.active = true;
+        $scope.currPlatform = value;
+      }
+    });
+    $scope.$broadcast('select_platform', $scope.currPlatform);
+  };
 }]);
 //绑定卖手店铺详细Controller
-app.controller('SellerShopCtrl', ['$scope','sellerShops', function($scope,sellerShops) {
+app.controller('SellerShopCtrl', ['$scope','$rootScope','sellerShops','platforms', function($scope,$rootScope,sellerShops,platforms) {
+  var userId = $rootScope.global.userSession.userId;
+  $scope.platform = {};
   $scope.sellerShopBinds = [];
-  $scope.platformId = 1;
   $scope.url = "";
   $scope.wangwang="";
   $scope.province = "";
   $scope.city = "";
   $scope.district = "";
   $scope.isShow = false;
+  $scope.isEdit = true;
+  $scope.currEditSellerShop = null;
   $scope.addSellerBind = function(){
     $scope.isShow = true;
+    $scope.isEdit = false;
+    clear();
+  };
+  $scope.editSellerBind = function(shopId){    
+    sellerShops.get(shopId).then(function(result){
+      $scope.url = result.url;
+      $scope.wangwang = result.wangwang;
+      $scope.province = result.province;
+      $scope.city = result.city;
+      $scope.district = result.district;
+      $scope.isShow = true;
+      $scope.isEdit = true;
+      $scope.currEditSellerShop = result;
+    }); 
   };
   $scope.cancel = function(){
     $scope.isShow = false;
   };
   $scope.save = function(){
-    var sellerShop = sellerShops.newEmpty();
-    sellerShop.Url = $scope.url;
-    sellerShop.Wangwang = $scope.wangwang;
-    sellerShop.Province = $scope.province;
-    sellerShop.City = $scope.city;
-    sellerShop.District = $scope.district;
-    var result = sellerShops.add(sellerShop);
-    if(angular.isObject(result)){
-      $scope.sellerShopBinds.push(result);
-      $scope.isShow = false;
-      clear();
-    }    
-  };
+    if($scope.isEdit){
+      var sellerShop = $scope.currEditSellerShop;      
+      sellerShop.province = $scope.province;
+      sellerShop.city = $scope.city;
+      sellerShop.district = $scope.district;
+      sellerShops.update(sellerShop.shopId,sellerShop).then(function(result){
+        initSellerShopList();
+        $scope.isShow = false;
+        clear();
+      },function(reason){
+
+      });
+    }else{
+      var sellerShop = sellerShops.newEmpty();
+      sellerShop.userId = userId;
+      sellerShop.platformId = $scope.platform.id;
+      sellerShop.url = $scope.url;
+      sellerShop.wangwang = $scope.wangwang;
+      sellerShop.province = $scope.province;
+      sellerShop.city = $scope.city;
+      sellerShop.district = $scope.district;
+      sellerShops.add(sellerShop).then(function(result){
+        if(angular.isObject(result)){
+          $scope.sellerShopBinds.push(result);
+          $scope.isShow = false;
+          clear();
+        } 
+      },function(reason){
+
+      });      
+    }        
+  };  
   var clear = function(){
     $scope.url = "";
     $scope.wangwang = "";
@@ -393,6 +535,19 @@ app.controller('SellerShopCtrl', ['$scope','sellerShops', function($scope,seller
     $scope.district = "";
   };
   $scope.$watch('$viewContentLoaded',function(){
-    $scope.sellerShopBinds=sellerShops.get(1,2);
+    $scope.platform = platforms.getDefault();
+    initSellerShopList();
   });
+  $scope.$on('select_platform',function(event,data){
+    $scope.platform = data;
+    initSellerShopList(); 
+    $scope.isEdit = false;
+    $scope.isShow = false;
+    clear();
+  });
+  var initSellerShopList = function(){
+    sellerShops.query(userId, $scope.platform.id).then(function(result){
+      $scope.sellerShopBinds = result;
+    });
+  };
 }]);

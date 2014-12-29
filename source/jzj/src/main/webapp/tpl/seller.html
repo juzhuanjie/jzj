@@ -16,8 +16,8 @@
     <div class="wrapper bg hidden-sm hidden-xs" id="email-menu">
       <div class="wrapper font-bold h4">选择平台</div>
       <ul class="nav nav-pills nav-stacked nav-sm">
-        <li ng-repeat="platform in platforms" ui-sref-active="active">
-          <a ui-sref="app.seller.{{platform.filter}}">
+        <li ng-repeat="platform in platforms" ng-class="{active:platform.active}">
+          <a ng-click="selectPlatform({{platform.id}})">
             <i class="fa fa-fw fa-circle text-muted" color="{{platform.color}}" label-color ></i>
             {{platform.name}}
           </a>

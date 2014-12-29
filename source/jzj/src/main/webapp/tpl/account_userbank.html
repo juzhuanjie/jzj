@@ -15,12 +15,12 @@
         <li class="list-group-item" ng-controller="ZhiFuBaoCtrl">
           <div class="row">
           	<span class="col-md-2 h4 m-b-sm block">支付宝</span>  
-          	<img ng-show="!isShow" ng-if="account.UserBankId > 0" src="img/zhifubao.jpg" height="50" width="60" />
+          	<img ng-show="!isShow" ng-if="account.userBankId > 0" src="img/zhifubao.jpg" height="50" width="60" />
           	<a class="col-md-1 text-info text-right pull-right" ng-click="showDetails()">
-          		<span ng-if="account.UserBankId < 0">绑定</span>
-              	<span ng-if="account.UserBankId > 0">查看</span>
+          		<span ng-if="account.userBankId < 0">绑定</span>
+              	<span ng-if="account.userBankId > 0">查看</span>
           	</a>
-          	<span ng-if="account.UserBankId < 0" class="text-danger pull-right">未绑定</span>
+          	<span ng-if="account.userBankId < 0" class="text-danger pull-right">未绑定</span>
           </div>
           <div ng-show="isShow" class="b wrapper-md pos-rlt bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
 			<h4 class="m-t-none m-b text-center">支付宝必须填写<span class="text-danger">真实姓名</span>，请务必准确填写，绑定后将<span class="text-danger">不能修改账号信息</span></h4>
@@ -29,11 +29,11 @@
 				<h4 class="m-t-none m-b">第一步：绑定支付宝</h4>
 	            <div class="form-group">
 	            	<label>姓名 <em class="text-muted">(支付宝必须和你财付通、银行卡姓名一致，不可修改)</em></label>
-	                <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="account.AccountName != '' && account.AccountName != undefined">
+	                <input type="text" class="form-control" ng-model="account.accountName" ng-disabled="isEdit">
 	            </div>
               	<div class="form-group">
 	            	<label>支付宝账号</label>
-	                <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">
+	                <input type="text" class="form-control" ng-model="account.accountNumber" ng-disabled="isEdit">
 	            </div>
           	</div>
 	        <div class="line b-b"></div>
@@ -61,7 +61,7 @@
 		        	</div>		        		        	
 		        </div>
 		        <div class="form-group">
-		        	<button class="btn btn-danger" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">确认</button>
+		        	<button class="btn btn-danger" ng-disabled="isEdit" ng-click="save()">确认</button>
 					<button class="btn btn-default" ng-click="hideDetails()">关闭</button>
 		        </div>
 	        </div>
@@ -71,12 +71,12 @@
         <li class="list-group-item" ng-controller="CaiFuTongCtrl">
           <div class="row">
           	<span class="col-md-2 h4 m-b-sm block">财付通</span>          	
-          	<img ng-show="!isShow" ng-if="account.UserBankId > 0" src="img/caifutong.jpg" height="50" width="60" />
+          	<img ng-show="!isShow" ng-if="account.userBankId > 0" src="img/caifutong.jpg" height="50" width="60" />
           	<a class="col-md-1 text-info text-right pull-right" ng-click="showDetails()">
-          		<span ng-if="account.UserBankId < 0">绑定</span>
-              	<span ng-if="account.UserBankId > 0">查看</span>
+          		<span ng-if="account.userBankId < 0">绑定</span>
+              	<span ng-if="account.userBankId > 0">查看</span>
           	</a>
-          	<span ng-if="account.UserBankId < 0" class="text-danger pull-right">未绑定</span>
+          	<span ng-if="account.userBankId < 0" class="text-danger pull-right">未绑定</span>
           </div>
           <div ng-show="isShow" class="b wrapper-md pos-rlt bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
 			<h4 class="m-t-none m-b text-center">财付通必须填写<span class="text-danger">真实姓名</span>，和绑定的支付宝姓名一致，绑定后将<span class="text-danger">不能修改账号信息</span></h4>
@@ -85,11 +85,11 @@
 				<h4 class="m-t-none m-b">第一步：绑定财付通</h4>
 	            <div class="form-group">
 	            	<label>姓名 <em class="text-muted">(支付宝必须和你财付通、银行卡姓名一致，不可修改)</em></label>
-	                <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="account.AccountName != '' && account.AccountName != undefined">
+	                <input type="text" class="form-control" ng-model="account.accountName" ng-disabled="isEdit">
 	            </div>
               	<div class="form-group">
 	            	<label>财付通账号</label>
-	                <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">
+	                <input type="text" class="form-control" ng-model="account.accountNumber" ng-disabled="isEdit">
 	            </div>
           	</div>
 	        <div class="line b-b"></div>
@@ -117,7 +117,7 @@
 		        	</div>		        		        	
 		        </div>
 		        <div class="form-group">
-		        	<button class="btn btn-danger" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">确认</button>
+		        	<button class="btn btn-danger" ng-disabled="isEdit" ng-click="save()">确认</button>
 					<button class="btn btn-default" ng-click="hideDetails()">关闭</button>
 		        </div>
 	        </div>
@@ -127,12 +127,12 @@
         <li class="list-group-item" ng-controller="YinHangKaCtrl" >
           	<div class="row">
 	          	<span class="col-md-2 h4 m-b-sm block">银行卡</span>      
-	          	<img ng-show="!isShow" ng-if="account.UserBankId > 0" src="img/yinghang.jpg" height="50" width="60" />
+	          	<img ng-show="!isShow" ng-if="account.userBankId > 0" src="img/yinghang.jpg" height="50" width="60" />
 	          	<a class="col-md-1 text-info text-right pull-right" ng-click="showDetails()">
-	          		<span ng-if="account.UserBankId < 0">绑定</span>
-	              	<span ng-if="account.UserBankId > 0">查看</span>
+	          		<span ng-if="account.userBankId < 0">绑定</span>
+	              	<span ng-if="account.userBankId > 0">查看</span>
 	          	</a>
-	          	<span ng-if="account.UserBankId < 0" class="text-danger pull-right">未绑定</span>
+	          	<span ng-if="account.userBankId < 0" class="text-danger pull-right">未绑定</span>
           	</div>       
 	        <div ng-show="isShow" class="b wrapper-md pos-rlt bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
 				<h4 class="m-t-none m-b text-center">银行卡开户必须填写<span class="text-danger">真实姓名</span>，和绑定的支付宝姓名一致，绑定后将<span class="text-danger">不能修改账号信息</span></h4>				
@@ -143,7 +143,7 @@
 			            <label>姓名</label>
 			          </div>
 			          <div class="col-md-2">
-			            <input type="text" class="form-control" ng-model="account.AccountName" ng-disabled="account.AccountName != '' && account.AccountName != undefined">
+			            <input type="text" class="form-control" ng-model="account.accountName" ng-disabled="isEdit">
 			          </div>                                               
 			        </div>	         
 			        <div class="row m-t m-b">
@@ -151,7 +151,7 @@
 			            <label>选择银行</label>
 			          </div>
 			          <div class="col-md-2">
-			            <select class="form-control" ng-model="account.BankType" ng-disabled="account.BankType != '' && account.BankType != undefined"><option>选择银行</option></select>
+			            <select class="form-control" ng-model="account.BankType" ng-disabled="isEdit"><option>选择银行</option></select>
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
@@ -159,7 +159,7 @@
 			            <label>开户城市</label>
 			          </div>
 			          <div class="col-md-2">
-			            <select class="form-control" ng-model="account.City" ng-disabled="account.City != '' && account.City != undefined"><option>选择开户城市</option></select>
+			            <select class="form-control" ng-model="account.City" ng-disabled="isEdit"><option>选择开户城市</option></select>
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
@@ -167,7 +167,7 @@
 			            <label>开户支行名称</label>
 			          </div>
 			          <div class="col-md-4">
-			            <select class="form-control" ng-model="account.Branch" ng-disabled="account.Branch != '' && userbank.CaiFuTong.Branch != undefined"><option>选择开户支行名称</option></select>
+			            <select class="form-control" ng-model="account.Branch" ng-disabled="isEdit"><option>选择开户支行名称</option></select>
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
@@ -175,12 +175,12 @@
 			            <label>银行卡号</label>
 			          </div>
 			          <div class="col-md-4">
-			            <input type="text" class="form-control" ng-model="account.AccountNumber" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">
+			            <input type="text" class="form-control" ng-model="account.accountNumber" ng-disabled="isEdit">
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
 			        	<div class="col-md-4">
-			        		<button class="btn btn-danger" ng-disabled="account.AccountNumber != '' && account.AccountNumber != undefined">确认</button>
+			        		<button class="btn btn-danger" ng-disabled="isEdit" ng-click="save()">确认</button>
 							<button class="btn btn-default" ng-click="hideDetails()">关闭</button>		
 						</div>        	
 			        </div>

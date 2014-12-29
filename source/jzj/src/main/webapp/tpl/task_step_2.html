@@ -17,10 +17,10 @@
           </thead>
           <tbody>
             <tr ng-repeat="b in buyerAccountBinds">
-              <td><span>{{b.accountLogin}}</span></td>
-              <td><span>{{b.province}} {{b.city}} {{b.district}} {{b.shreetAddress}}</span></td>
+              <td><span>{{b.AccountLogin}}</span></td>
+              <td><span>{{b.Province}} {{b.City}} {{b.District}} {{b.ShreetAddress}}</span></td>
               <td><span>审核地址</span></td>
-              <td><a ng-click="editBuyerBind({{b.buyerAccountId}})"><span>修改地址</span></a></td>
+              <td><a ng-click="editBuyerBind({{s.BuyerAccountId}})"><span>修改地址</span></a></td>
             </tr>            
           </tbody>
         </table>

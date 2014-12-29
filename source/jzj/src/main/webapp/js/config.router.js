@@ -29,7 +29,7 @@ angular.module('app')
               toState.url = "/access/signin";
               $location.path("/access/signin");
             }
-          });
+          });          
           init();
       }
     ]
@@ -82,7 +82,7 @@ angular.module('app')
               })
               .state('app.account.userbank', {
                   url: '/userbank',
-                  templateUrl: 'tpl/account_cashout.html'
+                  templateUrl: 'tpl/account_userbank.html'
               })
               .state('access', {
                   url: '/access',
@@ -129,6 +129,10 @@ angular.module('app')
                       }]
                   }
               })
+              .state('app.buyer.account', {
+                  url: '/account',
+                  templateUrl:'tpl/buyer_bind_account.html'
+              })
               .state('app.buyer.taobao', {
                   url: '/taobao',
                   templateUrl:'tpl/buyer_bind_taobao.html'
@@ -166,6 +170,10 @@ angular.module('app')
                       }]
                   }
               })
+              .state('app.seller.shop', {
+                  url: '/shop',
+                  templateUrl:'tpl/seller_bind_shop.html'
+              })
               .state('app.seller.taobao', {
                   url: '/taobao',
                   templateUrl:'tpl/seller_bind_taobao.html'
@@ -189,6 +197,34 @@ angular.module('app')
               .state('app.seller.amazon', {
                   url: '/amazon',
                   templateUrl:'tpl/seller_bind_amazon.html'
+              })
+              .state('app.task', {
+                  url: '/task',
+                  templateUrl: 'tpl/task.html'                  
+              })
+              .state('app.task.step1', {
+                  url: '/step1',
+                  templateUrl: 'tpl/task_step_1.html'                  
+              })
+              .state('app.task.step2', {
+                  url: '/step2',
+                  templateUrl: 'tpl/task_step_2.html'                  
+              })
+              .state('app.task.step3', {
+                  url: '/step3',
+                  templateUrl: 'tpl/task_step_3.html'                  
+              })
+              .state('app.task.step4', {
+                  url: '/step4',
+                  templateUrl: 'tpl/task_step_4.html'                  
+              })
+              .state('app.task.step5', {
+                  url: '/step5',
+                  templateUrl: 'tpl/task_step_5.html'                  
+              })
+              .state('app.task.step6', {
+                  url: '/step6',
+                  templateUrl: 'tpl/task_step_6.html'                  
               })
       }
     ]
