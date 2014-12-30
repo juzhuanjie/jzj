@@ -1,0 +1,21 @@
+
+.input-control-xs{
+	border-color: #cfdadd;
+    border-radius: 2px;
+    background-color: #fff;
+    background-image: none;
+    color: #555;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 5px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    box-shadow: none;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    border: 1px solid #ccc;
+    margin:0 10px;
+}
+.bg-remind{
+    background-color: #ffffe0;
+    color: #000;
+}

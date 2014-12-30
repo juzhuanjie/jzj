@@ -4101,7 +4101,12 @@ a.text-#000000:hover {
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
 }
-
+.no-p-t{
+  padding-top: 0px !important;
+}
+.no-p-b{
+  padding-bottom: 0px !important;
+}
 .wrapper-xs {
   padding: 5px;
 }
