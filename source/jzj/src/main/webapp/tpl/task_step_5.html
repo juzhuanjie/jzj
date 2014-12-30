@@ -1,116 +1,34 @@
-<div ng-controller="BuyerAccountCtrl">
-  <!-- header -->
-  <div class="wrapper bg-light lter">
-    <div class="h4 font-bold text-danger">绑定淘宝买号</div>
-  </div>
-  <!-- / header -->
-  <div class="wrapper bg-light lter">
-    <div class="table-responsive">
-        <table class="table table-striped b-t b-light">
-          <thead>
-            <tr>
-              <th class="col-md-2">用户名</th>
-              <th class="col-md-6">收货信息</th>
-              <th class="col-md-2">买号状态</th>
-              <th class="col-md-2">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="b in buyerAccountBinds">
-              <td><span>{{b.AccountLogin}}</span></td>
-              <td><span>{{b.Province}} {{b.City}} {{b.District}} {{b.ShreetAddress}}</span></td>
-              <td><span>审核地址</span></td>
-              <td><a ng-click="editBuyerBind({{s.BuyerAccountId}})"><span>修改地址</span></a></td>
-            </tr>            
-          </tbody>
-        </table>
-      </div>
-      <div class="line b-b"></div>   
-      <h5 class="m-t-none m-b text-center">提示：买号提交审核后，平台预计在24小时内完成审核操作，只有审核通过的买号才能接手任务</h5>
-      <div class="">
-        <a ng-click="addBuyerBind()"><span class="text-info font-bold"> + 绑定淘宝 </span><small class="text-muted"> (最多允许绑定3个买号)</small></a>
-      </div>  
-      <div ng-show="isShow" class="b wrapper-md pos-rlt m-t bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
-        <div class="row m-t m-b">
-          <div class="col-md-2">
-            <label><span class="text-danger">*</span>旺旺ID</label>
-          </div>
-          <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="wangwang" ng-disabled="isEdit"/>
-          </div>
-          <div class="col-md-6">
-            <span class="m-t text-muted">(旺旺ID绑定后无法修改，严禁绑定相似的买号，如：小符01)</span>
-          </div>
-        </div>  
-        <div class="row m-t m-b">
-          <div class="col-md-2">
-            <label><span class="text-danger">*</span>旺旺个人档案截图</label>
-          </div>
-          <div class="col-md-2">
-            <input type="file" class=""  />
-          </div>
-          <div class="col-md-2">
-            <img src="img/a0.jpg" width="50" height="50">
-          </div>
-          <div class="col-md-6">
-            <a href class="text-info">查看示例截图</a>
-          </div>            
-        </div>   
-        <div class="row m-t m-b">
-          <div class="col-md-12"><span class="m-t-none m-b text-muted">进入 “我的淘宝” 点击 “我的评价” 后，再点击个人信息中的 “会员名” 上传 “个人档案” 截图</span><a href class="text-info m-l">查看详细教程</a></div>
-        </div>      
-        <div class="row m-t m-b">
-          <div class="col-md-2">
-            <label><span class="text-danger">*</span>收货人姓名</label>
-          </div>
-          <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="accountLogin"/>
-          </div>                                    
-        </div>
-        <div class="row m-t m-b">
-          <div class="col-md-2">
-            <label><span class="text-danger">*</span>所在地区</label>
-          </div>
-          <div class="col-md-2">
-            <provincedropdown class="form-control" value="{{province}}" ></provincedropdown>
-          </div>          
-          <div class="col-md-2">
-            <citydropdown class="form-control" province="{{province}}" value="{{city}}"></citydropdown>
-          </div>  
-          <div class="col-md-4">
-            <districtdropdown class="form-control" province="{{province}}" city="{{city}}" value="{{district}}"></districtdropdown>
-          </div>                                 
-        </div>
-        <div class="row m-t m-b">
-          <div class="col-md-2">
-            <label><span class="text-danger">*</span>街道地址</label>
-          </div>
-          <div class="col-md-6">
-            <input type="text" class="form-control" ng-model="shreetAddress"/>
-          </div>                                               
-        </div>
-        <div class="row m-t m-b">
-          <div class="col-md-2">
-            <label><span class="text-danger">*</span>收货人手机</label>
-          </div>
-          <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="phone"/>
-          </div>                                                    
-        </div>
-        <div class="row m-t m-b">
-          <div class="col-md-12">
-            <button class="btn btn-danger" ng-click="save()">确认</button>     
-            <button class="btn btn-default" ng-click="cancel()">关闭</button>     
-          </div>
-        </div>
-      </div>    
-      <div class="bg-light lter text-warning m-t">
-        <h4 class="m-t-none font-bold">请注意：</h4>
-        <p>1. 您绑定的账号需满足<span class="text-danger">注册时间超过一月、实名验证、信誉等级2心</span>以上3个条件。</p>
-        <p>2. 淘宝/天猫可绑定3个买号，每个买号要求绑定不同的收货信息 （收货人姓名，地址，联系电话均要求不同）。</p>
-        <p>3. 建议还可以填写公司地址，亲属地址，朋友地址，必须确保收货地址真实有效。</p>
-        <p>4. 平台填写的收货信息，请务必和淘宝等网站的下单时收货信息保持一致，否则将封闭您的人气符账号, 并没收所有佣金。</p>
-        <p>5. 买号绑定并接手过任务以后，不得解绑及更换其它买号。</p>
-      </div>      
+<div class="wrapper-md no-p-t"> 
+  <div class="row wrapper">
+    <div>
+      <label class="h4 font-bold">支付</label>
+    </div>
+  </div> 
+  <div class="wrapper bg-remind">
+    <label>本次任务发布<span class="text-danger">1</span>单</label>
+    <label class="pull-right">需押金： <span class="text-danger">0.00</span>元  人气符：<span class="text-danger">0.00</span>点</label>
   </div>  
+
+  <div class="row wrapper no-p-b">
+    <h4 class="font-bold">选择支付方式<label class="h5 m-l font-normal text-muted">当前押金、符点足够支付，若需要使用网银支付方式，请先取消选择使用押金、符点支付</label></h4>
+    <div class="wrapper-sm bg-remind">
+      <label class="checkbox-inline"><input type="checkbox" />使用人气符点支付（可用人气符：<span class="text-danger">0</span>点）1点 = 1元</label> 
+    </div>       
+    <div class="wrapper-sm bg-remind m-t">
+      <label class="checkbox-inline"><input type="checkbox" />使用押金支付（可用押金：<span class="text-danger">0.00</span>元）</label>     
+    </div>
+    <div class="wrapper-sm bg-remind m-t">      
+      <label class="radio-inline"><input type="radio" name="pay"/>使用网银支付</label> 
+    </div>          
+  </div>
+
+  <div class="line b-b"></div> 
+
+  <div class="row wrapper-md no-p-t">
+    <div class="wrapper text-center">
+      <button class="btn btn-danger m-r" ui-sref="app.task.step4"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button>
+      <button class="btn btn-danger m-l" ui-sref="app.task.step6"><span class="m-r">付款并发布任务</span></button>
+    </div>
+  </div>
+
 </div>

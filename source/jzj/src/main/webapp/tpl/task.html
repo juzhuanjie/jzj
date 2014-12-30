@@ -6,39 +6,39 @@
   <span class="m-n font-thin h4">></span>
   <span class="m-n font-bold h4 text-danger">商家发布任务</span>
 </div>
-<div class="bg-light lter b-b wrapper-md">
+<div class="bg-light lter b-b wrapper-xs">
   <div class="row">
-    <div class="col-md-2"><span class="m-n font-bold h4 text-danger">发布任务</span></div>
-    <div class="col-md-1"><span>选择任务类型</span><span>1</span></div>
-    <div class="col-md-1"><span>填写商品信息</span><span>2</span></div>
-    <div class="col-md-1"><span>选择刷单数量</span><span>3</span></div>
-    <div class="col-md-1"><span>选择增值服务</span><span>4</span></div>
-    <div class="col-md-1"><span>支付</span><span>5</span></div>
-    <div class="col-md-1"><span>发布成功</span><span>6</span></div>
-  </div>
-</div>
-<div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="SellerCtrl">
-  <div class="col w-md dk b-r bg-auto">
-    <div class="wrapper bg hidden-sm hidden-xs" id="email-menu">
-      <div class="wrapper font-bold h4">选择平台</div>
-      <ul class="nav nav-pills nav-stacked nav-sm">
-        <li ng-repeat="platform in platforms" ui-sref-active="active">
-          <a ui-sref="app.seller.{{platform.filter}}">
-            <i class="fa fa-fw fa-circle text-muted" color="{{platform.color}}" label-color ></i>
-            {{platform.name}}
-          </a>
-        </li>
-      </ul>      
+    <div class="col-md-2"><span class="m-l font-bold h3 text-danger" style="line-height:50px;">发布任务</span></div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="pull-left col-md-2 text-center">
+          <div class=""><span>选择任务类型</span></div>
+          <div class="btn btn-icon btn-rounded btn-danger"><i class="fa">1</i></div>
+        </div>
+        <div class="pull-left col-md-2 text-center">
+          <div><span>填写商品信息</span></div>
+          <div class="btn btn-icon btn-rounded btn-default"><i class="fa">2</i></div>
+        </div> 
+        <div class="pull-left col-md-2 text-center">
+          <div><span>选择刷单数量</span></div>
+          <div class="btn btn-icon btn-rounded btn-default"><i class="fa">3</i></div>
+        </div>
+        <div class="pull-left col-md-2 text-center">
+          <div><span>选择增值服务</span></div>
+          <div class="btn btn-icon btn-rounded btn-default"><i class="fa">4</i></div>
+        </div>
+        <div class="pull-left col-md-2 text-center">
+          <div><span>支付</span></div>
+          <div class="btn btn-icon btn-rounded btn-default"><i class="fa">5</i></div>
+        </div>
+        <div class="pull-left col-md-2 text-center">
+          <div><span>发布成功</span></div>
+          <div class="btn btn-icon btn-rounded btn-default"><i class="fa">6</i></div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="col">
-    <div ui-view ></div>
-    <!-- <div class="bg-light lter b-b b-t wrapper-md">
-      <h4 class="m-t-none  text-danger">温馨提示</h4>
-      <p>1. 淘宝/天猫可绑定3个买号，每个买号要求绑定不同的收货信息 （收货人姓名，地址，联系电话均要求不同）。</p>
-      <p>2. 收货信息可填写朋友，家人等任意真实的收货信息。</p>
-      <p>3. 平台填写的收货信息，请务必和淘宝等网站的下单时收货信息保持一致，否则将封闭您的人气符账号。</p>
-      <p>4. 买号提交审核后，平台预计在24小时内完成审核操作，只有审核通过的买号才能接手任务。</p>
-    </div> -->
-  </div>
+</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+  <div ui-view ></div>
 </div>
