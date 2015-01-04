@@ -1,16 +1,16 @@
 'use strict';
 //request 拦截器，为http请求加上header信息
-app.factory('sessionInjector', ['$rootScope', function($rootScope){
+app.factory('sessionInjector',  function(){
 	return {
       request: function (config) {
           //如果User Session信息已经保存了，包在request的header发回去给服务器
-          if (angular.isObject($rootScope.global.userSession)) {            
-            config.headers['user-session-token'] = $rootScope.global.userSession.Tokan;
+          if (angular.isObject(app.userSession)) {            
+            config.headers['user-session-token'] = app.userSession.Tokan;
           }                    
           return config;
       }
     };
-}]);
+});
 //Promise Get的公共请求方式
 app.factory('promiseGet', ['$http','$q', function($http,$q){
 	return function(url){
@@ -88,14 +88,121 @@ app.factory('platforms', ['promisePost','promiseGet',function(promisePost,promis
 			    {id : 3, name: '京东', filter:'jd', color:'#fad733', active : false},
 			    {id : 4, name: '当当', filter:'dangdang', color:'#27c24c', active : false},
 			    {id : 5, name: '亚马逊', filter:'amazon', color:'#fad733', active : false},
-			    {id : 6, name: '一号店', filter:'yhd', color:'#23b7e5', active : false},
+			    {id : 6, name: '一号店', filter:'yhd', color:'#23b7e5', active : false}
 			  ];
 		},
 		getDefault : function(){
 			return {id : 1, name: '淘宝', filter:'taobao', color:'#23b7e5', active : false};
+		},
+		getAllWithShopCount : function(){
+			//TODO: 需要从后台的API来获取
+			return [
+			    {id : 1, name: '淘宝', count : 3},
+			    {id : 2, name: '天猫', count : 2},
+			    {id : 3, name: '京东', count : 1},
+			    {id : 4, name: '当当', count : 0},
+			    {id : 5, name: '亚马逊', count : 0},
+			    {id : 6, name: '一号店', count : 0}
+			  ];
 		}		
 	};
 }]);
+//不同平台的任务类型
+app.factory('taskTypes',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		get : function(platformId){
+			return [
+				{id : 1, name : "文字好评订单", point : 10.5},
+				{id : 2, name : "图文好评订单", point : 14.5},
+				{id : 3, name : "聚划算", point : 10.5},
+				{id : 4, name : "直通车订单", point : 10.5}
+			];
+		}
+	};
+}]);
+//任务流程 Service
+app.factory('taskflow',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		create : function(platformId){
+			var taobao = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
+			var tmall = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
+			var jd = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
+			var yhd = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
+			var dangdang = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
+			var amazon = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
+			var flow;
+			switch(platformId){
+				case 1:
+					flow = taobao;
+					break;
+				case 2:
+					flow = tmall;
+					break;
+				case 3:
+					flow = jd;
+					break;
+				case 4:
+					flow = dangdang;
+					break;
+				case 5:
+					flow = amazon;
+					break;
+				case 6:
+					flow = yhd;
+					break;				
+				default:
+					flow = taobao;
+					break;
+			}
+			return flow;
+		}
+	};
+}]);
+//任务流程 Service
+app.factory('flowDatas',function(){
+	var flowData = {};
+	return {
+		create : function(platformId){
+			var taobao = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
+			var tmall = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
+			var jd = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
+			var yhd = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
+			var dangdang = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
+			var amazon = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
+			var model;
+			switch(platformId){
+				case 1:
+					model = taobao;
+					break;
+				case 2:
+					model = tmall;
+					break;
+				case 3:
+					model = jd;
+					break;
+				case 4:
+					model = dangdang;
+					break;
+				case 5:
+					model = amazon;
+					break;
+				case 6:
+					model = yhd;
+					break;				
+				default:
+					model = taobao;
+					break;
+			}
+			return model;
+		},
+		get : function(){
+			return flowData;
+		},
+		set : function(data){
+			flowData = data;
+		}
+	};
+});
 //User 对象数据交互 Service
 app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {

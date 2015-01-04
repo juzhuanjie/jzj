@@ -1,18 +1,15 @@
-<div class="wrapper">
+<div class="wrapper" ng-controller="TaskFlowItem1Ctrl">
   <div class="row">
     <div class="col-md-4 b-r">      
       <div class="wrapper h4">第一步：选择平台</div>
       <ul class="list-group">
-        <li class="list-group-item"><label><input type="radio" name="platform" /><span class="m-l">淘宝</span></label><b class="badge bg-info pull-right">1</b></li>
-        <li class="list-group-item"><label><input type="radio" name="platform" /><span class="m-l">天猫</span></label><b class="badge bg-info pull-right">0</b></li>
-        <li class="list-group-item"><label><input type="radio" name="platform" /><span class="m-l">京东</span></label><b class="badge bg-info pull-right">0</b></li>
+        <li class="list-group-item" ng-repeat="p in platforms"><label ng-click="changePlatform(p.id)"><input type="radio" name="platform" value="{{p.id}}" ng-model="platformId"/><span class="m-l">{{p.name}}</span></label><b class="badge bg-info pull-right">{{p.count}}</b></li>
       </ul>      
     </div>
     <div class="col-md-4 b-lignt">
       <div class="wrapper h4">第二步：选择店铺</div>
       <ul class="list-group">
-        <li class="list-group-item"><label><input type="radio" name="shop" /><span class="m-l">aiene</span></label></li>
-        <li class="list-group-item"><label><input type="radio" name="shop" /><span class="m-l">juzhuanjie</span></label></li>
+        <li class="list-group-item" ng-repeat="s in shops"><label><input type="radio" name="shop" value="{{s.shopId}}" ng-model="selectedShop"/><span class="m-l">{{s.wangwang}}</span></label></li>
       </ul>   
       <div class="h5 text-muted text-right">(还可以绑定2个店铺) + 绑定更多店铺</div>
     </div>
@@ -27,7 +24,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="wrapper text-center"><button class="btn btn-danger" ui-sref="app.task.step2"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button><small class="text-muted">（填写商品信息）</small></div>
+    <div class="wrapper text-center"><button class="btn btn-danger" ng-click="nextstep()"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button><small class="text-muted">（填写商品信息）</small></div>
   </div>
   <div class="line b-b"></div>   
   <div class="row">

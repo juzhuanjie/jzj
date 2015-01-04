@@ -1,4 +1,4 @@
-<div class="wrapper-md no-p-t"> 
+<div class="wrapper-md no-p-t" ng-controller="TaskFlowItem5Ctrl"> 
   <div class="row wrapper">
     <div>
       <label class="h4 font-bold">支付</label>
@@ -26,8 +26,8 @@
 
   <div class="row wrapper-md no-p-t">
     <div class="wrapper text-center">
-      <button class="btn btn-danger m-r" ui-sref="app.task.step4"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button>
-      <button class="btn btn-danger m-l" ui-sref="app.task.step6"><span class="m-r">付款并发布任务</span></button>
+      <button class="btn btn-danger m-r" ng-click="prevstep()"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button>
+      <button class="btn btn-danger m-l" ng-click="nextstep()"><span class="m-r">付款并发布任务</span></button>
     </div>
   </div>
 
