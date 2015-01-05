@@ -1,0 +1,11 @@
+/usr/bin/mysqladmin -u root password 'root'
+/usr/bin/mysqladmin -u root -h Config623VM0 password 'root'
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+
+FLUSH   PRIVILEGES;
+
+CREATE USER 'harbor'@'localhost' IDENTIFIED BY 'bdnacn';
+CREATE USER 'harbor'@'%' IDENTIFIED BY 'bdnacn';
+
+grant all privileges on xss.* to harbor@localhost identified by 'bdnacn';

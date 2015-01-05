@@ -9,20 +9,18 @@ angular.module('app')
       function ($rootScope,   $state,   $stateParams,  $window, $location) {
           $rootScope.$state = $state;
           $rootScope.$stateParams = $stateParams;
-          $rootScope.global = { userSession : null };
           function init(){
             //从浏览器缓存里获取用户session
             if (angular.isObject(angular.fromJson($window.localStorage.getItem("userSession")))) {
-              $rootScope.global.userSession = angular.fromJson($window.localStorage.getItem("userSession"));
+              app.userSession = angular.fromJson($window.localStorage.getItem("userSession"));
             }else{
-              $rootScope.global.userSession = null;
+              app.userSession = null;
             }
-            console.log($window.localStorage.getItem("userSession"));
           };  
           //在注册一个路由事件，监听ui-route stats的改变
           $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             //如果没有登录就跳到登录页面
-            if(toState.name != "access.signin"  && (angular.isUndefined($rootScope.global.userSession) || $rootScope.global.userSession == null)){
+            if(toState.name != "access.signin"  && (angular.isUndefined(app.userSession) || app.userSession == null)){
               //event.preventDefault(); 
               //$location.path("/access/signin");
               toState.name = "access.signin";
@@ -198,33 +196,41 @@ angular.module('app')
                   url: '/amazon',
                   templateUrl:'tpl/seller_bind_amazon.html'
               })
+
+              
               .state('app.task', {
-                  url: '/task',
-                  templateUrl: 'tpl/task.html'                  
+                  url: '/taskflow/:id',
+                  templateUrl: 'tpl/task_flow.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.task.js'] );
+                      }]
+                  }              
               })
-              .state('app.task.step1', {
-                  url: '/step1',
-                  templateUrl: 'tpl/task_step_1.html'                  
+              .state('app.task.item1', {
+                  url: '/item1',
+                  templateUrl: 'tpl/task_item_1.html'                  
               })
-              .state('app.task.step2', {
-                  url: '/step2',
-                  templateUrl: 'tpl/task_step_2.html'                  
+              .state('app.task.item2', {
+                  url: '/item2',
+                  templateUrl: 'tpl/task_item_2.html'                  
               })
-              .state('app.task.step3', {
-                  url: '/step3',
-                  templateUrl: 'tpl/task_step_3.html'                  
+              .state('app.task.item3', {
+                  url: '/item3',
+                  templateUrl: 'tpl/task_item_3.html'                  
               })
-              .state('app.task.step4', {
-                  url: '/step4',
-                  templateUrl: 'tpl/task_step_4.html'                  
+              .state('app.task.item4', {
+                  url: '/item4',
+                  templateUrl: 'tpl/task_item_4.html'                  
               })
-              .state('app.task.step5', {
-                  url: '/step5',
-                  templateUrl: 'tpl/task_step_5.html'                  
+              .state('app.task.item5', {
+                  url: '/item5',
+                  templateUrl: 'tpl/task_item_5.html'                  
               })
-              .state('app.task.step6', {
-                  url: '/step6',
-                  templateUrl: 'tpl/task_step_6.html'                  
+              .state('app.task.item6', {
+                  url: '/item6',
+                  templateUrl: 'tpl/task_item_6.html'                  
               })
       }
     ]

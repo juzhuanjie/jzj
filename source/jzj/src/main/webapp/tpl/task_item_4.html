@@ -1,4 +1,4 @@
-<div class="wrapper-md no-p-t">
+<div class="wrapper-md no-p-t" ng-controller="TaskFlowItem4Ctrl">
   <div class="row wrapper no-p-b">
     <div>
       <label class="h4 font-bold">选择增值服务</label>
@@ -9,7 +9,7 @@
       <label class="h5 font-bold">快速返款给买手</label>
       <br/>
       <label class="m-t-xs checkbox m-l-md">
-        <input type="checkbox" class="" />押金直接返款：选择此服务，买手完成后，平台将直接使用押金为您操作返款，商家无需耗费时间、人力处理退款，减少押款周期
+        <input type="checkbox" class="" value="true" ng-model="flowData.agreeFastRefunds"/>押金直接返款：选择此服务，买手完成后，平台将直接使用押金为您操作返款，商家无需耗费时间、人力处理退款，减少押款周期
       </label>
       <label class="m-t-xs m-l-md">
         每单收取刷单金额的0.6%做为退款服务费，费用： 1 单 X 619元 X 0.6% = 3.71符点
@@ -24,24 +24,24 @@
   </div> 
   <div class="row wrapper no-p-t no-p-b">
       <h5  class="font-bold">1.提升完成任务速度：<label class="font-normal text-muted">增加符点数越多，推荐任务排名越靠前，便于更快速完成任务</label></h5>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>+ 10 符点</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>+ 20 符点</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>+ 30 符点</label>
+      <label class="radio-inline padder-lg" ><input type="radio" value="10" ng-model="flowData.fastDonePoint"/>+ 10 符点</label>
+      <label class="radio-inline padder-lg" ><input type="radio" value="20" ng-model="flowData.fastDonePoint"/>+ 20 符点</label>
+      <label class="radio-inline padder-lg" ><input type="radio" value="30" ng-model="flowData.fastDonePoint"/>+ 30 符点</label>
   </div>  
 
   <div class="line b-b"></div> 
 
-  <div class="row wrapper-md no-p-t no-p-b">
+  <div class="row wrapper no-p-t no-p-b">
       <h5 class="font-bold">2.加赏任务佣金： <label class="font-normal text-muted">增加符点数越多，买手完成任务的积极性就越大，买手会优先做此类任务</label></h5>
-      <label><input type="checkbox" />&nbsp;&nbsp;每单加赏佣金</label>
-      <label><input type="text" class="w-xxs input-control-xs" />人气符点，共计：1单 X 3人气符点 = 3人气符点<span class="text-muted">(最低为2人气符)</span></label>      
+      <label class="checkbox-inline padder-lg"><input type="checkbox" value="true" ng-model="flowData.agreeAddtionPoint"/>每单加赏佣金</label>
+      <label><input type="text" class="w-xxs input-control-xs" ng-model="flowData.addtionPoint"/>人气符点，共计：1单 X 3人气符点 = 3人气符点<span class="text-muted">(最低为2人气符)</span></label>      
   </div>  
 
   <div class="line b-b"></div> 
 
-  <div class="row wrapper-md no-p-t no-p-b">
+  <div class="row wrapper no-p-t no-p-b">
       <h5 class="font-bold">3.优先审单 <span  class="text-muted">选择此服务后，聚赚界将会优先审核您发布的任务</span></h5>
-      <label><input type="checkbox" />&nbsp;&nbsp;订单优先审核 <span class="text-muted">（5人气符点）</span></label>
+      <label class="checkbox-inline padder-lg"><input type="checkbox" value="true" ng-model="flowData.agreePriorityReview"/>订单优先审核 <span class="text-muted">（5人气符点）</span></label>
   </div>  
 
   <div class="line b-b"></div> 
@@ -54,15 +54,15 @@
 
   <div class="row wrapper-md no-p-t no-p-b">      
       <h5 class="font-bold">1.稀释自然搜索转化率： <span  class="text-muted">平台会根据您的选择匹配相应的自然搜索访客流量，本流量将会被计入淘宝搜索引擎统计</span><a class="font-normal text-info">点击查看流量说明</a></h5>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>5访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>10访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>12访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>20访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>30访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>50访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>100访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count"/>自定义</label>
-      <label class="radio-inline" style="padding-left:0px;margin-left:-30px;"><input type="text" name="count" class="w-xxs input-control-xs" /> 访客 <span class="text-muted">(不能低于5访客)</span></label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="5" ng-model="flowData.visitor"/>5访客</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="10" ng-model="flowData.visitor"/>10访客</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="12" ng-model="flowData.visitor"/>12访客</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="20" ng-model="flowData.visitor"/>20访客</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="30" ng-model="flowData.visitor"/>30访客</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="50" ng-model="flowData.visitor"/>50访客</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="100" ng-model="flowData.visitor"/>100访客</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="-1" ng-model="flowData.visitor"/>自定义</label>
+      <label class="radio-inline" style="padding-left:0px;margin-left:-30px;"><input type="text" name="count" class="w-xxs input-control-xs" ng-model="flowData.customVisitor"/> 访客 <span class="text-muted">(不能低于5访客)</span></label>
       <h5>选择此项服务后将会有<label class="text-danger">X</label>访客通过自然搜索找到您的商品并进入店铺，其中：</h5>
       <p>淘宝关键词1：XXXX刷<label class="text-danger">1</label>单，将会匹配<label class="text-danger">X</label>访客流量</p>
       <p>注：到店访客流量数可能会有少量误差，属于正常情况；</p>
@@ -74,8 +74,8 @@
 
   <div class="row wrapper-md no-p-t no-p-b">
       <h5 class="font-bold">2.延长买家购物周期： <span  class="text-muted">仅推荐重复购买率低的商品使用，如家具，家电，高单价的商品等；其他品类不推荐使用</span></h5>
-      <label class="radio-inline font-bold"><input type="radio" name="time"/>2个月 <span class="text-danger">2</span>符点/单/商品</label>
-      <label class="radio-inline font-bold padder-lg"><input type="radio" name="time"/>3个月 <span class="text-danger">3</span>符点/单/商品</label>
+      <label class="radio-inline font-bold"><input type="radio" name="time" value="2" ng-model="flowData.extensionShopingPeriod"/>2个月 <span class="text-danger">2</span>符点/单/商品</label>
+      <label class="radio-inline font-bold padder-lg"><input type="radio" name="time" value="3" ng-model="flowData.extensionShopingPeriod"/>3个月 <span class="text-danger">3</span>符点/单/商品</label>
       <p class="m-t-sm text-muted">选择此项服务后，购买过任务商品的买家<span class="text-danger">2</span>个月内，将不能再接手包含本任务商品的任务；</p>
       <p class="text-muted">合计收费：<span class="text-danger">2</span>符点 X <span class="text-danger">1</span>单 X <span class="text-danger">1</span>个商品链接 = <span class="text-danger">2</span>符点</p>
   </div> 
@@ -89,26 +89,26 @@
   </div> 
 
   <div class="row wrapper-md no-p-t">      
-      <label><input type="checkbox" />&nbsp;&nbsp;1.设置你希望买手对商品好评的范围 <span class="text-muted">（1符点/单）</span></label>
+      <label><input type="checkbox" value="true" ng-model="flowData.agreeQualityPraise"/>&nbsp;&nbsp;1.设置你希望买手对商品好评的范围 <span class="text-muted">（1符点/单）</span></label>
       <div class="row wrapper bg-remind">
         请根据您发布任务的商品设定<span class="text-danger">几个关键字</span>作为买手的<span class="text-danger">评价范围</span>独自发挥撰写评价，例如<span class="text-danger"> “手感面料很舒服，款式也很漂亮，包装很讲究，物流很快，性价比高”</span> 等。注意：请不要填写完整的评价内容，避免所有买手评价商品的内容一模一样。
       </div>
       <div class="row m-t form-horizontal">
         <label class="col-md-1 control-label text-left">关键字1：</label>
         <div class="col-md-4">
-          <input class="form-control" type="text" />
+          <input class="form-control" type="text" ng-model="flowData.praiseKeywords[0]"/>
         </div>
       </div>
       <div class="row m-t form-horizontal">
         <label class="col-md-1 control-label text-left">关键字2：</label>
         <div class="col-md-4">
-          <input class="form-control" type="text" />
+          <input class="form-control" type="text" ng-model="flowData.praiseKeywords[1]"/>
         </div>
       </div>
       <div class="row m-t form-horizontal">
         <label class="col-md-1 control-label text-left">关键字3：</label>
         <div class="col-md-4">
-          <input class="form-control" type="text" />
+          <input class="form-control" type="text" ng-model="flowData.praiseKeywords[2]"/>
         </div>
       </div>
       <div class="row m-t">
@@ -122,8 +122,8 @@
 
   <div class="row wrapper-md no-p-t">
     <div class="wrapper text-center">
-      <button class="btn btn-danger m-r" ui-sref="app.task.step3"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button>
-      <button class="btn btn-danger m-l" ui-sref="app.task.step5"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button><span class="text-muted">(支付)</span>
+      <button class="btn btn-danger m-r" ng-click="prevstep()"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button>
+      <button class="btn btn-danger m-l" ng-click="nextstep()"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button><span class="text-muted">(支付)</span>
     </div>
   </div>
   

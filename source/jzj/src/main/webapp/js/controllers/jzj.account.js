@@ -1,10 +1,13 @@
+
 'use strict';
+
 /*
 ** 账号信息设置页面相关的Controller
 */
+
 //基本信息Controller
-app.controller('UserCtrl', ['$scope', '$rootScope', '$modal','users', function($scope, $rootScope, $modal, users) {
-    var userId = $rootScope.global.userSession.userId;
+app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal, users) {
+    var userId = app.userSession.userId;
     $scope.user = users.newEmpty();
     $scope.openSetLoginPwd = function () {
       var modalInstance = $modal.open({
@@ -193,8 +196,8 @@ app.controller('HeadImageUploadCtrl', ['$scope', 'FileUploader', '$modalInstance
     };
 }]);
 //支付宝设置Controller
-app.controller('ZhiFuBaoCtrl', ['$scope', '$rootScope', 'userBanks', function($scope,$rootScope, userBanks){
-  var userId = $rootScope.global.userSession.userId;
+app.controller('ZhiFuBaoCtrl', ['$scope', 'userBanks', function($scope, userBanks){
+  var userId = app.userSession.userId;
   var bankType = 1;
   $scope.isEdit = true;
   $scope.account = userBanks.newEmpty(bankType);
@@ -232,8 +235,8 @@ app.controller('ZhiFuBaoCtrl', ['$scope', '$rootScope', 'userBanks', function($s
   };
 }]);
 //财付通设置Controller
-app.controller('CaiFuTongCtrl', ['$scope','$rootScope','userBanks', function($scope,$rootScope,userBanks){
-  var userId = $rootScope.global.userSession.userId;
+app.controller('CaiFuTongCtrl', ['$scope','userBanks', function($scope,userBanks){
+  var userId = app.userSession.userId;
   var bankType = 2;
   $scope.isEdit = true;
   $scope.account = userBanks.newEmpty(bankType);
@@ -271,8 +274,8 @@ app.controller('CaiFuTongCtrl', ['$scope','$rootScope','userBanks', function($sc
   };
 }]);
 //银行卡设置Controller
-app.controller('YinHangKaCtrl', ['$scope','$rootScope','userBanks', function($scope,$rootScope,userBanks){
-  var userId = $rootScope.global.userSession.userId;
+app.controller('YinHangKaCtrl', ['$scope','userBanks', function($scope,userBanks){
+  var userId = app.userSession.userId;
   var bankType = 3;
   $scope.isEdit = true;
   $scope.account = userBanks.newEmpty(bankType);
@@ -333,8 +336,8 @@ app.controller('BuyerCtrl', ['$scope','platforms', function($scope,platforms) {
   };
 }]);
 //绑定买手详细Controller
-app.controller('BuyerAccountCtrl', ['$scope','$rootScope','buyerAccounts','platforms', function($scope,$rootScope,buyerAccounts,platforms) {
-  var userId = $rootScope.global.userSession.userId;
+app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms', function($scope,buyerAccounts,platforms) {
+  var userId = app.userSession.userId;
   $scope.platform = {};
   $scope.buyerAccountBinds = [];
   $scope.wangwang="";
@@ -462,8 +465,8 @@ app.controller('SellerCtrl', ['$scope','platforms', function($scope, platforms) 
   };
 }]);
 //绑定卖手店铺详细Controller
-app.controller('SellerShopCtrl', ['$scope','$rootScope','sellerShops','platforms', function($scope,$rootScope,sellerShops,platforms) {
-  var userId = $rootScope.global.userSession.userId;
+app.controller('SellerShopCtrl', ['$scope','sellerShops','platforms', function($scope,sellerShops,platforms) {
+  var userId = app.userSession.userId;
   $scope.platform = {};
   $scope.sellerShopBinds = [];
   $scope.url = "";
