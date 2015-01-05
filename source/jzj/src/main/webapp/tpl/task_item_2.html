@@ -5,33 +5,33 @@
       <div class="row">
         <label class="col-md-2 control-label text-left"><span class="text-danger">*</span>商品名称</label>
         <div class="col-md-4">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].productName"/>
         </div>
       </div>
       <div class="row m-t-xs">
         <label class="col-md-2 control-label text-left"><span class="text-danger">*</span>商品链接</label>
         <div class="col-md-4">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].productLink"/>
         </div>
       </div>
       <div class="row m-t-xs">
         <label class="col-md-2 control-label text-left"><span class="text-danger">&nbsp;</span>规格</label>
         <div class="col-md-2">
-          <input type="text" class="form-control" placeholder="如：颜色"/>
+          <input type="text" class="form-control" placeholder="如：颜色" ng-model="flowData.products[0].productSpecifications.color"/>
         </div>
         <div class="col-md-2">
-          <input type="text" class="form-control" placeholder="如：尺寸"/>
+          <input type="text" class="form-control" placeholder="如：尺寸" ng-model="flowData.products[0].productSpecifications.size"/>
         </div>
       </div>
       <div class="row m-t-xs">
         <label class="col-md-2 control-label text-left"><span class="text-danger">*</span>单品售价</label>
         <div class="col-md-1">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].productPrice"/>
         </div>
         <label class="col-md-1 text-left control-label">元</label>
         <label class="col-md-1 text-left control-label"><span class="text-danger">*</span>每单拍</label>
         <div class="col-md-1">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].productCount"/>
         </div>
         <label class="col-md-1 text-left control-label">件</label>
         <label class="col-md-2 text-left control-label">下单总金额<span class="m-l m-r text-danger">0</span>元</label>
@@ -39,7 +39,7 @@
       <div class="row m-t-xs">
         <label class="col-md-2 control-label text-left"><span class="text-danger">&nbsp;</span>搜索页面展示价格</label>
         <div class="col-md-2">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].productCount2"/>
         </div>
         <label class="col-md-4 text-left control-label ">如该商品有满减、促销、多规格等情况，请填写此金额</label>
       </div>
@@ -64,23 +64,23 @@
       <div class="row m-t">
         <label class="col-md-3 control-label text-left"><span class="text-danger">*</span>让买手在<span class="text-danger">taobao.com</span>搜索关键字进入 “搜索列表”  </label>
         <div class="col-md-2">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].keywordSource.productKeyword"/>
         </div>
       </div>
 
       <div class="row m-t">
         <label class="col-md-3 control-label text-left">当前列表中，告诉买手通过筛选分类找到商品</label>
         <div class="col-md-1">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].keywordSource.prodcutCategory1"/>
         </div>
         <div class="col-md-1">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].keywordSource.prodcutCategory2"/>
         </div>
         <div class="col-md-1">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].keywordSource.prodcutCategory3"/>
         </div>
         <div class="col-md-1">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" ng-model="flowData.products[0].keywordSource.prodcutCategory4"/>
         </div>
         <label class="col-md-2 control-label text-left">最多四个分类</label>
       </div>
@@ -97,13 +97,13 @@
       </div>
       <div class="row m-t">
         <label class="m-l">价格</label>
-        <input type="text" class="form-control" style="width:50px;display:inline;" />
+        <input type="text" class="w-xxs input-control-xs"  ng-model="flowData.products[0].searchMinPrice"/>
         <label class="">元</label>
-        <input type="text" class="form-control"  style="width:50px;display:inline;"/>
+        <input type="text" class="w-xxs input-control-xs" ng-model="flowData.products[0].searchMaxPrice"/>
         <label class="">元</label>
         <label class="m-l m-r">|</label>
         <label >商品所在地</label>        
-        <select class="form-control" style="width:100px;display:inline;"><option>全国</option></select>
+        <select class="input-control-xs" ng-model="flowData.products[0].searchAddress"><option>全国</option></select>
       </div>
       <div class="row m-t">
         <a class="m-l text-danger"> + 支付2元可多添加1个商品 <span class="text-muted"> (最多可添加2个商品)</span> </a>
@@ -118,11 +118,11 @@
     <h4 class="text-danger">2.设置商品收取运费的方式</h4>
     <div class="wrapper-xs">
       <div class="row radio">
-        <label class="m-l"><input class="" type="radio" name="fare"/>商品本身包邮</label><label class="text-muted">买手按照商品实际金额下单</label>
+        <label class="m-l"><input class="" type="radio" name="fare" value="true" ng-model="flowData.freePostage"/>商品本身包邮</label><label class="text-muted">买手按照商品实际金额下单</label>
       </div>
       <div class="line line-dashed b-b line-lg pull-in"></div>
       <div class="row radio">
-        <label class="m-l"><input type="radio" name="fare"/>商品不包邮</label><label class="text-muted">无需买手联系客服，商家每单额外支出10元作为运费押金，任务完成后运费押金将全部退还给商家</label>
+        <label class="m-l"><input type="radio" name="fare" value="false" ng-model="flowData.freePostage"/>商品不包邮</label><label class="text-muted">无需买手联系客服，商家每单额外支出10元作为运费押金，任务完成后运费押金将全部退还给商家</label>
       </div>
     </div>
   </div>

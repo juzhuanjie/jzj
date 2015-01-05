@@ -160,10 +160,57 @@ app.factory('taskflow',['promisePost','promiseGet',function(promisePost,promiseG
 }]);
 //任务流程 Service
 app.factory('flowDatas',function(){
-	var flowData = {};
+	var flowData = null;
 	return {
 		create : function(platformId){
-			var taobao = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
+			var taobao = { 
+					"platformId" : 1, 
+					"shopId" : 1, 
+					"taskTypeId" : 1,
+					"products" : [{
+						"productName" : "",
+						"productLink" : "",
+						"productSpecifications" : { "color" : "", "size" : ""},
+						"productPrice" : "",
+						"productCount" : "",
+						"productPrice2" : "",
+						"productImage" : "",
+						"keywordSource" : [{ 
+							"productKeyword" : "",
+							"prodcutCategory1" : "",
+							"prodcutCategory2" : "",
+							"prodcutCategory3" : "",
+							"prodcutCategory4" : "" 
+							}],
+						"searchMinPrice" : "",
+						"searchMaxPrice" : "",
+						"searchAddress" : ""
+						}],	
+					"payedAddProduct" : false,
+					"freePostage" : false,
+					"orderQuantity" : 1,
+					"customOrderQuantity" : "",
+					"pcOrderQuantity" : "",
+					"padOrderQuantity" : "",
+					"dealKeyword1" : "",
+					"dealKeyword1OrderQuantity" : "",
+					"dealKeyword2" : "",
+					"dealKeyword2OrderQuantity" : "",
+					"orderMessages" : [""],
+					"agreeFastRefunds" : false,
+					"fastDonePoint" : -1,
+					"agreeAddtionPoint" : false,
+					"addtionPoint" : "",
+					"agreePriorityReview" : false,
+					"visitor" : 5,
+					"customVisitor" : "",
+					"extensionShopingPeriod" : -1,
+					"agreeQualityPraise" : false,
+					"praiseKeywords" : ["","",""],
+					"paymentPiont" : false,
+					"paymentDeposit" : false,
+					"paymentBank" : false,
+				};
 			var tmall = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
 			var jd = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
 			var yhd = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };

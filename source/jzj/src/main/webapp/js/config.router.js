@@ -199,7 +199,7 @@ angular.module('app')
 
               
               .state('app.task', {
-                  url: '/taskflow',
+                  url: '/taskflow/:id',
                   templateUrl: 'tpl/task_flow.html',
                   resolve: {
                       deps: ['uiLoad',

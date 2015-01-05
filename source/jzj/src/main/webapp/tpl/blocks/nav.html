@@ -37,7 +37,42 @@
         </a>
       </li>
     </ul>
-  </li>  
+  </li> 
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-success"></i>
+      <span>未发布的任务</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>未发布的任务</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="apps.note">
+          <b class="badge bg-info pull-right">0</b>
+          <span>天猫任务</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="apps.contact">
+          <b class="badge bg-info pull-right">2</b>
+          <span>淘宝任务</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.weather">
+          <b class="badge bg-info pull-right">1</b>
+          <span>京东任务</span>
+        </a>
+      </li>
+    </ul>
+  </li>
   <li ui-sref-active="active">
     <a ui-sref="app.calendar">
     <b class="badge bg-info pull-right">0</b>
@@ -60,7 +95,7 @@
     </a>
   </li> 
   <li ui-sref-active="active">
-    <a ui-sref="app.task.item1">
+    <a ui-sref="app.task({id:'new'})">
       <i class="glyphicon glyphicon-plus icon text-info-lter"></i>
       <span>发布任务</span>
     </a>
@@ -168,25 +203,25 @@
   <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">          
     <span>账号信息</span>
   </li>  
-  <li>
+  <li ui-sref-active="active">
     <a ui-sref="app.account.user">
       <i class="icon-user icon text-success-lter"></i>
       <span>基本信息</span>
     </a>
   </li>
-  <li>
+  <li ui-sref-active="active">
     <a ui-sref="app.account.userbank">
       <i class="icon-question icon"></i>
       <span>提现账号管理</span>
     </a>
   </li>
-  <li>
+  <li ui-sref-active="active">
     <a ui-sref="app.seller.shop">
       <i class="glyphicon glyphicon-plus icon text-info-dker"></i>
       <span>绑定店铺</span>
     </a>
   </li>
-  <li>
+  <li ui-sref-active="active">
     <a ui-sref="app.buyer.account">
       <i class="glyphicon glyphicon-plus icon text-info-dker"></i>
       <span>添加买号</span>
