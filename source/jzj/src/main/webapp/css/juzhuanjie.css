@@ -19,3 +19,15 @@
     background-color: #ffffe0;
     color: #000;
 }
+.l-h-lg{
+    line-height: 75px;
+}
+.breadcrumb-custom{
+    margin-bottom: 0;
+    border-radius: 0;
+    padding: 10px 20px;
+}
+.breadcrumb-font{
+    color: #f05050 !important;
+    /*font-weight: bold;*/
+}

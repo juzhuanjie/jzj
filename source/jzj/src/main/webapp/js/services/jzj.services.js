@@ -209,7 +209,7 @@ app.factory('flowDatas',function(){
 					"praiseKeywords" : ["","",""],
 					"paymentPiont" : false,
 					"paymentDeposit" : false,
-					"paymentBank" : false,
+					"paymentBank" : false
 				};
 			var tmall = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
 			var jd = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };

@@ -3,7 +3,7 @@
   <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
     <span>任务管理</span>
   </li>  
-  <li>
+  <!-- <li>
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -37,8 +37,8 @@
         </a>
       </li>
     </ul>
-  </li> 
-  <li>
+  </li>  -->
+  <!-- <li>
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -72,8 +72,8 @@
         </a>
       </li>
     </ul>
-  </li>
-  <li ui-sref-active="active">
+  </li> -->
+  <!-- <li ui-sref-active="active">
     <a ui-sref="app.calendar">
     <b class="badge bg-info pull-right">0</b>
       <i class="glyphicon glyphicon glyphicon-flag icon text-info-dker"></i>
@@ -92,6 +92,18 @@
       <b class="badge bg-info pull-right">9</b>
       <i class="glyphicon glyphicon glyphicon-flag icon text-info-lter"></i>
       <span>京东任务</span>
+    </a>
+  </li>  -->
+  <li ui-sref-active="active">
+    <a ui-sref="app.tasklist({status:1})">
+      <i class="glyphicon glyphicon-th-large icon text-success"></i>
+      <span>已完成的任务</span>
+    </a>
+  </li> 
+  <li ui-sref-active="active">
+    <a ui-sref="app.tasklist({status:2})">
+      <i class="glyphicon glyphicon-th  icon text-info-lter"></i>
+      <span>未发布任务</span>
     </a>
   </li> 
   <li ui-sref-active="active">
@@ -194,7 +206,6 @@
       <span>会员记录</span>
     </a>
   </li>
-
 
 
 
