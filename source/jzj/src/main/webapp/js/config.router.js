@@ -232,6 +232,20 @@ angular.module('app')
                   url: '/item6',
                   templateUrl: 'tpl/task_item_6.html'                  
               })
+              .state('app.tasklist', {
+                  url: '/tasklist/:status',
+                  templateUrl: 'tpl/task_list.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.task.js'] );
+                      }]
+                  }                   
+              })
+              .state('app.tasklist.filter', {
+                  url: '/filter/:filter',
+                  templateUrl: 'tpl/task_list.html'                  
+              })
       }
     ]
   );
