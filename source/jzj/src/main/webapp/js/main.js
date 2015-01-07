@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 'users', '$state',
-    function(              $scope,   $translate,   $localStorage, $window , users, $state) {
+  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 'users', '$state','platforms',
+    function(              $scope,   $translate,   $localStorage, $window , users, $state, platforms) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -37,7 +37,10 @@ angular.module('app')
           container: false
         }
       }
-
+      $scope.platforms = [];
+      $scope.$on('$viewContentLoaded',function(){
+        $scope.platforms = platforms.getAll();
+      });
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
         $scope.app.settings = $localStorage.settings;
