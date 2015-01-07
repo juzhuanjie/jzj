@@ -31,3 +31,46 @@
     color: #f05050 !important;
     /*font-weight: bold;*/
 }
+.ul-t{
+    list-style: outside none none;
+    margin: 0;
+    padding-left: 0;
+}
+.ul-t li{
+    float: left;
+    padding: 0 20px 0 0;
+}
+.b-default {
+  border-color: #f6f8f8;
+}
+.m-panel{
+    background-color: #fff;
+    border: 1px solid #f6f8f8;
+    border-radius: 2px;
+}
+.m-panel-heading{    
+    height: 40px;
+    background: #f6f8f8;
+}
+.m-panel .m-panel-title{
+    float: left;
+    padding: 10px;
+}
+.m-panel-heading a:hover{
+    color: #fff;
+    background: #f05050;
+}
+.m-panel .title-danger{
+    color: #fff;
+    background: #f05050;
+}
+.m-panel .title-default{
+    color: #000;
+    background: none;
+}
+.m-panel-body{
+    padding: 10px;
+}
+.filter-control{
+    width: 100px;
+}

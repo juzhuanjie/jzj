@@ -246,6 +246,17 @@ angular.module('app')
                   url: '/filter/:filter',
                   templateUrl: 'tpl/task_list.html'                  
               })
+
+              .state('app.peddingtask', {
+                  url: '/peddingtask/:platformId',
+                  templateUrl: 'tpl/pedding_task.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.task.js'] );
+                      }]
+                  }                   
+              })
       }
     ]
   );

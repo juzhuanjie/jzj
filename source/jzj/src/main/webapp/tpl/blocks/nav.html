@@ -38,41 +38,7 @@
       </li>
     </ul>
   </li>  -->
-  <!-- <li>
-    <a href class="auto">
-      <span class="pull-right text-muted">
-        <i class="fa fa-fw fa-angle-right text"></i>
-        <i class="fa fa-fw fa-angle-down text-active"></i>
-      </span>
-      <i class="glyphicon glyphicon-th-large icon text-success"></i>
-      <span>未发布的任务</span>
-    </a>
-    <ul class="nav nav-sub dk">
-      <li class="nav-sub-header">
-        <a href>
-          <span>未发布的任务</span>
-        </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="apps.note">
-          <b class="badge bg-info pull-right">0</b>
-          <span>天猫任务</span>
-        </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="apps.contact">
-          <b class="badge bg-info pull-right">2</b>
-          <span>淘宝任务</span>
-        </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="app.weather">
-          <b class="badge bg-info pull-right">1</b>
-          <span>京东任务</span>
-        </a>
-      </li>
-    </ul>
-  </li> -->
+  
   <!-- <li ui-sref-active="active">
     <a ui-sref="app.calendar">
     <b class="badge bg-info pull-right">0</b>
@@ -106,6 +72,29 @@
       <span>未发布任务</span>
     </a>
   </li> 
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-tasks icon text-success"></i>
+      <span>待处理的任务</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>待处理的任务</span>
+        </a>
+      </li>
+      <li ui-sref-active="active" ng-repeat="p in platforms">
+        <a ui-sref="app.peddingtask({platformId:p.id})">
+          <b class="badge bg-info pull-right">0</b>          
+          <span>{{p.name}}任务</span>
+        </a>
+      </li>
+    </ul>
+  </li>
   <li ui-sref-active="active">
     <a ui-sref="app.task({id:'new'})">
       <i class="glyphicon glyphicon-plus icon text-info-lter"></i>
