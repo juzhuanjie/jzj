@@ -1,40 +1,53 @@
 
+<div ng-controller="TaskListCtrl">
 <div>
   <ul class="breadcrumb bg-white b-b breadcrumb-custom">
     <li><a href class="breadcrumb-font"><i class="fa fa-home"></i> 首页</a></li>
     <li><a href class="breadcrumb-font">任务列表</a></li>
-    <li class="active breadcrumb-font">已完成任务</li>
+    <li class="active breadcrumb-font">{{statusName}}任务</li>
   </ul>
 </div>
 <div class="wrapper-md bg-white">
     <!--过滤条件-->
-    <div class="row">
+    <div class="row" ng-controller="TaskFilterCtrl">
       <div class="col-md-2">
         <label class="font-bold">平台：</label>
         <div class="btn-group">
-          <select class="form-control"><option>全部</option></select>
+          <select class="form-control" ng-model="condition.platform">
+            <option value="-1">全部</option>
+            <option ng-repeat="p in platforms" value="{{p.id}}">{{p.name}}</option>
+          </select>
         </div>
       </div>
       <div class="col-md-2">
         <label class="font-bold">店铺：</label>      
         <div class="btn-group">
-          <select class="form-control"><option>全部</option></select>
+          <select class="form-control" ng-model="condition.shop">
+            <option value="-1">全部</option>
+            <option ng-repeat="s in shops" value="{{s.shopId}}">{{s.wangwang}}</option>
+          </select>
         </div>
       </div> 
-      <div class="col-md-2">
+      <div class="col-md-3">
         <label class="font-bold">任务类型：</label>
         <div class="btn-group">
-          <select class="form-control"><option>全部</option></select>
+          <select class="form-control" ng-model="condition.taskType">
+            <option value="-1">全部</option>
+            <option ng-repeat="t in taskTypes" value="{{t.id}}">{{t.name}}</option>
+          </select>
         </div>
       </div>
       <div class="col-md-2">
         <label class="font-bold">终端：</label>      
         <div class="btn-group">
-          <select class="form-control"><option>全部</option></select>
+          <select class="form-control" ng-model="condition.terminal">
+            <option value="-1">全部</option>
+            <option ng-repeat="t in terminals" value="{{t.id}}">{{t.name}}</option>
+          </select>
         </div>
       </div>
       <div class="col-md-2">
-        <button class="btn btn-danger">查询</button>
+        <button class="btn btn-danger" ng-click="query()">查询</button>
       </div>
     </div>
     <!--任务列表-->
@@ -110,4 +123,5 @@
         <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="m-t-none m-b"></pagination>
       </div>
     </div>
+  </div>
   </div>

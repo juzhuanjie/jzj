@@ -84,7 +84,7 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 		$scope.selectedPlatform = $scope.flowData.platformId;		
 		loadShop();
 		$scope.selectedShop = $scope.flowData.shopId;				
-		$scope.tasktypes = taskTypes.get($scope.flowData.platformId);
+		$scope.tasktypes = taskTypes.query($scope.flowData.platformId);
 		$scope.selectedTaksType = $scope.flowData.taskTypeId;
 	});
 	$scope.nextstep = function(){
@@ -169,4 +169,93 @@ app.controller('TaskFlowItem5Ctrl',['$scope', function($scope){
 //发布成功
 app.controller('TaskFlowItem6Ctrl',['$scope', function($scope){
 	$scope.flowData = {}; 
+}]);
+//待处理的任务
+app.controller('PeddingTaskCtrl',['$scope','$stateParams','platforms',function($scope,$stateParams,platforms){
+	$scope.platformName = "";
+	$scope.$watch('$viewContentLoaded',function(){
+		var platformId = $stateParams.platformId;
+		$scope.platformName = platforms.getPlatformName(platformId);
+	});
+}]);
+//查询任务
+app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss',function($scope,$stateParams,taskStatuss){
+	$scope.statusId = 1;
+	$scope.statusName = "";
+	$scope.taskList = [];
+	$scope.taskStats = { all : 8, doing : 2, finish : 6 };
+	$scope.$watch('$viewContentLoaded',function(){
+		$scope.statusId = $stateParams.status;
+		var statuss = taskStatuss.getAll();
+		angular.forEach(statuss,function(value){
+			if(value.id == $scope.statusId){
+				$scope.statusName = value.name;
+			}
+		});
+		$scope.taskList = queryTasks();
+		//TODO:统计不同状态下任务的数量
+		$scope.taskStats = { all : 8, doing : 2, finish : 6 };		
+	});
+	$scope.filterByStatusId = function(statusId){
+		//TODO:根据状态来过滤task
+		$scope.taskList = queryTasksByStatusId(statusId);		
+	};
+	$scope.filterByCondition = function(condition){
+		//TODO:根据状态来过滤task
+		$scope.taskList = queryTasksByCondition(condition);		
+	};
+	//TODO:查询所有待处理的任务
+	var queryTasks = function(){
+		return [];
+	};
+	//TODO:查询进行中的任务
+	var queryTasksByStatusId = function(statusId){
+		return [];
+	};
+	//TODO:查询已完成的任务
+	var queryTasksByCondition = function(condition){
+		return [];
+	};
+}]);
+//筛选控制器
+app.controller('TaskFilterCtrl',['$scope','$stateParams','platforms','sellerShops','taskTypes','terminals',function($scope,$stateParams,platforms,sellerShops,taskTypes,terminals){
+	var userId = app.userSession.userId;
+	$scope.platforms = [];
+	$scope.shops = [];
+	$scope.taskTypes = [];
+	$scope.terminals = [];
+	$scope.condition = {
+		platform : -1,
+		shop : -1,
+		taskType : -1,
+		terminal : -1
+	};
+	$scope.$watch('$viewContentLoaded',function(){
+		//初始化平台下拉列表
+		$scope.platforms = platforms.getAll();
+		//初始化店铺
+		if(angular.isUndefined($stateParams.platformId)){
+			initSellerShopList();
+		}else{
+			initSellerShopListByPlatformId($stateParams.platformId);
+		}		
+		//初始化任务类型
+		$scope.taskTypes = taskTypes.getAll();	
+		//初始化终端
+		$scope.terminals = terminals.getAll();
+	});
+	$scope.query = function(){
+		//传递事件触发查询任务
+		$scope.$emit('filter-task', $scope.condition);
+	};
+	var initSellerShopList = function(){
+	    sellerShops.getAllShops(userId).then(function(result){
+	      $scope.shops = result;
+	    });
+	};
+	var initSellerShopListByPlatformId = function(platformId){
+		sellerShops.query(userId,platformId).then(function(result){
+	      $scope.shops = result;
+	    });
+	};
 }]);

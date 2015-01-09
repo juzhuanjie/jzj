@@ -79,10 +79,7 @@ app.factory('restAPIPost', ['$resource', function($resource){
 }]);
 //平台操作Service
 app.factory('platforms', ['promisePost','promiseGet',function(promisePost,promiseGet){
-	return {
-		getAll : function(){
-			//TODO: 获取所有平台，这个需要跟数据库对应，写死的就好
-			return [
+	var platformList = [
 			    {id : 1, name: '淘宝', filter:'taobao', color:'#23b7e5', active : false},
 			    {id : 2, name: '天猫', filter:'tmall', color:'#7266ba', active : false},
 			    {id : 3, name: '京东', filter:'jd', color:'#fad733', active : false},
@@ -90,6 +87,10 @@ app.factory('platforms', ['promisePost','promiseGet',function(promisePost,promis
 			    {id : 5, name: '亚马逊', filter:'amazon', color:'#fad733', active : false},
 			    {id : 6, name: '一号店', filter:'yhd', color:'#23b7e5', active : false}
 			  ];
+	return {
+		getAll : function(){
+			//TODO: 获取所有平台，这个需要跟数据库对应，写死的就好
+			return platformList;
 		},
 		getDefault : function(){
 			return {id : 1, name: '淘宝', filter:'taobao', color:'#23b7e5', active : false};
@@ -104,18 +105,59 @@ app.factory('platforms', ['promisePost','promiseGet',function(promisePost,promis
 			    {id : 5, name: '亚马逊', count : 0},
 			    {id : 6, name: '一号店', count : 0}
 			  ];
+		},
+		getPlatformName : function(platformId){
+			var name = "";
+			angular.forEach(platformList,function(value){
+				if(value.id == platformId){
+					name = value.name;
+				}
+			});
+			return name;
 		}		
 	};
 }]);
 //不同平台的任务类型
 app.factory('taskTypes',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(platformId){
+		query : function(platformId){
 			return [
 				{id : 1, name : "文字好评订单", point : 10.5},
 				{id : 2, name : "图文好评订单", point : 14.5},
 				{id : 3, name : "聚划算", point : 10.5},
 				{id : 4, name : "直通车订单", point : 10.5}
+			];
+		},
+		getAll : function(){
+			return [
+				{id : 1, name : "文字好评订单", point : 10.5},
+				{id : 2, name : "图文好评订单", point : 14.5},
+				{id : 3, name : "聚划算", point : 10.5},
+				{id : 4, name : "直通车订单", point : 10.5}
+			];
+		}
+	};
+}]);
+//终端
+app.factory('terminals',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		getAll : function(){
+			return [
+				{id : 1, name : "电脑"},
+				{id : 2, name : "手机/Pad"}
+			];
+		}
+	};
+}]);
+//终端
+app.factory('taskStatuss',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		getAll : function(){
+			return [
+				{id : 1, name : "已完成"},
+				{id : 2, name : "未发布"},
+				{id : 3, name : "待处理"},
+				{id : 4, name : "进行中"}
 			];
 		}
 	};
@@ -365,6 +407,10 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 		query : function(userId, platformId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组
 			return promiseGet('http://mc-ubuntu2.cloudapp.net/sellerShop/find?userId=' + userId + '&platformId=' + platformId);	
+		},
+		getAllShops : function(userId){
+			//TODO: 获取店铺绑定信息, 返回的是一个数组
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/sellerShop/find?userId=' + userId);	
 		},
 		add : function(sellerShop){
 			//TODO: 添加店铺绑定信息

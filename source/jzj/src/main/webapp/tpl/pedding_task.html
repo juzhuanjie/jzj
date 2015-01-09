@@ -1,16 +1,17 @@
 
+<div ng-controller="PeddingTaskCtrl">
 <div>
   <ul class="breadcrumb bg-white b-b breadcrumb-custom">
     <li><a href class="breadcrumb-font"><i class="fa fa-home"></i> 首页</a></li>
     <li><a href class="breadcrumb-font">待处理任务</a></li>
-    <li class="active breadcrumb-font">淘宝任务</li>
+    <li class="active breadcrumb-font">{{platformName}}任务</li>
   </ul>
 </div>
 <div class="wrapper-md bg-white">
     <!--待处理的任务-->
     <div class="panel panel-default b-default">
       <div class="panel-heading">      
-        <span class="text-danger font-bold"><span class="label bg-danger">T</span> 淘宝待处理的任务</span>
+        <span class="text-danger font-bold"><span class="label bg-danger">T</span> {{platformName}}待处理的任务</span>
       </div> 
       <div class="panel-body">
         <div class="task-list">
@@ -53,7 +54,7 @@
     </div>
 
     <!--任务进展-->  
-    <div class="panel panel-default m-t b-default">
+    <div class="panel panel-default m-t b-default" ng-controller="TaskListCtrl">
       <div class="panel-heading">
         <span class="text-danger font-bold"><span class="label bg-danger">T</span> 任务进展</span>
       </div> 
@@ -61,35 +62,44 @@
         
         <div class="row padder-md l-h-3x">
           <ul class="ul-t">
-            <li><a class="wrapper-xs text-white bg-danger">所有任务<span>(1)</span></a></li>  
-            <li><a class="text-danger">进行中的任务<span>(1)</span></a></li>  
-            <li><a class="text-danger">已完成的任务<span>(0)</span></a></li>    
+            <li ng-click='filterByStatusId(-1)'><a class="wrapper-xs text-white bg-danger">所有任务<span>({{taskStats.all}})</span></a></li>  
+            <li ng-click='filterByStatusId(4)'><a class="text-danger">进行中的任务<span>({{taskStats.doing}})</span></a></li>  
+            <li ng-click='filterByStatusId(1)'><a class="text-danger">已完成的任务<span>({{taskStats.finish}})</span></a></li>    
           </ul>    
         </div>
         <div class="line text-danger b-b"></div>
         <div class="row padder-md">
           <!--过滤条件-->
-          <div class="row m-t-xs">            
+          <div class="row m-t-xs" ng-controller="TaskFilterCtrl">            
             <div class="col-md-2">
               <label class="font-bold">店铺：</label>      
               <div class="btn-group">
-                <select class="form-control filter-control"><option>全部</option></select>
+                <select class="form-control filter-control" ng-model="condition.shop">
+                  <option value="-1">全部</option>
+                  <option ng-repeat="s in shops" value="{{s.shopId}}">{{s.wangwang}}</option>
+                </select>
               </div>
             </div> 
             <div class="col-md-2">
               <label class="font-bold">任务类型：</label>
               <div class="btn-group">
-                <select class="form-control filter-control"><option>全部</option></select>
+                <select class="form-control filter-control" ng-model="condition.taskType">
+                  <option value="-1">全部</option>
+                  <option ng-repeat="t in taskTypes" value="{{t.id}}">{{t.name}}</option>
+                </select>
               </div>
             </div>
             <div class="col-md-2">
               <label class="font-bold">终端：</label>      
               <div class="btn-group">
-                <select class="form-control filter-control"><option>全部</option></select>
+                <select class="form-control filter-control" ng-model="condition.terminal">
+                  <option value="-1">全部</option>
+                  <option ng-repeat="t in terminals" value="{{t.id}}">{{t.name}}</option>
+                </select>
               </div>
             </div>
             <div class="col-md-2">
-              <button class="btn btn-danger">查询</button>
+              <button class="btn btn-danger" ng-click="query()">查询</button>
             </div> 
           </div>
           <!--任务列表-->
@@ -168,4 +178,5 @@
         </div>
       </div>      
     </div>
+  </div>
   </div>
