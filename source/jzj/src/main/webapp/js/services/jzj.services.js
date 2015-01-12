@@ -79,10 +79,7 @@ app.factory('restAPIPost', ['$resource', function($resource){
 }]);
 //平台操作Service
 app.factory('platforms', ['promisePost','promiseGet',function(promisePost,promiseGet){
-	return {
-		getAll : function(){
-			//TODO: 获取所有平台，这个需要跟数据库对应，写死的就好
-			return [
+	var platformList = [
 			    {id : 1, name: '淘宝', filter:'taobao', color:'#23b7e5', active : false},
 			    {id : 2, name: '天猫', filter:'tmall', color:'#7266ba', active : false},
 			    {id : 3, name: '京东', filter:'jd', color:'#fad733', active : false},
@@ -90,6 +87,10 @@ app.factory('platforms', ['promisePost','promiseGet',function(promisePost,promis
 			    {id : 5, name: '亚马逊', filter:'amazon', color:'#fad733', active : false},
 			    {id : 6, name: '一号店', filter:'yhd', color:'#23b7e5', active : false}
 			  ];
+	return {
+		getAll : function(){
+			//TODO: 获取所有平台，这个需要跟数据库对应，写死的就好
+			return platformList;
 		},
 		getDefault : function(){
 			return {id : 1, name: '淘宝', filter:'taobao', color:'#23b7e5', active : false};
@@ -104,13 +105,32 @@ app.factory('platforms', ['promisePost','promiseGet',function(promisePost,promis
 			    {id : 5, name: '亚马逊', count : 0},
 			    {id : 6, name: '一号店', count : 0}
 			  ];
+		},
+		getPlatformName : function(platformId){
+			var name = "";
+			angular.forEach(platformList,function(value){
+				if(value.id == platformId){
+					name = value.name;
+				}
+			});
+			return name;
 		}		
 	};
 }]);
 //不同平台的任务类型
 app.factory('taskTypes',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(platformId){
+		//TODO: 根据平台查询任务类型
+		query : function(platformId){
+			return [
+				{id : 1, name : "文字好评订单", point : 10.5},
+				{id : 2, name : "图文好评订单", point : 14.5},
+				{id : 3, name : "聚划算", point : 10.5},
+				{id : 4, name : "直通车订单", point : 10.5}
+			];
+		},
+		//获取所有的任务类型
+		getAll : function(){
 			return [
 				{id : 1, name : "文字好评订单", point : 10.5},
 				{id : 2, name : "图文好评订单", point : 14.5},
@@ -120,42 +140,29 @@ app.factory('taskTypes',['promisePost','promiseGet',function(promisePost,promise
 		}
 	};
 }]);
-//任务流程 Service
-app.factory('taskflow',['promisePost','promiseGet',function(promisePost,promiseGet){
+//终端
+app.factory('terminals',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		create : function(platformId){
-			var taobao = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
-			var tmall = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
-			var jd = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
-			var yhd = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
-			var dangdang = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
-			var amazon = ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'];
-			var flow;
-			switch(platformId){
-				case 1:
-					flow = taobao;
-					break;
-				case 2:
-					flow = tmall;
-					break;
-				case 3:
-					flow = jd;
-					break;
-				case 4:
-					flow = dangdang;
-					break;
-				case 5:
-					flow = amazon;
-					break;
-				case 6:
-					flow = yhd;
-					break;				
-				default:
-					flow = taobao;
-					break;
-			}
-			return flow;
+		getAll : function(){
+			return [
+				{id : 1, name : "电脑"},
+				{id : 2, name : "手机/Pad"}
+			];
 		}
+	};
+}]);
+//终端
+app.factory('taskStatuss',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		getAll : function(){
+			return [
+				{id : 1, name : "已完成"},
+				{id : 2, name : "未发布"},
+				{id : 3, name : "待处理"},
+				{id : 4, name : "进行中"},
+				{id : 5, name : "已发布"}
+			];
+		}	
 	};
 }]);
 //任务流程 Service
@@ -163,53 +170,56 @@ app.factory('flowDatas',function(){
 	var flowData = null;
 	return {
 		create : function(platformId){
-			var taobao = { 
+			var taobao = { 		
+					"taskId" : -1,	
+					"status" : 2,		
 					"platformId" : 1, 
 					"shopId" : 1, 
 					"taskTypeId" : 1,
-					"products" : [{
-						"productName" : "",
-						"productLink" : "",
-						"productSpecifications" : { "color" : "", "size" : ""},
-						"productPrice" : "",
-						"productCount" : "",
-						"productPrice2" : "",
-						"productImage" : "",
+					"productId" : -1,
+					"totalTasks" : 1,
+					"taskDetail" : {
+						"currItem" : "app.task.item1",
+						"flowItem" : ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'],
+						"totalTasks" : "",
 						"keywordSource" : [{ 
 							"productKeyword" : "",
 							"prodcutCategory1" : "",
 							"prodcutCategory2" : "",
 							"prodcutCategory3" : "",
 							"prodcutCategory4" : "" 
-							}],
+						}],
 						"searchMinPrice" : "",
 						"searchMaxPrice" : "",
-						"searchAddress" : ""
-						}],	
-					"payedAddProduct" : false,
-					"freePostage" : false,
-					"orderQuantity" : 1,
-					"customOrderQuantity" : "",
-					"pcOrderQuantity" : "",
-					"padOrderQuantity" : "",
-					"dealKeyword1" : "",
-					"dealKeyword1OrderQuantity" : "",
-					"dealKeyword2" : "",
-					"dealKeyword2OrderQuantity" : "",
-					"orderMessages" : [""],
-					"agreeFastRefunds" : false,
-					"fastDonePoint" : -1,
-					"agreeAddtionPoint" : false,
-					"addtionPoint" : "",
-					"agreePriorityReview" : false,
-					"visitor" : 5,
-					"customVisitor" : "",
-					"extensionShopingPeriod" : -1,
-					"agreeQualityPraise" : false,
-					"praiseKeywords" : ["","",""],
-					"paymentPiont" : false,
-					"paymentDeposit" : false,
-					"paymentBank" : false
+						"searchAddress" : "",
+						"payedAddProduct" : false,
+						"freePostage" : false,
+						"orderQuantity" : 1,
+						"customOrderQuantity" : "",
+						"pcOrderQuantity" : "",
+						"padOrderQuantity" : "",
+						"dealKeyword1" : "",
+						"dealKeyword1OrderQuantity" : "",
+						"dealKeyword2" : "",
+						"dealKeyword2OrderQuantity" : "",
+						"orderMessages" : [""],
+						"agreeFastRefunds" : false,
+						"fastDonePoint" : -1,
+						"agreeAddtionPoint" : false,
+						"addtionPoint" : "",
+						"agreePriorityReview" : false,
+						"visitor" : 5,
+						"customVisitor" : "",
+						"extensionShopingPeriod" : -1,
+						"agreeQualityPraise" : false,
+						"praiseKeywords" : ["","",""],
+						"paymentPiont" : false,
+						"paymentDeposit" : false,
+						"paymentBank" : false,
+						"shopName" : "",
+						"totalCash" : 0,
+						"totalPoint" : 0
+					}					
 				};
 			var tmall = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
 			var jd = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
@@ -250,6 +260,49 @@ app.factory('flowDatas',function(){
 		}
 	};
 });
+//ShopTast 对象数据交互 Service
+app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		add : function(shopTask){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/shopTask', shopTask);	
+		},
+		save : function(taskId,shopTask){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/shopTask/' + taskId, shopTask);
+		},
+		query : function(statusId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/find?status=' + statusId);
+		},
+		get : function(taksId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/' + taksId);
+		}		
+	};
+}]);
+//ShopProduct 对象数据交互 Service
+app.factory('products', ['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		add : function(product){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/shopProduct', product);	
+		},
+		get : function(productId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopProduct?id=' + productId);
+		},
+		save : function(productId,product){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/shopProduct/' + productId, product);
+		},
+		newEmpty : function(){
+			return {
+				"productId" : -1,
+				"shopId" : -1,
+				"productName" : "",
+				"productLink" : "",
+				"productDesc" : { "color" : "", "size" : ""},
+				"productPrice" : "",
+				"productPrice2" : "",
+				"productImage" : ""
+			};
+		}		
+	};
+}]);
 //User 对象数据交互 Service
 app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
@@ -365,6 +418,10 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 		query : function(userId, platformId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组
 			return promiseGet('http://mc-ubuntu2.cloudapp.net/sellerShop/find?userId=' + userId + '&platformId=' + platformId);	
+		},
+		getAllShops : function(userId){
+			//TODO: 获取店铺绑定信息, 返回的是一个数组
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/sellerShop/find?userId=' + userId);	
 		},
 		add : function(sellerShop){
 			//TODO: 添加店铺绑定信息
