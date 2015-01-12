@@ -6,15 +6,15 @@
   <div class="line b-b"></div> 
   <div class="row wrapper no-p-t">
       <h5  class="font-bold">1.请选择刷单数量</h5>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="1" ng-model="flowData.orderQuantity"/>1单</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="3" ng-model="flowData.orderQuantity"/>3单</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="5" ng-model="flowData.orderQuantity"/>5单</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="10" ng-model="flowData.orderQuantity"/>10单</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="20" ng-model="flowData.orderQuantity"/>20单</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="100" ng-model="flowData.orderQuantity"/>100单</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="250" ng-model="flowData.orderQuantity"/>250单</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="-1" ng-model="flowData.orderQuantity"/>自定义</label>
-      <label class="radio-inline" style="padding-left:0px;margin-left:-30px;"><input type="text" name="count" class="w-xxs input-control-xs" ng-model="flowData.customOrderQuantity"/> 单 <span class="text-muted">(1-500单)</span></label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="1" ng-model="flowData.taskDetail.orderQuantity"/>1单</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="3" ng-model="flowData.taskDetail.orderQuantity"/>3单</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="5" ng-model="flowData.taskDetail.orderQuantity"/>5单</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="10" ng-model="flowData.taskDetail.orderQuantity"/>10单</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="20" ng-model="flowData.taskDetail.orderQuantity"/>20单</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="100" ng-model="flowData.taskDetail.orderQuantity"/>100单</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="250" ng-model="flowData.taskDetail.orderQuantity"/>250单</label>
+      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="-1" ng-model="flowData.taskDetail.orderQuantity"/>自定义</label>
+      <label class="radio-inline" style="padding-left:0px;margin-left:-30px;"><input type="text" name="count" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.customOrderQuantity"/> 单 <span class="text-muted">(1-500单)</span></label>
       <h5 ><span class="text-danger">注意：</span>请控制好店铺的转化率！不得超过3%！如果因转化率过高，导致商品降权，聚赚界概不负责！</h5>
   </div>  
 
@@ -22,17 +22,17 @@
 
   <div class="row wrapper-md no-p-t">
       <h5 class="font-bold">2.请设置订单分布 <span  class="font-normal text-muted">( 注：电脑端、手机端/Pad端订单总数需要为<span class="text-danger">1</span>单 )</span></h5>
-      <label class="">电脑端<input type="text" class="w-xxs input-control-xs" ng-model="flowData.pcOrderQuantity"/>单</label>
-      <label class="m-l" >手机 | Pad客户端<input type="text" class="w-xxs input-control-xs" ng-model="flowData.padOrderQuantity"/>单 <span>( 手机订单 每单加<span class="text-danger">0.5</span>符点)</span></label>
+      <label class="">电脑端<input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.pcOrderQuantity" ng-change="countPoint()"/>单</label>
+      <label class="m-l" >手机 | Pad客户端<input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.padOrderQuantity" ng-change="countPoint()"/>单 <span>( 手机订单 每单加<span class="text-danger">0.5</span>符点)</span></label>
   </div>  
 
   <div class="line b-b"></div> 
 
   <div class="row wrapper-md no-p-t">
       <h5 class="font-bold">3.请设置成交关键词分布 <span  class="font-normal text-muted">( 注：关键词订单总数需要为<span class="text-danger">1</span>单 )</span></h5>
-      <label>淘宝关键词1：</label><input type="text" class="w-sm input-control-xs" ng-model="flowData.dealKeyword1"/><input type="text" class="w-xxs input-control-xs" ng-model="flowData.dealKeyword1OrderQuantity"/><label>单</label>
+      <label>淘宝关键词1：</label><input type="text" class="w-sm input-control-xs" ng-model="flowData.taskDetail.dealKeyword1"/><input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.dealKeyword1OrderQuantity"/><label>单</label>
       <br/><br/>
-      <label>淘宝关键词2：</label><input type="text" class="w-sm input-control-xs" ng-model="flowData.dealKeyword2"/><input type="text" class="w-xxs input-control-xs" ng-model="flowData.dealKeyword2OrderQuantity"/><label>单</label>
+      <label>淘宝关键词2：</label><input type="text" class="w-sm input-control-xs" ng-model="flowData.taskDetail.dealKeyword2"/><input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.dealKeyword2OrderQuantity"/><label>单</label>
   </div>  
 
   <div class="line b-b"></div> 
@@ -41,7 +41,7 @@
       <h5 class="font-bold">4.订单留言 <span  class="font-normal text-muted">( 注：出于安全性考虑，强烈不建议制定订单留言。如必须留言，请尽可能填写多个不同的留言内容</span></h5>
       <div class="row">
         <div class="col-md-6">
-          <input type="text" class="col-md-6 form-control" placeholder="例如：快点给我发货哦！" ng-model="flowData.orderMessages[0]"/>
+          <input type="text" class="col-md-6 form-control" placeholder="例如：快点给我发货哦！" ng-model="flowData.taskDetail.orderMessages[0]"/>
         </div>
       </div>
       <div class="row m-t">
@@ -56,7 +56,9 @@
   <div class="row wrapper-md no-p-t">
       <h5 class="font-bold">费用小计</h5>
       <div class="row wrapper bg-remind">
-         <label class="">刷单费用：<sapn class="text-danger">16.6</sapn>人气符点/单 X <sapn class="text-danger">1</sapn>单</label><label class="pull-right"><sapn class="text-danger">16.60</sapn>人气符点</label>
+         <label class="">刷单费用：<sapn class="text-danger">16.6</sapn>人气符点/单 X <sapn class="text-danger">{{pcOrderQuantity}}</sapn>单</label>
+         <sapn class="text-danger">17.1</sapn>人气符点/单 X <sapn class="text-danger">{{padOrderQuantity}}</sapn>单</label>
+         <label class="pull-right"><sapn class="text-danger">{{totalPoint}}</sapn>人气符点</label>
       </div>      
   </div>
 
