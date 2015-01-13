@@ -20,23 +20,26 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 			$scope.platformId = 1;			
 			$scope.flowData = flowDatas.create($scope.platformId);
 			$scope.flowItem = $scope.flowData.taskDetail.flowItem;
-			$scope.currItemIndex = 0;
+			$scope.currItemIndex = 0;			
 			$state.go($scope.flowItem[0]);
+			$scope.$broadcast('flow-ready',$scope.flowData);
 		}else{			
 			var id = $stateParams.id;
 			if(id != 'new' && $scope.isFirstPost){
 				$scope.isFirstPost = false;
 				tasks.get(id).then(function(result){
-					$scope.platformId = result.platformId;			
+					$scope.platformId = result.PlatformId;			
 					$scope.flowData = result;
 					$scope.flowData.taskDetail = angular.fromJson(result.taskDetail);
 					$scope.flowItem = $scope.flowData.taskDetail.flowItem;
 					$scope.currItem = $scope.flowData.taskDetail.currItem;
 					$state.go($scope.currItem);
+					$scope.$broadcast('flow-ready',$scope.flowData);
 				});
+			}else{
+				$scope.$broadcast('flow-ready',$scope.flowData);
 			}
-		}
-		$scope.$broadcast('flow-ready',$scope.flowData);
+		}		
 	});
 	$scope.$on('change-platform',function(event, platformId){
 		$scope.platformId = platformId;		
@@ -127,11 +130,12 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 	$scope.flowData = {}; 
 	$scope.$on('flow-ready',function(event,flowData){
 		$scope.flowData = flowData;
+		console.log(flowData);
 		$scope.platforms = platforms.getAllWithShopCount();		
-		$scope.selectedPlatform = $scope.flowData.platformId;		
+		$scope.selectedPlatform = $scope.flowData.PlatformId;		
 		loadShop();
 		$scope.selectedShop = $scope.flowData.shopId;				
-		$scope.tasktypes = taskTypes.query($scope.flowData.platformId);
+		$scope.tasktypes = taskTypes.query($scope.flowData.PlatformId);
 		$scope.selectedTaksType = $scope.flowData.taskTypeId;
 	});
 	$scope.nextstep = function(){
@@ -139,7 +143,7 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 	};
 	$scope.changePlatform = function(platformId){
 		$scope.selectedPlatform = platformId;
-		$scope.flowData.platformId = platformId;
+		$scope.flowData.PlatformId = platformId;
 		loadShop();
 		$scope.$emit('change-platform', platformId);
 	};
@@ -153,7 +157,7 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 		$scope.flowData.taskTypeId = taskTypeId;
 	};
 	var loadShop = function(){
-		sellerShops.query(userId, $scope.flowData.platformId).then(function(result){
+		sellerShops.query(userId, $scope.flowData.PlatformId).then(function(result){
 	      $scope.shops = result;
 	    });
 	};
@@ -320,8 +324,9 @@ app.controller('TaskFlowItem6Ctrl',['$scope','$timeout', function($scope,$timeou
 		$scope.flowData = flowData;
 		timeout5();
 	});
+	var timer;
 	var timeout5 = function(){
-		$timeout(function(){
+		timer = $timeout(function(){
 			$scope.timespan--;
 			if($scope.timespan <= 0){
 				$scope.payOk();
@@ -331,9 +336,11 @@ app.controller('TaskFlowItem6Ctrl',['$scope','$timeout', function($scope,$timeou
 		},1000);
 	};
 	$scope.payOk = function(){
+		$timeout.cancel(timer);
 		$scope.$emit('pay-ok', { "item" : $scope.thisItem, "flowData" : $scope.flowData });
 	};
 	$scope.payCancel = function(){
+		$timeout.cancel(timer);
 		$scope.$emit('pay-cancel', { "item" : $scope.thisItem, "flowData" : $scope.flowData });
 	};
 }]);
@@ -348,18 +355,11 @@ app.controller('PeddingTaskCtrl',['$scope','$stateParams','platforms',function($
 //查询任务
 app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss','tasks',function($scope,$stateParams,taskStatuss,tasks){
 	$scope.statusId = 1;
+	$scope.platformId = 1;
 	$scope.statusName = "";
 	$scope.taskList = [];
 	$scope.taskStats = { all : 8, doing : 2, finish : 6 };
 	$scope.$watch('$viewContentLoaded',function(){
-		$scope.statusId = $stateParams.status;
-		var statuss = taskStatuss.getAll();
-		angular.forEach(statuss,function(value){
-			if(value.id == $scope.statusId){
-				$scope.statusName = value.name;
-			}
-		});
-		queryTasksByStatusId($scope.statusId);
 		//TODO:统计不同状态下任务的数量
 		$scope.taskStats = { all : 8, doing : 2, finish : 6 };		
 	});
@@ -371,13 +371,30 @@ app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss','tasks',fun
 		//TODO:根据状态来过滤task
 		$scope.taskList = queryTasksByCondition(condition);		
 	};
+	$scope.initTaskByStatus = function(){
+		$scope.statusId = $stateParams.status;
+		var statuss = taskStatuss.getAll();
+		angular.forEach(statuss,function(value){
+			if(value.id == $scope.statusId){
+				$scope.statusName = value.name;
+			}
+		});
+		queryTasksByStatusId($scope.statusId);
+	};
+	$scope.initTaskByPlatform = function(){
+		$scope.platformId = $stateParams.platformId;
+		console.log($stateParams.platformId);
+		queryTasksByPlatform($scope.platformId);
+	};
 	//TODO:查询所有任务
-	var queryTasks = function(platformId){
-		return [];
+	var queryTasksByPlatform = function(platformId){
+		tasks.queryByPlatform(platformId).then(function(result){
+			$scope.taskList = result;
+		});		
 	};
 	//TODO:查询进行中的任务
 	var queryTasksByStatusId = function(statusId){
-		tasks.query(statusId).then(function(result){
+		tasks.queryByStatus(statusId).then(function(result){
 			$scope.taskList = result;
 		});
 	};

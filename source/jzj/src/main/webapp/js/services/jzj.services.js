@@ -173,7 +173,7 @@ app.factory('flowDatas',function(){
 			var taobao = { 		
 					"taskId" : -1,	
 					"status" : 2,		
-					"platformId" : 1, 
+					"PlatformId" : 1, 
 					"shopId" : 1, 
 					"taskTypeId" : 1,
 					"productId" : -1,
@@ -269,8 +269,11 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 		save : function(taskId,shopTask){
 			return promisePost('http://mc-ubuntu2.cloudapp.net/shopTask/' + taskId, shopTask);
 		},
-		query : function(statusId){
+		queryByStatus : function(statusId){
 			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/find?status=' + statusId);
+		},
+		queryByPlatform : function(platformId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/find?PlatformId=' + platformId);
 		},
 		get : function(taksId){
 			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/' + taksId);

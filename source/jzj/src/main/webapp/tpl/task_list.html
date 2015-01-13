@@ -9,7 +9,7 @@
 </div>
 <div class="wrapper-md bg-white">
     <!--过滤条件-->
-    <div class="row" ng-controller="TaskFilterCtrl">
+    <div class="row" ng-controller="TaskFilterCtrl" ng-init="initTaskByStatus()">
       <div class="col-md-2">
         <label class="font-bold">平台：</label>
         <div class="btn-group">
@@ -53,6 +53,7 @@
     <!--任务列表-->
     <div class="row wrapper-md">
       <div class="task-list">
+        <!--task item-->
         <div class="panel panel-danger" ng-repeat="t in taskList">
           <div class="panel-heading">                    
             <span><span class="label bg-danger">T</span> {{getShopName(t.taskDetail)}}<span class="m-l">任务编号：</span><span>{{t.taskId}}</span> [<a ui-sref="app.task({id:{{t.taskId}}})" class="text-info">详情</a>]</span>
@@ -66,7 +67,8 @@
             <article class="media" >
               <span class="pull-left m-r"><i class="fa fa-file-o fa-5x"></i></span>
               <div class="pull-right l-h-lg">
-                <a href class="btn btn-info">重新发布</a>
+                <a ng-if="statusId==2" href class="btn btn-info">继续发布</a>
+                <a ng-if="statusId==1" href class="btn btn-info">一键发布</a>
               </div>
               <div class="media-body l-h-lg">   
                 <a href class="h4">{{t.productId.productName}}</a>
@@ -74,7 +76,7 @@
             </article>
           </div>
         </div>
-        
+        <!--task item-->
       </div>
       <div class="pagination pull-right">
         <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="m-t-none m-b"></pagination>
