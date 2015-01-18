@@ -2,7 +2,7 @@
   <div class="row wrapper no-p-b">
     <div>
       <label class="h4 font-bold">选择增值服务</label>
-      <label class="h4 pull-right">已选择：<span class="text-danger">天猫 | 聚赚界旗舰店 | 订单 | 新手1单套餐</span></label>
+      <label class="h4 pull-right">已选择：<span class="text-danger">{{platformName}} | {{shopName}} | 订单 </span></label>
     </div>
     <br/>
     <div>
@@ -48,42 +48,6 @@
   
   <div class="row wrapper">
     <div>
-      <label class="h4 font-bold">安全优化</label>      
-    </div>
-  </div> 
-
-  <div class="row wrapper-md no-p-t no-p-b">      
-      <h5 class="font-bold">1.稀释自然搜索转化率： <span  class="text-muted">平台会根据您的选择匹配相应的自然搜索访客流量，本流量将会被计入淘宝搜索引擎统计</span><a class="font-normal text-info">点击查看流量说明</a></h5>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="5" ng-model="flowData.taskDetail.visitor"/>5访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="10" ng-model="flowData.taskDetail.visitor"/>10访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="12" ng-model="flowData.taskDetail.visitor"/>12访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="20" ng-model="flowData.taskDetail.visitor"/>20访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="30" ng-model="flowData.taskDetail.visitor"/>30访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="50" ng-model="flowData.taskDetail.visitor"/>50访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="100" ng-model="flowData.taskDetail.visitor"/>100访客</label>
-      <label class="radio-inline padder-lg" ><input type="radio" name="count" value="-1" ng-model="flowData.taskDetail.visitor"/>自定义</label>
-      <label class="radio-inline" style="padding-left:0px;margin-left:-30px;"><input type="text" name="count" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.customVisitor"/> 访客 <span class="text-muted">(不能低于5访客)</span></label>
-      <h5>选择此项服务后将会有<label class="text-danger">X</label>访客通过自然搜索找到您的商品并进入店铺，其中：</h5>
-      <p>淘宝关键词1：XXXX刷<label class="text-danger">1</label>单，将会匹配<label class="text-danger">X</label>访客流量</p>
-      <p>注：到店访客流量数可能会有少量误差，属于正常情况；</p>
-      <br/>
-      <p>你目前有<label class="text-danger">X</label>个访客流量，使用本次服务后，将剩余<label class="text-danger">X</label>个访客流量</p>
-  </div>  
-    
-  <div class="line b-b"></div> 
-
-  <div class="row wrapper-md no-p-t no-p-b">
-      <h5 class="font-bold">2.延长买家购物周期： <span  class="text-muted">仅推荐重复购买率低的商品使用，如家具，家电，高单价的商品等；其他品类不推荐使用</span></h5>
-      <label class="checkbox-inline font-bold"><input type="checkbox" value="2" ng-checked="extShopingPeriodOption[2]" ng-click="setShopingPeriod(2)"/>2个月 <span class="text-danger">2</span>符点/单/商品</label>
-      <label class="checkbox-inline font-bold padder-lg"><input type="checkbox" value="3" ng-checked="extShopingPeriodOption[3]" ng-click="setShopingPeriod(3)"/>3个月 <span class="text-danger">3</span>符点/单/商品</label>
-      <p class="m-t-sm text-muted">选择此项服务后，购买过任务商品的买家<span class="text-danger">2</span>个月内，将不能再接手包含本任务商品的任务；</p>
-      <p class="text-muted">合计收费：<span class="text-danger">2</span>符点 X <span class="text-danger">1</span>单 X <span class="text-danger">1</span>个商品链接 = <span class="text-danger">2</span>符点</p>
-  </div> 
-
-  <div class="line b-b"></div> 
-  
-  <div class="row wrapper">
-    <div>
       <h4 class="font-bold">优质好评 <span  class="h5 font-normal text-muted">选择此服务后，将有助于提升评价质量并优化您商品评价印象关键词 </span><a class="h5 font-normal text-info">查看说明</a></h4>      
     </div>
   </div> 
@@ -93,27 +57,15 @@
       <div class="row wrapper bg-remind">
         请根据您发布任务的商品设定<span class="text-danger">几个关键字</span>作为买手的<span class="text-danger">评价范围</span>独自发挥撰写评价，例如<span class="text-danger"> “手感面料很舒服，款式也很漂亮，包装很讲究，物流很快，性价比高”</span> 等。注意：请不要填写完整的评价内容，避免所有买手评价商品的内容一模一样。
       </div>
-      <div class="row m-t form-horizontal">
-        <label class="col-md-1 control-label text-left">关键字1：</label>
+      <div class="row m-t form-horizontal" ng-repeat="praise in praiseKeyword">
+        <label class="col-md-1 control-label text-left">关键字{{$index+1}}：</label>
         <div class="col-md-4">
-          <input class="form-control" type="text" ng-model="flowData.taskDetail.praiseKeywords[0]"/>
+          <input class="form-control" type="text" ng-model="flowData.taskDetail.praiseKeywords[$index]"/>
         </div>
-      </div>
-      <div class="row m-t form-horizontal">
-        <label class="col-md-1 control-label text-left">关键字2：</label>
-        <div class="col-md-4">
-          <input class="form-control" type="text" ng-model="flowData.taskDetail.praiseKeywords[1]"/>
-        </div>
-      </div>
-      <div class="row m-t form-horizontal">
-        <label class="col-md-1 control-label text-left">关键字3：</label>
-        <div class="col-md-4">
-          <input class="form-control" type="text" ng-model="flowData.taskDetail.praiseKeywords[2]"/>
-        </div>
-      </div>
-      <div class="row m-t">
+      </div>      
+      <div class="row m-t" ng-if="isBindPraiseKeyword">
         <div class="col-md-6">
-          <a class="text-info">+ 继续添加关键字 <span class="text-muted">(最多可添加10条)</span></a>
+          <a class="text-info" ng-click="addPraiseKeyord()">+ 继续添加关键字 <span class="text-muted">(最多可添加10条)</span></a>
         </div>
       </div>
   </div>
@@ -173,13 +125,12 @@
                 <h5>提升完成任务速度：{{fastDonePoint}}符点</h5>
                 <h5>优先审核：{{priorityReviewPoint}}符点</h5>
                 <h5>加赏任务佣金：{{addtionPoint}}符点</h5>
-                <h5>延长买家购物周期： {{extPeriodPoint}}符点</h5>
                 <h5>指定好评：{{qualityPraisePoint}}符点</h5>
               </td>
-              <td>{{fastRefundPoint + fastDonePoint + addtionPoint + priorityReviewPoint + extPeriodPoint + qualityPraisePoint}}符点</td>
+              <td>{{fastRefundPoint + fastDonePoint + addtionPoint + priorityReviewPoint + qualityPraisePoint}}符点</td>
               <td>新手1单套餐1单</td>
               <td>--</td>
-              <td>{{fastRefundPoint + fastDonePoint + addtionPoint + priorityReviewPoint + extPeriodPoint + qualityPraisePoint}}符点</td>
+              <td>{{fastRefundPoint + fastDonePoint + addtionPoint + priorityReviewPoint + qualityPraisePoint}}符点</td>
             </tr>  
           </tbody>
         </table>
@@ -187,7 +138,7 @@
   </div>  
 
   <div class="row wrapper-md no-p-t">
-    <h4 class="text-right">费用合计  押金：<label class="text-danger">{{flowData.totalTasks * flowData.productId.productPrice}}</label>元  人气符：<label class="text-danger">{{(suiltPoint * 1) + fastRefundPoint + fastDonePoint + addtionPoint + priorityReviewPoint + extPeriodPoint + qualityPraisePoint}}</label>点</h4>
+    <h4 class="text-right">费用合计  押金：<label class="text-danger">{{flowData.totalTasks * flowData.productId.productPrice}}</label>元  人气符：<label class="text-danger">{{((suiltPoint * 1) + fastRefundPoint + fastDonePoint + addtionPoint + priorityReviewPoint + qualityPraisePoint) | number:2}}</label>点</h4>
   </div>
 
 </div>

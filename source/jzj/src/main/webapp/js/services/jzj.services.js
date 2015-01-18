@@ -174,43 +174,35 @@ app.factory('flowDatas',function(){
 					"taskId" : -1,	
 					"status" : 2,		
 					"PlatformId" : 1, 
-					"shopId" : 1, 
+					"shopId" : -1, 
 					"taskTypeId" : 1,
 					"productId" : -1,
+					"productPrice" : 0,
 					"totalTasks" : 1,
 					"taskDetail" : {
 						"currItem" : "app.task.item1",
 						"flowItem" : ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'],
 						"totalTasks" : "",
-						"keywordSource" : [{ 
-							"productKeyword" : "",
-							"prodcutCategory1" : "",
-							"prodcutCategory2" : "",
-							"prodcutCategory3" : "",
-							"prodcutCategory4" : "" 
-						}],
+						"productCount" : 1,
+						"searchProductKeywords" : [{"":""}],
+						"prodcutCategory1" : "",
+						"prodcutCategory2" : "",
+						"prodcutCategory3" : "",
+						"prodcutCategory4" : "", 
 						"searchMinPrice" : "",
 						"searchMaxPrice" : "",
-						"searchAddress" : "",
+						"searchProductLocation" : "",
 						"payedAddProduct" : false,
 						"freePostage" : false,
-						"orderQuantity" : 1,
-						"customOrderQuantity" : "",
+						"orderQuantity" : "",
 						"pcOrderQuantity" : "",
-						"padOrderQuantity" : "",
-						"dealKeyword1" : "",
-						"dealKeyword1OrderQuantity" : "",
-						"dealKeyword2" : "",
-						"dealKeyword2OrderQuantity" : "",
+						"padOrderQuantity" : "",					
 						"orderMessages" : [""],
 						"agreeFastRefunds" : false,
 						"fastDonePoint" : -1,
 						"agreeAddtionPoint" : false,
 						"addtionPoint" : "",
 						"agreePriorityReview" : false,
-						"visitor" : 5,
-						"customVisitor" : "",
-						"extensionShopingPeriod" : -1,
 						"agreeQualityPraise" : false,
 						"praiseKeywords" : ["","",""],
 						"paymentPiont" : false,
@@ -277,6 +269,10 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 		},
 		get : function(taksId){
 			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/' + taksId);
+		},
+		statsShopOrderCount : function(shopId){
+			//TODO: 统计店铺最近发布任务的单数
+			return 1;
 		}		
 	};
 }]);
@@ -299,7 +295,7 @@ app.factory('products', ['promisePost','promiseGet',function(promisePost,promise
 				"productName" : "",
 				"productLink" : "",
 				"productDesc" : { "color" : "", "size" : ""},
-				"productPrice" : "",
+				"productPrice" : 0,
 				"productPrice2" : "",
 				"productImage" : ""
 			};
@@ -452,3 +448,83 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 		}
 	};
 }]);
+//商品所在地 Service
+app.factory('productLocations',function(){
+	return {
+		getAll : function(){
+			return [ "全国"
+					,"北京"
+					,"上海"
+					,"广州"
+					,"深圳"
+					,"杭州"
+					,"海外"
+					,"江浙沪"
+					,"珠三角"
+					,"京津冀" 
+					,"东三省"
+					,"港澳台"
+					,"江浙沪皖"
+					,"长沙"
+					,"长春"
+					,"成都"
+					,"重庆"
+					,"大连"
+					,"东莞"
+					,"佛山"
+					,"福州"
+					,"贵阳"
+					,"合肥"
+					,"金华"
+					,"济南"
+					,"嘉兴"
+					,"昆明"
+					,"宁波"
+					,"南昌"
+					,"南京"
+					,"青岛"
+					,"泉州"
+					,"沈阳"
+					,"苏州"
+					,"天津"
+					,"温州"
+					,"无锡"
+					,"武汉"
+					,"西安"
+					,"厦门"
+					,"郑州"
+					,"中山"
+					,"石家"
+					,"哈尔"
+					,"安徽"
+					,"福建"
+					,"广东"
+					,"广西"
+					,"贵州"
+					,"海南"
+					,"河北"
+					,"河南"
+					,"湖北"
+					,"湖南"
+					,"江苏"
+					,"江西"
+					,"吉林"
+					,"辽宁"
+					,"宁夏"
+					,"青海"
+					,"山东"
+					,"山西"
+					,"陕西"
+					,"云南"
+					,"四川"
+					,"西藏"
+					,"新疆"
+					,"浙江"
+					,"澳门"
+					,"香港"
+					,"台湾"
+					,"内蒙古"
+					,"黑龙江"];
+		}
+	};
+});

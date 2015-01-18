@@ -26,20 +26,20 @@
       <div class="row m-t-xs">
         <label class="col-md-2 control-label text-left"><span class="text-danger">*</span>单品售价</label>
         <div class="col-md-1">
-          <input type="text" class="form-control" ng-model="product.productPrice"/>
+          <input type="text" class="form-control" ng-model="product.productPrice" ng-change="countProductTotalPrice()"/>
         </div>
-        <label class="col-md-1 text-left control-label">元</label>
+        <label class="col-md-1 text-left control-label" >元</label>
         <label class="col-md-1 text-left control-label"><span class="text-danger">*</span>每单拍</label>
         <div class="col-md-1">
-          <input type="text" class="form-control" ng-model="flowData.totalTasks"/>
+          <input type="text" class="form-control" ng-model="flowData.taskDetail.productCount" ng-change="countProductTotalPrice()"/>
         </div>
         <label class="col-md-1 text-left control-label">件</label>
-        <label class="col-md-2 text-left control-label">下单总金额<span class="m-l m-r text-danger">0</span>元</label>
+        <label class="col-md-2 text-left control-label">下单总金额<span class="m-l m-r text-danger" ng-bind="totalPrice"></span>元</label>
       </div>
       <div class="row m-t-xs">
         <label class="col-md-2 control-label text-left"><span class="text-danger">&nbsp;</span>搜索页面展示价格</label>
         <div class="col-md-2">
-          <input type="text" class="form-control" ng-model="product.productPrice2"/>
+          <input type="text" class="form-control" ng-model="flowData.productPrice"/>
         </div>
         <label class="col-md-4 text-left control-label ">如该商品有满减、促销、多规格等情况，请填写此金额</label>
       </div>
@@ -60,35 +60,34 @@
         </div>
       </div>
 
-      <label class="m-t">关键字来源1：</label><br/>
-      <div class="row m-t">
-        <label class="col-md-3 control-label text-left"><span class="text-danger">*</span>让买手在<span class="text-danger">taobao.com</span>搜索关键字进入 “搜索列表”  </label>
+      <h4 class="m-t">让买手在<span class="text-danger">taobao.com</span>搜索关键字进入 “搜索列表” </h4>
+      <div class="row m-t" ng-repeat="keyword in productKeywords">
+        <label class="col-md-4 control-label text-left"><span class="text-danger">*</span>关键字来源{{$index + 1}}：</label>
         <div class="col-md-2">
-          <input type="text" class="form-control" ng-model="flowData.taskDetail.keywordSource[0].productKeyword"/>
+          <input type="text" class="form-control" ng-model="flowData.taskDetail.searchProductKeywords[$index].key"/>
         </div>
+      </div>
+      <div class="row m-t" ng-if="isCanBingProductKeyword">
+        <a class="col-md-6 text-danger" ng-click="addSearchKeyword()"> + 可多添加1个淘宝搜索关键字方案 <span class="text-muted"> (最多可添加4个方案)</span> </a><span class="col-md-4 text-right">可提高任务安全保障</span>
       </div>
 
       <div class="row m-t">
-        <label class="col-md-3 control-label text-left">当前列表中，告诉买手通过筛选分类找到商品</label>
+        <label class="col-md-4 control-label text-left">当前列表中，告诉买手通过筛选分类找到商品</label>
         <div class="col-md-1">
-          <input type="text" class="form-control" ng-model="flowData.taskDetail.keywordSource[0].prodcutCategory1"/>
+          <input type="text" class="form-control" ng-model="flowData.taskDetail.prodcutCategory1"/>
         </div>
         <div class="col-md-1">
-          <input type="text" class="form-control" ng-model="flowData.taskDetail.keywordSource[0].prodcutCategory2"/>
+          <input type="text" class="form-control" ng-model="flowData.taskDetail.prodcutCategory2"/>
         </div>
         <div class="col-md-1">
-          <input type="text" class="form-control" ng-model="flowData.taskDetail.keywordSource[0].prodcutCategory3"/>
+          <input type="text" class="form-control" ng-model="flowData.taskDetail.prodcutCategory3"/>
         </div>
         <div class="col-md-1">
-          <input type="text" class="form-control" ng-model="flowData.taskDetail.keywordSource[0].prodcutCategory4"/>
+          <input type="text" class="form-control" ng-model="flowData.taskDetail.prodcutCategory4"/>
         </div>
         <label class="col-md-2 control-label text-left">最多四个分类</label>
       </div>
-      
-      <div class="row m-t">
-        <a class="col-md-4 text-danger"> + 可多添加1个淘宝搜索关键字方案 <span class="text-muted"> (最多可添加4个方案)</span> </a><span class="col-md-6 text-right">可提高任务安全保障</span>
-      </div>
-      
+
       <div class="line b-b"></div> 
       
       <h4 class="">缩小搜索范围：</h4>
@@ -103,13 +102,7 @@
         <label class="">元</label>
         <label class="m-l m-r">|</label>
         <label >商品所在地</label>        
-        <select class="input-control-xs" ng-model="flowData.taskDetail.searchAddress"><option>全国</option></select>
-      </div>
-      <div class="row m-t">
-        <a class="m-l text-danger"> + 支付2元可多添加1个商品 <span class="text-muted"> (最多可添加2个商品)</span> </a>
-      </div>
-      <div class="row m-t">      
-        <button class="btn btn-danger m-l" ng-click="saveProduct()">确认提交信息</button>
+        <select class="input-control-xs" ng-model="flowData.taskDetail.searchProductLocation"><option ng-repeat="location in productLocation" value="{{location}}">{{location}}</option></select>
       </div>
     </div>    
   </div>
