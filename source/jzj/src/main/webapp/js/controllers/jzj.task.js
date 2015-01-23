@@ -174,13 +174,10 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 	};
 }]);
 //填写商品信息
-app.controller('TaskFlowItem2Ctrl',['$scope','products','productLocations', function($scope,products,productLocations){
+app.controller('TaskFlowItem2Ctrl',['$scope','products', function($scope,products){
 	$scope.thisItem = "app.task.item2";
 	$scope.flowData = {};
-	$scope.product = {};
-	$scope.productLocation = [];
-	$scope.productKeywords = [];
-	$scope.isCanBingProductKeyword = true;
+	$scope.product = {};	
 	$scope.totalPrice = 0;
 	$scope.$on('flow-ready',function(event,flowData){
 		$scope.flowData = flowData;
@@ -191,33 +188,11 @@ app.controller('TaskFlowItem2Ctrl',['$scope','products','productLocations', func
 		}else{
 			$scope.product = products.newEmpty();	
 			$scope.product.shopId = flowData.shopId;		
-		}	
-		$scope.productLocation = productLocations.getAll();			
-		transProductKeywords();
-		checkProductKeywordCount();		
+		}							
 	});
 	$scope.countProductTotalPrice = function(){
 		$scope.totalPrice = parseFloat($scope.product.productPrice) * parseInt($scope.flowData.taskDetail.productCount);
-	};	
-	$scope.addSearchKeyword = function(){		
-		if($scope.flowData.taskDetail.searchProductKeywords.length < 4){
-			var key = $scope.flowData.taskDetail.searchProductKeywords.length + 1;
-			$scope.flowData.taskDetail.searchProductKeywords.push({"":""});
-			transProductKeywords();
-		}
-		checkProductKeywordCount();		
-	};
-	var transProductKeywords = function(){
-		$scope.productKeywords = [];
-		for (var i = 0; i<$scope.flowData.taskDetail.searchProductKeywords.length; i++) {
-			$scope.productKeywords.push({i: $scope.flowData.taskDetail.searchProductKeywords[i]});
-		};
-	};
-	var checkProductKeywordCount = function(){
-		if($scope.flowData.taskDetail.searchProductKeywords.length >= 4){
-			$scope.isCanBingProductKeyword = false;
-		}
-	};
+	};		
 	$scope.nextstep = function(){
 		$scope.product.productDesc = angular.toJson($scope.product.productDesc);
 		if($scope.product.productId > 0){			
@@ -247,13 +222,15 @@ app.controller('TaskFlowItem2Ctrl',['$scope','products','productLocations', func
 	};
 }]);
 //选择刷单数量
-app.controller('TaskFlowItem3Ctrl',['$scope','platforms','sellerShops', function($scope,platforms,sellerShops){
+app.controller('TaskFlowItem3Ctrl',['$scope','platforms','sellerShops','productLocations', function($scope,platforms,sellerShops,productLocations){
 	$scope.thisItem = "app.task.item3";
 	$scope.flowData = {}; 
 	$scope.productKeywords = [];
 	$scope.orderMessages = [];
+	$scope.productLocation = [];
 	$scope.platformName = "";
 	$scope.shopName = "";
+	$scope.isCanBingProductKeyword = true;
 	$scope.$on('flow-ready',function(event,flowData){
 		$scope.flowData = flowData;
 		transProductKeywords();
@@ -261,6 +238,9 @@ app.controller('TaskFlowItem3Ctrl',['$scope','platforms','sellerShops', function
 		$scope.countPoint();
 		getPlatformName($scope.flowData.PlatformId);
 		getShopName($scope.flowData.shopId);
+		transProductKeywords();
+		checkProductKeywordCount();	
+		$scope.productLocation = productLocations.getAll();
 	});
 	$scope.nextstep = function(){
 		$scope.$emit('next-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });
@@ -271,8 +251,30 @@ app.controller('TaskFlowItem3Ctrl',['$scope','platforms','sellerShops', function
 	$scope.orderQuantity = 0;
 	$scope.totalPoint = 0;
 	$scope.countPoint = function(){
-		$scope.orderQuantity = ($scope.flowData.taskDetail.orderQuantity == "" || $scope.flowData.taskDetail.orderQuantity < 0 )? 0 : $scope.flowData.taskDetail.orderQuantity;
+		$scope.orderQuantity = 0;
+		angular.forEach($scope.flowData.taskDetail.searchProductKeywords,function(value){
+			$scope.orderQuantity = $scope.orderQuantity + parseInt(value.orderQuantity);
+		});
 		$scope.totalPoint = parseInt($scope.orderQuantity) * 16.6;
+	};
+	$scope.addSearchKeyword = function(){		
+		if($scope.flowData.taskDetail.searchProductKeywords.length < 4){
+			var key = $scope.flowData.taskDetail.searchProductKeywords.length + 1;
+			$scope.flowData.taskDetail.searchProductKeywords.push({"keyword":"", "orderQuantity":"", "prodcutCategory1" : "", "prodcutCategory2" : "", "prodcutCategory3" : "", "prodcutCategory4" : ""});
+			transProductKeywords();
+		}
+		checkProductKeywordCount();		
+	};
+	var transProductKeywords = function(){
+		$scope.productKeywords = [];
+		for (var i = 0; i<$scope.flowData.taskDetail.searchProductKeywords.length; i++) {
+			$scope.productKeywords.push({i: $scope.flowData.taskDetail.searchProductKeywords[i]});
+		};
+	};
+	var checkProductKeywordCount = function(){
+		if($scope.flowData.taskDetail.searchProductKeywords.length >= 4){
+			$scope.isCanBingProductKeyword = false;
+		}
 	};
 	$scope.addOrderMessage = function(){
 		$scope.flowData.taskDetail.orderMessages.push("");

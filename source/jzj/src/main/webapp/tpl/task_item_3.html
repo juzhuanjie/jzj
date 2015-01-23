@@ -1,15 +1,61 @@
 <div class="wrapper-md no-p-t" ng-controller="TaskFlowItem3Ctrl">
   <div class="row wrapper no-p-b">
-    <span class="h4 font-bold">选择刷单数量</span>
+    <span class="h4 font-bold">填写刷单信息</span>
     <span class="h4 pull-right">已选择：<label class="text-danger">{{platformName}} | {{shopName}} | 订单</label></span>
   </div>  
   <div class="line b-b"></div> 
-  <div class="row wrapper no-p-t">
-      <label>1.请选择刷单数量</label><input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.orderQuantity" ng-change="countPoint()">
-  </div>  
-  <div class="row wrapper no-p-t">
-      <h5 ><span class="text-danger">注意：</span>请控制好店铺的转化率！不得超过3%！如果因转化率过高，导致商品降权，聚赚界概不负责！</h5>
-  </div> 
+  <div class="wrapper-md row no-p-t">    
+    <h5 class="font-bold">1.请设置成交关键词分布 <span  class="font-normal text-muted">( 注：关键词订单总数需要为<span class="text-danger">1</span>单 )</span></h5>    
+    <label class="m-t">使用 <span class="text-danger">“淘宝搜索框”</span> 查找商品</label><br/>
+    <div class="wrapper">
+      <div class="row m-b b bg-remind wrapper-sm" ng-repeat="keyword in productKeywords">
+        <div class="">
+          <label><span class="text-danger">*</span>搜索关键词{{$index+1}}：</label>
+          <input type="text" class="w-sm input-control-xs" ng-model="flowData.taskDetail.searchProductKeywords[$index].keyword"/>
+          <input type="text" class="w-xxs input-control-xs" ng-change="countPoint()" ng-model="flowData.taskDetail.searchProductKeywords[$index].orderQuantity"/><label>单</label>
+        </div>
+        <label class="m-t">当前列表中，告诉买手通过筛选分类找到商品</label>
+        <div class="row m-t">        
+          <div class="col-md-1">
+            <input type="text" class="form-control" ng-model="flowData.taskDetail.searchProductKeywords[$index].prodcutCategory1"/>
+          </div>
+          <div class="col-md-1">
+            <input type="text" class="form-control" ng-model="flowData.taskDetail.searchProductKeywords[$index].prodcutCategory2"/>
+          </div>
+          <div class="col-md-1">
+            <input type="text" class="form-control" ng-model="flowData.taskDetail.searchProductKeywords[$index].prodcutCategory3"/>
+          </div>
+          <div class="col-md-1">
+            <input type="text" class="form-control" ng-model="flowData.taskDetail.searchProductKeywords[$index].prodcutCategory4"/>
+          </div>
+          <label class="col-md-2 control-label m-t-xs">最多四个分类</label>
+        </div>
+      </div>
+      <div class="row" ng-if="isCanBingProductKeyword">
+        <a class="pull-left text-danger" ng-click="addSearchKeyword()"> + 可多添加1个淘宝搜索关键字方案 <span class="text-muted"> (最多可添加4个方案)</span> </a><span class="pull-right text-right">可提高任务安全保障</span>
+      </div>
+    </div>
+    
+
+    <div class="line b-b"></div> 
+    <div class="m-t">
+      <h5 class="font-bold">缩小搜索范围：</h5>
+      <div class="row m-t">
+        <label class="col-md-4 control-label text-left">让买手用列表筛选中 “价格筛选” 、 “商品所在地” 缩小范围</label>
+      </div>
+      <div class="row m-t">
+        <label class="m-l">价格</label>
+        <input type="text" class="w-xxs input-control-xs"  ng-model="flowData.taskDetail.searchMinPrice"/>
+        <label class="">元</label>
+        <input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.searchMaxPrice"/>
+        <label class="">元</label>
+        <label class="m-l m-r">|</label>
+        <label >商品所在地</label>        
+        <select class="input-control-xs" ng-model="flowData.taskDetail.searchProductLocation"><option ng-repeat="location in productLocation" value="{{location}}">{{location}}</option></select>
+      </div>
+    </div>
+  </div>
+
   <div class="line b-b"></div> 
 
   <div class="row wrapper-md no-p-t hide">
@@ -19,15 +65,6 @@
   </div>  
 
   <div class="line b-b hide"></div> 
-
-  <div class="row wrapper-md no-p-t">
-      <h5 class="font-bold">2.请设置成交关键词分布 <span  class="font-normal text-muted">( 注：关键词订单总数需要为<span class="text-danger">1</span>单 )</span></h5>
-      <div class="m-t" ng-repeat="keyword in productKeywords">
-        <label>搜索关键词{{$index+1}}：</label><input type="text" class="w-sm input-control-xs" ng-model="flowData.taskDetail.searchProductKeywords[$index].key"/><input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.searchProductKeywords[$index].value"/><label>单</label>
-      </div>
-  </div>  
-
-  <div class="line b-b"></div> 
 
   <div class="row wrapper-md no-p-t">
       <h5 class="font-bold">3.订单留言 <span  class="font-normal text-muted">( 注：出于安全性考虑，强烈不建议制定订单留言。如必须留言，请尽可能填写多个不同的留言内容</span></h5>
@@ -50,6 +87,11 @@
          <label class="pull-right"><sapn class="text-danger">{{totalPoint | number:2}}</sapn>人气符点</label>
       </div>      
   </div>
+
+  <div class="row wrapper no-p-t">
+      <h5 ><span class="text-danger">注意：</span>请控制好店铺的转化率！不得超过3%！如果因转化率过高，导致商品降权，聚赚界概不负责！</h5>
+  </div> 
+   
 
   <div class="row wrapper-md no-p-t">
     <div class="wrapper text-center"><button class="btn btn-danger m-r" ng-click="prevstep()"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button><button class="btn btn-danger m-l" ng-click="nextstep()"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button></div>
