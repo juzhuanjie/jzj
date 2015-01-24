@@ -263,6 +263,19 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 		queryByPlatform : function(platformId){
 			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/find?PlatformId=' + platformId);
 		},
+		filter : function(statusId,condition){
+			var queryPara = 'find?status=' + statusId;
+			if(angular.isDefined(condition.platformId) && condition.platformId != -1){
+				queryPara += '&PlatformId=' + condition.platformId;
+			}
+			if(angular.isDefined(condition.shopId) && condition.shopId != -1){
+				queryPara += '&shopId=' + condition.shopId;
+			}
+			if(angular.isDefined(condition.taskTypeId) && condition.taskTypeId != -1){
+				queryPara += '&taskTypeId=' + condition.taskTypeId;
+			}
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/' + queryPara);
+		},
 		get : function(taksId){
 			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/' + taksId);
 		},

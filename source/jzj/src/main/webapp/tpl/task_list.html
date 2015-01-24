@@ -13,7 +13,7 @@
       <div class="col-md-2">
         <label class="font-bold">平台：</label>
         <div class="btn-group">
-          <select class="form-control" ng-model="condition.platform">
+          <select class="form-control" ng-model="condition.platformId">
             <option value="-1">全部</option>
             <option ng-repeat="p in platforms" value="{{p.id}}">{{p.name}}</option>
           </select>
@@ -22,7 +22,7 @@
       <div class="col-md-2">
         <label class="font-bold">店铺：</label>      
         <div class="btn-group">
-          <select class="form-control" ng-model="condition.shop">
+          <select class="form-control" ng-model="condition.shopId">
             <option value="-1">全部</option>
             <option ng-repeat="s in shops" value="{{s.shopId}}">{{s.wangwang}}</option>
           </select>
@@ -31,16 +31,16 @@
       <div class="col-md-3">
         <label class="font-bold">任务类型：</label>
         <div class="btn-group">
-          <select class="form-control" ng-model="condition.taskType">
+          <select class="form-control" ng-model="condition.taskTypeId">
             <option value="-1">全部</option>
             <option ng-repeat="t in taskTypes" value="{{t.id}}">{{t.name}}</option>
           </select>
         </div>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2 hide">
         <label class="font-bold">终端：</label>      
         <div class="btn-group">
-          <select class="form-control" ng-model="condition.terminal">
+          <select class="form-control" ng-model="condition.terminalId">
             <option value="-1">全部</option>
             <option ng-repeat="t in terminals" value="{{t.id}}">{{t.name}}</option>
           </select>
@@ -67,7 +67,7 @@
             <article class="media" >
               <span class="pull-left m-r"><i class="fa fa-file-o fa-5x"></i></span>
               <div class="pull-right l-h-lg">
-                <a ng-if="statusId==2" href class="btn btn-info">继续发布</a>
+                <a ng-if="statusId==2" ui-sref="app.task({id:{{t.taskId}}})" class="btn btn-info">继续发布</a>
                 <a ng-if="statusId==1" href class="btn btn-info">一键发布</a>
               </div>
               <div class="media-body l-h-lg">   

@@ -20,6 +20,8 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 			$scope.platformId = 1;			
 			$scope.flowData = flowDatas.create($scope.platformId);
 			$scope.flowItem = $scope.flowData.taskDetail.flowItem;
+			//SET status is 未发布
+			$scope.flowData.status = 2;
 			$scope.currItemIndex = 0;			
 			$state.go($scope.flowItem[0]);
 			$scope.$broadcast('flow-ready',$scope.flowData);
@@ -59,8 +61,7 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 		$scope.flowData = data.flowData; 
 		$scope.flowData.taskDetail.currItem = $scope.currItem;
 		$scope.flowData.taskDetail = angular.toJson($scope.flowData.taskDetail);
-		//SET status is 未发布
-		$scope.flowData.status = 2;
+		
 		if($scope.flowData.taskId > 0){			
 			tasks.save($scope.flowData.taskId,$scope.flowData).then(function(result){
 				$scope.flowData = result;
@@ -95,11 +96,12 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 		$scope.flowData.taskDetail.currItem = 'app.task.item1';
 		$scope.flowData.taskDetail = angular.toJson($scope.flowData.taskDetail);
 		//发布成功，加到已发布状态列表里
-		$scope.flowData.status = 5;
+		$scope.flowData.status = 4;
 		tasks.save($scope.flowData.taskId,$scope.flowData).then(function(result){
 			$scope.flowData = result;
 			$scope.flowData.taskDetail = angular.fromJson($scope.flowData.taskDetail);
 			//TODO: 处理支付事件
+			$location.url('/app/tasklist/4');
 		});
 	});
 	$scope.$on('pay-cancel',function(event,data){
@@ -113,8 +115,8 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 			$scope.flowData = result;
 			$scope.flowData.taskDetail = angular.fromJson($scope.flowData.taskDetail);
 			//TODO: 处理支付事件
+			$location.url('/app/tasklist/2');
 		});
-		$location.url('/app/tasklist/2');
 	});	
 }]);
 //选择任务类型
@@ -481,14 +483,6 @@ app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss','tasks',fun
 		//TODO:统计不同状态下任务的数量
 		$scope.taskStats = { all : 8, doing : 2, finish : 6 };		
 	});
-	$scope.filterByStatusId = function(statusId){
-		//TODO:根据状态来过滤task
-		$scope.taskList = queryTasksByStatusId(statusId);		
-	};
-	$scope.filterByCondition = function(condition){
-		//TODO:根据状态来过滤task
-		$scope.taskList = queryTasksByCondition(condition);		
-	};
 	$scope.initTaskByStatus = function(){
 		$scope.statusId = $stateParams.status;
 		var statuss = taskStatuss.getAll();
@@ -501,7 +495,6 @@ app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss','tasks',fun
 	};
 	$scope.initTaskByPlatform = function(){
 		$scope.platformId = $stateParams.platformId;
-		console.log($stateParams.platformId);
 		queryTasksByPlatform($scope.platformId);
 	};
 	//TODO:查询所有任务
@@ -517,8 +510,10 @@ app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss','tasks',fun
 		});
 	};
 	//TODO:查询已完成的任务
-	var queryTasksByCondition = function(condition){
-		return [];
+	var filterTasksByCondition = function(condition){		
+		tasks.filter($scope.statusId,condition).then(function(result){
+			$scope.taskList = result;
+		});
 	};
 	$scope.getShopName = function(json){
 		return angular.fromJson(json).shopName;
@@ -529,6 +524,9 @@ app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss','tasks',fun
 	$scope.getTaskTotalPoint = function(json){
 		return angular.fromJson(json).totalPoint;
 	};
+	$scope.$on('filterTaskLoaded',function(event,data){
+		filterTasksByCondition(data);
+	});
 }]);
 //筛选控制器
 app.controller('TaskFilterCtrl',['$scope','$stateParams','platforms','sellerShops','taskTypes','terminals',function($scope,$stateParams,platforms,sellerShops,taskTypes,terminals){
@@ -538,10 +536,10 @@ app.controller('TaskFilterCtrl',['$scope','$stateParams','platforms','sellerShop
 	$scope.taskTypes = [];
 	$scope.terminals = [];
 	$scope.condition = {
-		platform : -1,
-		shop : -1,
-		taskType : -1,
-		terminal : -1
+		platformId : -1,
+		shopId : -1,
+		taskTypeId : -1,
+		terminalId : -1
 	};
 	$scope.$watch('$viewContentLoaded',function(){
 		//初始化平台下拉列表
@@ -559,7 +557,7 @@ app.controller('TaskFilterCtrl',['$scope','$stateParams','platforms','sellerShop
 	});
 	$scope.query = function(){
 		//传递事件触发查询任务
-		$scope.$emit('filter-task', $scope.condition);
+		$scope.$emit('filterTaskLoaded', $scope.condition);
 	};
 	var initSellerShopList = function(){
 	    sellerShops.getAllShops(userId).then(function(result){

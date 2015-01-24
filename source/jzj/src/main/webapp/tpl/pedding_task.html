@@ -54,7 +54,7 @@
     </div>
 
     <!--任务进展-->  
-    <div class="panel panel-default m-t b-default" ng-controller="TaskListCtrl" ng-init="initTaskByPlatform()">
+    <div class="panel panel-default m-t b-default hide" ng-controller="TaskListCtrl" ng-init="initTaskByPlatform()">
       <div class="panel-heading">
         <span class="text-danger font-bold"><span class="label bg-danger">T</span> 任务进展</span>
       </div> 
@@ -74,7 +74,7 @@
             <div class="col-md-2">
               <label class="font-bold">店铺：</label>      
               <div class="btn-group">
-                <select class="form-control filter-control" ng-model="condition.shop">
+                <select class="form-control filter-control" ng-model="condition.shopId">
                   <option value="-1">全部</option>
                   <option ng-repeat="s in shops" value="{{s.shopId}}">{{s.wangwang}}</option>
                 </select>
@@ -83,7 +83,7 @@
             <div class="col-md-3">
               <label class="font-bold">任务类型：</label>
               <div class="btn-group">
-                <select class="form-control filter-control" ng-model="condition.taskType">
+                <select class="form-control filter-control" ng-model="condition.taskTypeId">
                   <option value="-1">全部</option>
                   <option ng-repeat="t in taskTypes" value="{{t.id}}">{{t.name}}</option>
                 </select>
@@ -92,7 +92,7 @@
             <div class="col-md-2">
               <label class="font-bold">终端：</label>      
               <div class="btn-group">
-                <select class="form-control filter-control" ng-model="condition.terminal">
+                <select class="form-control filter-control" ng-model="condition.terminalId">
                   <option value="-1">全部</option>
                   <option ng-repeat="t in terminals" value="{{t.id}}">{{t.name}}</option>
                 </select>
