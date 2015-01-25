@@ -1,4 +1,4 @@
-<!-- list -->
+
 <ul class="nav">
   <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
     <span>任务管理</span>
@@ -54,10 +54,30 @@
   <li class="line dk"></li>
 
   <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-    <span>资金记录</span>
+    <span>资金管理</span>
+  </li>
+  
+  <li ui-sref-active="active">
+    <a ui-sref="app.financial.capital">
+      <i class="glyphicon glyphicon-usd icon text-success"></i>
+      <span>本金记录</span>
+    </a>
   </li>
 
-  <li ng-class="{active:$state.includes('app.page')}">
+  <li ui-sref-active="active">
+    <a ui-sref="app.financial.deposit">
+      <i class="glyphicon  glyphicon-gbp icon text-info"></i>
+      <span>押金记录</span>
+    </a>
+  </li>
+
+  <li ui-sref-active="active">
+    <a ui-sref="app.financial.brokerage">
+      <i class="glyphicon glyphicon-euro icon text-success"></i>
+      <span>佣金记录</span>
+    </a>
+  </li>
+  <!-- <li ng-class="{active:$state.includes('app.page')}">
     <a href class="auto">
       <span class="pull-right text-muted">
         <i class="fa fa-fw fa-angle-right text"></i>
@@ -124,57 +144,56 @@
         </a>
       </li>      
     </ul>
-  </li>
+  </li> -->
   
   <li ng-class="">
-    <a ui-sref="app.chart">
-      <i class="glyphicon glyphicon-edit"></i>
-      <span>符点记录</span>
+    <a ui-sref="app.financial.piont">
+      <i class="glyphicon glyphicon-edit text-info"></i>
+      <span>赚点记录</span>
     </a>
   </li>
   <li ng-class="">
-    <a ui-sref="app.chart">
-      <i class="glyphicon glyphicon glyphicon-align-left"></i>
-      <span>流量记录</span>
-    </a>
-  </li>
-  <li ng-class="">
-    <a ui-sref="app.chart">
-      <i class="glyphicon glyphicon glyphicon glyphicon-user"></i>
+    <a ui-sref="app.financial.member">
+      <i class="glyphicon  glyphicon-user text-success"></i>
       <span>会员记录</span>
     </a>
   </li>
 
-
+  <li ng-class="">
+    <a ui-sref="app.financial.cashout">
+      <i class="glyphicon glyphicon-transfer text-info"></i>
+      <span>提取现金</span>
+    </a>
+  </li>
 
   <li class="line dk hidden-folded"></li>
 
   <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">          
-    <span>账号信息</span>
+    <span>账号管理</span>
   </li>  
   <li ui-sref-active="active">
     <a ui-sref="app.account.user">
-      <i class="icon-user icon text-success-lter"></i>
+      <i class="icon-user icon text-success"></i>
       <span>基本信息</span>
     </a>
   </li>
   <li ui-sref-active="active">
     <a ui-sref="app.account.userbank">
-      <i class="icon-question icon"></i>
-      <span>提现账号管理</span>
+      <i class="glyphicon  glyphicon-credit-card text-primary"></i>
+      <span>提现账号</span>
     </a>
   </li>
   <li ui-sref-active="active">
     <a ui-sref="app.seller.shop">
-      <i class="glyphicon glyphicon-plus icon text-info-dker"></i>
+      <i class="glyphicon glyphicon-plus icon text-success"></i>
       <span>绑定店铺</span>
     </a>
   </li>
   <li ui-sref-active="active">
     <a ui-sref="app.buyer.account">
-      <i class="glyphicon glyphicon-plus icon text-info-dker"></i>
+      <i class="glyphicon glyphicon-plus icon text-info"></i>
       <span>添加买号</span>
     </a>
   </li>
 </ul>
-<!-- / list -->
+<!-- / list

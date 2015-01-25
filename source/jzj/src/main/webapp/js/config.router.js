@@ -246,7 +246,6 @@ angular.module('app')
                   url: '/filter/:filter',
                   templateUrl: 'tpl/task_list.html'                  
               })
-
               .state('app.peddingtask', {
                   url: '/peddingtask/:platformId',
                   templateUrl: 'tpl/pedding_task.html',
@@ -256,6 +255,40 @@ angular.module('app')
                           return uiLoad.load( ['js/controllers/jzj.task.js'] );
                       }]
                   }                   
+              })
+              .state('app.financial', {
+                  url: '/financial',
+                  template: '<div ui-view></div>',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.financial.js'] );
+                      }]
+                  }              
+              })
+              .state('app.financial.capital', {
+                  url: '/capital',
+                  templateUrl: 'tpl/capital.html'                  
+              })              
+              .state('app.financial.deposit', {
+                  url: '/deposit',
+                  templateUrl: 'tpl/deposit.html'                  
+              })
+              .state('app.financial.brokerage', {
+                  url: '/brokerage',
+                  templateUrl: 'tpl/brokerage.html'                  
+              })
+              .state('app.financial.piont', {
+                  url: '/piont',
+                  templateUrl: 'tpl/piont.html'                  
+              })
+              .state('app.financial.member', {
+                  url: '/member',
+                  templateUrl: 'tpl/member.html'                  
+              })
+              .state('app.financial.cashout', {
+                  url: '/cashout',
+                  templateUrl: 'tpl/cashout.html'                  
               })
       }
     ]

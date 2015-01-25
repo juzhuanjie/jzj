@@ -1,0 +1,36 @@
+
+<div>
+  <ul class="breadcrumb bg-white b-b breadcrumb-custom">
+    <li><a href class="breadcrumb-font"><i class="fa fa-home"></i> 首页</a></li>
+    <li><a href class="breadcrumb-font">资金记录</a></li>
+    <li class="active breadcrumb-font">会员记录</li>
+  </ul>
+</div>
+<div class="wrapper-md">
+	<h4 class="m-t-none m-b text-danger">会员记录</h4>
+	<div class="table-responsive">
+	    <table class="table table-striped bg-white">
+	      <thead>
+	        <tr>
+	          <th class="col-md-2">时间</th>
+	          <th class="col-md-2">收入</th>
+	          <th class="col-md-2">支出</th>
+	          <th class="col-md-2">结余</th>
+	          <th class="col-md-4">备注</th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	        <tr>
+	          <td class="col-md-2">2014.12.08 11:11</td>
+	          <td class="col-md-2">-</td>
+	          <td class="col-md-2">2990元</td>
+	          <td class="col-md-2">6810.00元</td>
+	          <td class="col-md-4">购买VIP会员</td>
+	        </tr>            
+	      </tbody>
+	    </table>
+	</div>
+	<div class="pagination pull-left">
+       <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="m-t-none m-b"></pagination>
+    </div>
+</div>

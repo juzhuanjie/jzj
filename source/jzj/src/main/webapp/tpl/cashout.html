@@ -1,0 +1,58 @@
+
+<div>
+  <ul class="breadcrumb bg-white b-b breadcrumb-custom">
+    <li><a href class="breadcrumb-font"><i class="fa fa-home"></i> 首页</a></li>
+    <li><a href class="breadcrumb-font">资金记录</a></li>
+    <li class="active breadcrumb-font">提取现金</li>
+  </ul>
+</div>
+<div class="wrapper-md">
+	<h4 class="m-t-none m-b text-danger">提取现金</h4>
+	<div class="line b-b"></div> 
+	<div class="form-horizontal m-t">
+		<div>
+	        <h5 class="font-bold">1.选择提现类型</h5>
+	        <label class="checkbox-inline m-r-lg"><input type="checkbox"/>本金余额：<span class="text-danger">1000</span> 元</label>
+	        <label class="checkbox-inline m-r-lg"><input type="checkbox"/>押金余额：<span class="text-danger">15000</span> 元</label>
+	        <label class="checkbox-inline m-r-lg"><input type="checkbox"/>佣金余额：<span class="text-danger">100</span> 元</label>
+	        <label class="checkbox-inline m-r-lg"><input type="checkbox"/>赚点余额：<span class="text-danger">80</span> 元</label>
+	  	</div>
+	  	<div class="line b-b"></div> 
+		<div class="m-t">
+			<h5 class="font-bold">2.填写提现信息</h5>
+			<label>银行卡：</label>
+			<div class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
+		</div>
+		<div>
+			<label class="control-label text-left">提现金额：</label>
+			<div class="btn-group"><input type="text" class="form-control" /></div>
+			<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span><span class="text-danger">(提现操作平台将收取0.3%的手续费)</span></label>
+		</div>		
+		<div class="m-t-xs">			
+			<label>总计实际到账金额：</label><label class="text-danger">0</label> <label> 元</label>
+		</div>
+		<div class="m-t-xs">
+			<p class="text-danger">注：预计2个工作日内（国家法定假日和双休日顺延）平台完成提现操作，到账时间已各大银行为准，预计3-5工作日左右</p>	
+		</div>
+		<div class="line b-b"></div> 
+		<div>
+			<h5 class="font-bold">3.确认支付</h5>
+			<label class="control-label text-left">支付密码：</label>
+			<div class="btn-group"><input type="text" class="form-control" /></div>
+			<label class="control-label text-left"><a class="text-info">找回支付密码</a></label>
+		</div>
+		<div class="line b-b"></div> 
+		<div class="m-t m-b">
+			<button class="btn btn-danger">申请提现</button>
+		</div>
+	</div>
+	<div class="line b-b"></div> 
+	<div class="bg-light m-t">
+        <h4 class="m-t-none font-bold">温馨提示：</h4>
+        <p class="text-muted">1. 请确保您输入的提现金额，以及支付宝或银行账户信息准确无误。</p>
+        <p class="text-muted">2. 如果您填写的提现信息不正确也可能会导致提现失败，由此产生的提现费用将不予退还。</p>
+		<p class="text-muted">3. 在国家法定节假日和双休日期间，用户可以申请提现，聚赚界会在7个工作日内进行处理。由此造成的不便，请多多原谅。</p>
+		<p class="text-muted">4. 平台禁止洗钱、信用卡套现、虚假交易等行为，已经发现并确认，将终止该账户的使用。</p>
+		<p class="text-muted">5. 平台操作提现后，到账资金可能会分为几笔打入您的账户，查询时请注意计算到账总金额。</p>
+     </div>
+</div>
