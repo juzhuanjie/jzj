@@ -8,7 +8,36 @@ app.factory('sessionInjector',  function(){
             config.headers['user-session-token'] = app.userSession.Tokan;
           }                    
           return config;
-      }
+      },
+      response:function(response)
+        {            
+            switch (response.status) {
+                case (200):
+                    if(!angular.isObject(response.data))
+                    {
+                        //这里可以做自己相应的处理,跳到登录页面
+                        if(response.data.indexOf("location.replace(\"/views/login.html\")")>0){
+                            window.location = "/views/login.html";
+                        }
+                    }
+                    break;
+                case (500):
+                    alert("服务器系统内部错误");
+                    break;
+                case (401):
+                    alert("未登录");
+                    break;
+                case (403):
+                    alert("无权限执行此操作");
+                    break;
+                case (408):
+                    alert("请求超时");
+                    break;
+                default:
+                    alert("未知错误");
+            }
+            return response;
+        }
     };
 });
 //Promise Get的公共请求方式
@@ -173,40 +202,47 @@ app.factory('flowDatas',function(){
 			var taobao = { 		
 					"taskId" : -1,	
 					"status" : 2,		
-					"PlatformId" : 1, 
+					"platformId" : 1, 
 					"shopId" : -1, 
 					"taskTypeId" : 1,
 					"productId" : -1,
 					"productPrice" : 0,
-					"totalTasks" : 1,
+					"totalTasks" : 1,					
+				    "commission": 0,
+				    "bonus": 0,
+				    "terminal": null,
+				    "approvalPriority": 0,
+				    "taskPriority": 0,
+				    "includeShipping": 0,
 					"taskDetail" : {
 						"currItem" : "app.task.item1",
 						"flowItem" : ['app.task.item1','app.task.item2','app.task.item3','app.task.item4','app.task.item5','app.task.item6'],
-						"totalTasks" : "",
+						"taskId" : -1,
+						"status" : 2,
+						"platformId" : 1, 
+						"shopId" : -1, 
+						"shopName" : "",
+						"taskTypeId" : 1,
+						"productId" : -1,
+						"productPrice" : 0, 
 						"productCount" : 1,
-						"searchProductKeywords" : [{"keyword":"", "orderQuantity":"", "prodcutCategory1" : "", "prodcutCategory2" : "", "prodcutCategory3" : "", "prodcutCategory4" : ""}],
+						"searchProductKeywords" : [{"keyword":"", "totalTasks":"", "prodcutCategory1" : "", "prodcutCategory2" : "", "prodcutCategory3" : "", "prodcutCategory4" : ""}],
 						"searchMinPrice" : "",
 						"searchMaxPrice" : "",
 						"searchProductLocation" : "",
-						"payedAddProduct" : false,
-						"freePostage" : false,
-						"orderQuantity" : "",
-						"pcOrderQuantity" : "",
-						"padOrderQuantity" : "",					
+						"includeShipping" : false,
+						"totalTasks" : "",					
 						"orderMessages" : [""],
 						"agreeFastRefunds" : false,
-						"fastDonePoint" : -1,
-						"agreeAddtionPoint" : false,
-						"addtionPoint" : "",
-						"agreePriorityReview" : false,
+						"taskPriority" : -1,
+						"agreeBonus" : false,
+						"bonus" : 0,
+						"agreeApprovalPriority" : false,
 						"agreeQualityPraise" : false,
 						"praiseKeywords" : ["","",""],
 						"paymentPiont" : false,
 						"paymentDeposit" : false,
-						"paymentBank" : false,
-						"shopName" : "",
-						"totalCash" : 0,
-						"totalPoint" : 0
+						"paymentBank" : false
 					}					
 				};
 			var tmall = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };

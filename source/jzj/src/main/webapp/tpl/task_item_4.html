@@ -33,15 +33,15 @@
 
   <div class="row wrapper no-p-t no-p-b">
       <h5 class="font-bold">2.加赏任务佣金： <label class="font-normal text-muted">增加符点数越多，买手完成任务的积极性就越大，买手会优先做此类任务</label></h5>
-      <label class="checkbox-inline padder-lg"><input type="checkbox" value="true" ng-model="flowData.taskDetail.agreeAddtionPoint" ng-click="countTotal()"/>每单加赏佣金</label>
-      <label><input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.addtionPoint" ng-change="countTotal()"/>人气符点，共计：1单 X 3人气符点 = 3人气符点<span class="text-muted">(最低为2人气符)</span></label>      
+      <label class="checkbox-inline padder-lg"><input type="checkbox" value="true" ng-model="flowData.taskDetail.agreeBonus" ng-click="countTotal()"/>每单加赏佣金</label>
+      <label><input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.bonus" ng-change="countTotal()"/>人气符点，共计：1单 X 3人气符点 = 3人气符点<span class="text-muted">(最低为2人气符)</span></label>      
   </div>  
 
   <div class="line b-b"></div> 
 
   <div class="row wrapper no-p-t no-p-b">
       <h5 class="font-bold">3.优先审单 <span  class="text-muted">选择此服务后，聚赚界将会优先审核您发布的任务</span></h5>
-      <label class="checkbox-inline padder-lg"><input type="checkbox" value="true" ng-model="flowData.taskDetail.agreePriorityReview" ng-click="countTotal()"/>订单优先审核 <span class="text-muted">（5人气符点）</span></label>
+      <label class="checkbox-inline padder-lg"><input type="checkbox" value="true" ng-model="flowData.taskDetail.agreeApprovalPriority" ng-click="countTotal()"/>订单优先审核 <span class="text-muted">（5人气符点）</span></label>
   </div>  
 
   <div class="line b-b"></div> 
@@ -97,13 +97,13 @@
             <tr>
               <td>押金</td>
               <td>
-                <h5>商品1：{{flowData.productId.productPrice}}元 X {{flowData.totalTasks}}</h5>
+                <h5>商品1：{{flowData.taskDetail.productId.productPrice}}元 X {{flowData.taskDetail.totalTasks}}</h5>
                 <h5>退款保障金： 每单30.95元</h5>
               </td>
-              <td>{{flowData.productId.productPrice * flowData.totalTasks}}元</td>
+              <td>{{flowData.taskDetail.productId.productPrice * flowData.taskDetail.totalTasks}}元</td>
               <td>新手1单套餐1单</td>
               <td>--</td>
-              <td>{{flowData.productId.productPrice}} X {{flowData.totalTasks}} = {{flowData.productId.productPrice * flowData.totalTasks}}元</td>
+              <td>{{flowData.taskDetail.productId.productPrice}} X {{flowData.taskDetail.totalTasks}} = {{flowData.taskDetail.productId.productPrice * flowData.taskDetail.totalTasks}}元</td>
             </tr> 
             <tr>
               <td>
@@ -138,7 +138,7 @@
   </div>  
 
   <div class="row wrapper-md no-p-t">
-    <h4 class="text-right">费用合计  押金：<label class="text-danger">{{flowData.totalTasks * flowData.productId.productPrice}}</label>元  人气符：<label class="text-danger">{{((suiltPoint * 1) + fastRefundPoint + fastDonePoint + addtionPoint + priorityReviewPoint + qualityPraisePoint) | number:2}}</label>点</h4>
+    <h4 class="text-right">费用合计  押金：<label class="text-danger">{{flowData.taskDetail.totalTasks * flowData.taskDetail.productId.productPrice}}</label>元  人气符：<label class="text-danger">{{((suiltPoint * 1) + fastRefundPoint + fastDonePoint + addtionPoint + priorityReviewPoint + qualityPraisePoint) | number:2}}</label>点</h4>
   </div>
 
 </div>

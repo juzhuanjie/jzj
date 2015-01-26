@@ -39,7 +39,7 @@
       <div class="row m-t">
         <label class="col-md-2 control-label text-left"><span class="text-danger">&nbsp;</span>搜索页面展示价格</label>
         <div class="col-md-2">
-          <input type="text" class="form-control" ng-model="flowData.productPrice"/>
+          <input type="text" class="form-control" ng-model="flowData.taskDetail.productPrice"/>
         </div>
         <label class="col-md-4 text-left control-label ">如该商品有满减、促销、多规格等情况，请填写此金额</label>
       </div>
@@ -59,11 +59,11 @@
     <h4 class="text-danger">2.设置商品收取运费的方式</h4>
     <div class="wrapper-xs">
       <div class="row radio">
-        <label class="m-l"><input class="" type="radio" name="fare" value="true" ng-model="flowData.taskDetail.freePostage"/>商品本身包邮</label><label class="text-muted">买手按照商品实际金额下单</label>
+        <label class="m-l"><input class="" type="radio" name="fare" value="true" ng-model="flowData.taskDetail.includeShipping"/>商品本身包邮</label><label class="text-muted">买手按照商品实际金额下单</label>
       </div>
       <div class="line line-dashed b-b line-lg pull-in"></div>
       <div class="row radio">
-        <label class="m-l"><input type="radio" name="fare" value="false" ng-model="flowData.taskDetail.freePostage"/>商品不包邮</label><label class="text-muted">无需买手联系客服，商家每单额外支出10元作为运费押金，任务完成后运费押金将全部退还给商家</label>
+        <label class="m-l"><input type="radio" name="fare" value="false" ng-model="flowData.taskDetail.includeShipping"/>商品不包邮</label><label class="text-muted">无需买手联系客服，商家每单额外支出10元作为运费押金，任务完成后运费押金将全部退还给商家</label>
       </div>
     </div>
   </div>

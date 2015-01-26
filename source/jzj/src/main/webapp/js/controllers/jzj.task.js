@@ -22,6 +22,7 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 			$scope.flowItem = $scope.flowData.taskDetail.flowItem;
 			//SET status is 未发布
 			$scope.flowData.status = 2;
+			$scope.flowData.taskDetail.status = 2;
 			$scope.currItemIndex = 0;			
 			$state.go($scope.flowItem[0]);
 			$scope.$broadcast('flow-ready',$scope.flowData);
@@ -30,7 +31,7 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 			if(id != 'new' && $scope.isFirstPost){
 				$scope.isFirstPost = false;
 				tasks.get(id).then(function(result){
-					$scope.platformId = result.PlatformId;			
+					$scope.platformId = result.platformId;			
 					$scope.flowData = result;
 					$scope.flowData.taskDetail = angular.fromJson(result.taskDetail);
 					$scope.flowItem = $scope.flowData.taskDetail.flowItem;
@@ -47,6 +48,7 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 		$scope.platformId = platformId;		
 		$scope.flowData = flowDatas.create($scope.platformId);	
 		$scope.flowItem = $scope.flowData.taskDetail.flowItem;
+		$scope.flowData.taskDetail.PlatformId = platformId;
 	});
 	$scope.$on('next-step',function(event,data){		
 		var index = 0;
@@ -60,8 +62,9 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 		$scope.currItem = $scope.flowItem[index];
 		$scope.flowData = data.flowData; 
 		$scope.flowData.taskDetail.currItem = $scope.currItem;
-		$scope.flowData.taskDetail = angular.toJson($scope.flowData.taskDetail);
-		
+		//把TaskDetails数据映射到上层的表结构的列里面
+		mapData();
+		$scope.flowData.taskDetail = angular.toJson($scope.flowData.taskDetail);		
 		if($scope.flowData.taskId > 0){			
 			tasks.save($scope.flowData.taskId,$scope.flowData).then(function(result){
 				$scope.flowData = result;
@@ -88,15 +91,20 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 		$scope.currItem = $scope.flowItem[index];
 		$scope.flowData = data.flowData;
 		$scope.flowData.taskDetail.currItem = $scope.currItem;
+		//把TaskDetails数据映射到上层的表结构的列里面
+		mapData();
 		$state.go($scope.flowItem[index]);
 	});
 	$scope.$on('pay-ok',function(event,data){
 		$scope.flowData = data.flowData; 
 		//重置会step1
 		$scope.flowData.taskDetail.currItem = 'app.task.item1';
-		$scope.flowData.taskDetail = angular.toJson($scope.flowData.taskDetail);
 		//发布成功，加到已发布状态列表里
 		$scope.flowData.status = 4;
+		$scope.flowData.taskDetail.status = 4;
+		//把TaskDetails数据映射到上层的表结构的列里面
+		mapData();
+		$scope.flowData.taskDetail = angular.toJson($scope.flowData.taskDetail);		
 		tasks.save($scope.flowData.taskId,$scope.flowData).then(function(result){
 			$scope.flowData = result;
 			$scope.flowData.taskDetail = angular.fromJson($scope.flowData.taskDetail);
@@ -108,9 +116,12 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 		$scope.flowData = data.flowData; 
 		//重置会step1
 		$scope.flowData.taskDetail.currItem = 'app.task.item1';
-		$scope.flowData.taskDetail = angular.toJson($scope.flowData.taskDetail);
 		//发布成功，加到已发布状态列表里
 		$scope.flowData.status = 2;
+		$scope.flowData.taskDetail.status = 2;
+		//把TaskDetails数据映射到上层的表结构的列里面
+		mapData();
+		$scope.flowData.taskDetail = angular.toJson($scope.flowData.taskDetail);		
 		tasks.save($scope.flowData.taskId,$scope.flowData).then(function(result){
 			$scope.flowData = result;
 			$scope.flowData.taskDetail = angular.fromJson($scope.flowData.taskDetail);
@@ -118,6 +129,26 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 			$location.url('/app/tasklist/2');
 		});
 	});	
+	var mapData = function(){
+		$scope.flowData.platformId = $scope.flowData.taskDetail.platformId;
+		$scope.flowData.shopId = $scope.flowData.taskDetail.shopId;
+		$scope.flowData.taskTypeId = $scope.flowData.taskDetail.taskTypeId;
+		$scope.flowData.productId = $scope.flowData.taskDetail.productId;
+		$scope.flowData.productPrice = $scope.flowData.taskDetail.productPrice;
+		if($scope.flowData.taskDetail.includeShipping){
+			$scope.flowData.includeShipping = 1;
+		}else{
+			$scope.flowData.includeShipping = 0;
+		}		
+		$scope.flowData.bonus = $scope.flowData.taskDetail.bonus;
+		
+		if($scope.flowData.taskDetail.agreeApprovalPriority){
+			$scope.flowData.approvalPriority = 5;
+		}else{
+			$scope.flowData.approvalPriority = 0;
+		}		
+		$scope.flowData.taskPriority = $scope.flowData.taskDetail.taskPriority;
+	};
 }]);
 //选择任务类型
 app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskTypes', 'platforms','tasks', function($scope,flowDatas,sellerShops,taskTypes,platforms,tasks){
@@ -135,10 +166,10 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 	$scope.$on('flow-ready',function(event,flowData){
 		$scope.flowData = flowData;
 		$scope.platforms = platforms.getAllWithShopCount();		
-		$scope.selectedPlatform = $scope.flowData.PlatformId;		
+		$scope.selectedPlatform = $scope.flowData.platformId;		
 		$scope.selectedShop = $scope.flowData.shopId;	
 		loadShop();				
-		$scope.tasktypes = taskTypes.query($scope.flowData.PlatformId);
+		$scope.tasktypes = taskTypes.query($scope.flowData.platformId);
 		$scope.selectedTaksType = $scope.flowData.taskTypeId;
 	});
 	$scope.nextstep = function(){
@@ -147,6 +178,7 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 	$scope.changePlatform = function(platformId){
 		$scope.selectedPlatform = platformId;
 		$scope.flowData.PlatformId = platformId;
+		$scope.flowData.taskDetail.PlatformId = platformId;
 		loadShop();
 		$scope.$emit('change-platform', platformId);
 	};
@@ -155,17 +187,19 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 		$scope.selectedShopName = shopName;
 		$scope.flowData.shopId = shopId;
 		$scope.flowData.taskDetail.shopName = shopName;
+		$scope.flowData.taskDetail.shopId = shopId;
 		statsShopOrder(shopId);
 	};
 	$scope.changeTaskType = function(taskTypeId){
 		$scope.selectedTaksType = taskTypeId;
 		$scope.flowData.taskTypeId = taskTypeId;
+		$scope.flowData.taskDetail.taskTypeId = taskTypeId;
 	};
 	var statsShopOrder = function(shopId){
 		$scope.shopOrderCount = 1;
 	};
 	var loadShop = function(){
-		sellerShops.query(userId, $scope.flowData.PlatformId).then(function(result){
+		sellerShops.query(userId, $scope.flowData.platformId).then(function(result){
 	      $scope.shops = result;
 	      angular.forEach($scope.shops,function(value){
 			  if(value.shopId == $scope.selectedShop){
@@ -183,13 +217,13 @@ app.controller('TaskFlowItem2Ctrl',['$scope','products', function($scope,product
 	$scope.totalPrice = 0;
 	$scope.$on('flow-ready',function(event,flowData){
 		$scope.flowData = flowData;
-		if(angular.isObject(flowData.productId)){			
-			$scope.product = flowData.productId;	
-			$scope.product.productDesc = angular.fromJson(flowData.productId.productDesc);
+		if(angular.isObject(flowData.taskDetail.productId)){			
+			$scope.product = flowData.taskDetail.productId;	
+			$scope.product.productDesc = angular.fromJson(flowData.taskDetail.productId.productDesc);
 			$scope.countProductTotalPrice();
 		}else{
 			$scope.product = products.newEmpty();	
-			$scope.product.shopId = flowData.shopId;		
+			$scope.product.shopId = flowData.taskDetail.shopId;		
 		}							
 	});
 	$scope.countProductTotalPrice = function(){
@@ -200,26 +234,26 @@ app.controller('TaskFlowItem2Ctrl',['$scope','products', function($scope,product
 		if($scope.product.productId > 0){			
 			products.save($scope.product.productId,$scope.product).then(function(result){
 				$scope.product = result;
-				$scope.product.productDesc = angular.fromJson(result.productDesc);
-				$scope.flowData.productId = $scope.product;
+				$scope.product.productDesc = angular.fromJson(result.productDesc);	
+				$scope.flowData.taskDetail.productId = $scope.product;		
 				$scope.product.productDesc = angular.toJson($scope.product.productDesc);
-				$scope.flowData.productId = $scope.product;
+				$scope.flowData.taskDetail.productId = $scope.product;
 				$scope.$emit('next-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });	
 			});
 		}else{
 			products.add($scope.product).then(function(result){
 				$scope.product = result;
 				$scope.product.productDesc = angular.fromJson(result.productDesc);
-				$scope.flowData.productId = $scope.product;
+				$scope.flowData.taskDetail.productId = $scope.product;
 				$scope.product.productDesc = angular.toJson($scope.product.productDesc);
-				$scope.flowData.productId = $scope.product;
+				$scope.flowData.taskDetail.productId = $scope.product;
 				$scope.$emit('next-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });	
 			});
 		}			
 	};
 	$scope.prevstep = function(){
 		$scope.product.productDesc = angular.toJson($scope.product.productDesc);
-		$scope.flowData.productId = $scope.product;
+		$scope.flowData.taskDetail.productId = $scope.product;
 		$scope.$emit('prev-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });
 	};
 }]);
@@ -238,8 +272,8 @@ app.controller('TaskFlowItem3Ctrl',['$scope','platforms','sellerShops','productL
 		transProductKeywords();
 		transOrderMessages();
 		$scope.countPoint();
-		getPlatformName($scope.flowData.PlatformId);
-		getShopName($scope.flowData.shopId);
+		getPlatformName($scope.flowData.taskDetail.platformId);
+		getShopName($scope.flowData.taskDetail.shopId);
 		transProductKeywords();
 		checkProductKeywordCount();	
 		$scope.productLocation = productLocations.getAll();
@@ -250,19 +284,20 @@ app.controller('TaskFlowItem3Ctrl',['$scope','platforms','sellerShops','productL
 	$scope.prevstep = function(){
 		$scope.$emit('prev-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });
 	};
-	$scope.orderQuantity = 0;
+	$scope.totalTasks = 0;
 	$scope.totalPoint = 0;
 	$scope.countPoint = function(){
-		$scope.orderQuantity = 0;
+		$scope.totalTasks = 0;
 		angular.forEach($scope.flowData.taskDetail.searchProductKeywords,function(value){
-			$scope.orderQuantity = $scope.orderQuantity + parseInt(value.orderQuantity);
+			$scope.totalTasks = $scope.totalTasks + parseInt(value.totalTasks);
 		});
-		$scope.totalPoint = parseInt($scope.orderQuantity) * 16.6;
+		$scope.flowData.taskDetail.totalTasks = $scope.totalTasks;
+		$scope.totalPoint = parseInt($scope.totalTasks) * 16.6;
 	};
 	$scope.addSearchKeyword = function(){		
 		if($scope.flowData.taskDetail.searchProductKeywords.length < 4){
 			var key = $scope.flowData.taskDetail.searchProductKeywords.length + 1;
-			$scope.flowData.taskDetail.searchProductKeywords.push({"keyword":"", "orderQuantity":"", "prodcutCategory1" : "", "prodcutCategory2" : "", "prodcutCategory3" : "", "prodcutCategory4" : ""});
+			$scope.flowData.taskDetail.searchProductKeywords.push({"keyword":"", "totalTasks":"", "prodcutCategory1" : "", "prodcutCategory2" : "", "prodcutCategory3" : "", "prodcutCategory4" : ""});
 			transProductKeywords();
 		}
 		checkProductKeywordCount();		
@@ -313,12 +348,11 @@ app.controller('TaskFlowItem4Ctrl',['$scope','platforms','sellerShops', function
 	$scope.shopName = "";
 	$scope.$on('flow-ready',function(event,flowData){
 		$scope.flowData = flowData;		
-		console.log($scope.flowData);
-		$scope.setFaskDone($scope.flowData.taskDetail.fastDonePoint);
+		$scope.setFaskDone($scope.flowData.taskDetail.taskPriority);
 		transPraiseKeyword();
 		checkPraiseKeywordCount();
-		getPlatformName($scope.flowData.PlatformId);
-		getShopName($scope.flowData.shopId);
+		getPlatformName($scope.flowData.taskDetail.platformId);
+		getShopName($scope.flowData.taskDetail.shopId);
 	});
 	$scope.nextstep = function(){
 		$scope.$emit('next-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });
@@ -338,15 +372,15 @@ app.controller('TaskFlowItem4Ctrl',['$scope','platforms','sellerShops', function
 			$scope.fastRefundPoint = 1 * $scope.flowData.productId.productPrice * 0.006;
 			$scope.flowData.taskDetail.totalPoint += (1 * parseFloat($scope.flowData.productId.productPrice) * 0.006);
 		}
-		if($scope.flowData.taskDetail.fastDonePoint > 0){
-			$scope.fastDonePoint = $scope.flowData.taskDetail.fastDonePoint;
-			$scope.flowData.taskDetail.totalPoint += parseFloat($scope.flowData.taskDetail.fastDonePoint);
+		if($scope.flowData.taskDetail.taskPriority > 0){
+			$scope.fastDonePoint = $scope.flowData.taskDetail.taskPriority;
+			$scope.flowData.taskDetail.totalPoint += parseFloat($scope.flowData.taskDetail.taskPriority);
 		}
-		if($scope.flowData.taskDetail.agreeAddtionPoint){
-			$scope.addtionPoint = $scope.flowData.taskDetail.addtionPoint;
-			$scope.flowData.taskDetail.totalPoint +=  parseFloat($scope.flowData.taskDetail.addtionPoint);
+		if($scope.flowData.taskDetail.agreeBonus){
+			$scope.addtionPoint = $scope.flowData.taskDetail.bonusPoint;
+			$scope.flowData.taskDetail.totalPoint +=  parseFloat($scope.flowData.taskDetail.bonusPoint);
 		}
-		if($scope.flowData.taskDetail.agreePriorityReview){
+		if($scope.flowData.taskDetail.agreeApprovalPriority){
 			$scope.priorityReviewPoint = 5;
 			$scope.flowData.taskDetail.totalPoint += 5;
 		}
@@ -365,7 +399,7 @@ app.controller('TaskFlowItem4Ctrl',['$scope','platforms','sellerShops', function
 				$scope.fastDoneOption[key] = false;
 			}
 		});
-		$scope.flowData.taskDetail.fastDonePoint = point;
+		$scope.flowData.taskDetail.taskPriority = point;
 		$scope.countTotal();
 	};
 	$scope.praiseKeyword = [];
@@ -418,7 +452,7 @@ app.controller('TaskFlowItem5Ctrl',['$scope', function($scope){
 	$scope.totalPoint = 0;
 	var countTotalDeposit = function(){
 		//TODO: 需要计算订单所需押金
-		$scope.totalDeposit = parseInt($scope.flowData.taskDetail.productCount) * parseFloat($scope.flowData.productId.productPrice) * parseInt($scope.flowData.taskDetail.orderQuantity);
+		$scope.totalDeposit = parseInt($scope.flowData.taskDetail.productCount) * parseFloat($scope.flowData.taskDetail.productId.productPrice) * parseInt($scope.flowData.taskDetail.totalTasks);
 	};
 	var countTotalPoint = function(){
 		//TODO: 需要计算订单所需符点
