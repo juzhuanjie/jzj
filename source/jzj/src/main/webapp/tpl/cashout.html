@@ -6,51 +6,83 @@
     <li class="active breadcrumb-font">提取现金</li>
   </ul>
 </div>
-<div class="wrapper-md">
-	<h4 class="m-t-none m-b text-danger">提取现金</h4>
+<div class="wrapper-md bg-white" ng-controller="CashoutCtrl">
+	<h4 class="m-t-none m-b text-danger">申请提现</h4>
 	<div class="line b-b"></div> 
 	<div class="form-horizontal m-t">
-		<div>
-	        <h5 class="font-bold">1.选择提现类型</h5>
-	        <label class="checkbox-inline m-r-lg"><input type="checkbox"/>本金提现</label>
-	        <label class="checkbox-inline m-r-lg"><input type="checkbox"/>押金提现</label>
-	        <label class="checkbox-inline m-r-lg"><input type="checkbox"/>佣金提现</label>
-	        <label class="checkbox-inline m-r-lg"><input type="checkbox"/>赚点提现</label>
-	  	</div>
-	  	<div class="m-t">			
-			<label>总计可提现金额：</label><label class="text-danger">0</label> <label> 元</label>
-		</div>
+	  	<div class="list-group list-group-lg list-group-sp">
+	        <div class="clearfix">
+	          <div>
+	          	<label>可提取现金：</label>
+	          	<label class="h3 text-danger font-thin h3">{{totalCashs}}</label> 
+	          	<label> 元</label>
+	          </div>	          
+	        </div>
+	        <div class="clearfix">
+	          <div>
+	          	<label>可提现赚点：</label>
+	          	<label class="h3 text-danger font-thin h3">{{totalPoints}}</label> 
+	          	<label> 点</label>
+	          	<small class="text-muted"> 如果想提取赚点，请先 </small>
+	          	<a ng-show="!isVisibelPoints2cash" class="text-info" ng-click="showPoints2cash()">变现</a>
+	          </div>
+	          <div ng-show="isVisibelPoints2cash" class="b wrapper-md pos-rlt bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
+	          	<div class="m-t-xs">
+					<p class="text-danger">注：赚点变现操作平台将收取5%的手续费</p>	
+				</div>
+	          	<div>
+					<label class="control-label text-left">变现赚点：</label>
+					<div class="btn-group"><input type="text" class="form-control" ng-model="transPoints" ng-change="countPoints2cashFee()"/></div>
+					<label class="control-label text-left"><span class="text-muted">单次最少变现100点 </span></label>
+				</div>		
+				<div class="m-t-xs">			
+					<label>变现手续费：</label><label class="h3 text-danger font-thin h3">{{points2cash.fee}}</label> <label> 元</label>
+					<label class="m-l-lg">变现实际到账金额：</label><label class="h3 text-danger font-thin h3r">{{points2cash.amount}}</label> <label> 元</label>
+				</div>
+				<div class="m-t m-b">
+					<button class="btn btn-danger" ng-click="submitPoints2cash()">确定</button>
+					<button class="btn btn-default" ng-click="cancelPoints2cash()">取消</button>
+				</div>
+	          </div>          
+	        </div>
+	    </div>
 	  	<div class="line b-b"></div> 
 		<div class="m-t">
-			<h5 class="font-bold">2.填写提现信息</h5>
-			<label>银行卡：</label>
-			<div class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
+			<h5 class="font-bold">填写提现信息</h5>
+			<label>提现账号：</label>
+			<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
+			<div ng-if="isBindUserBank" class="btn-group">
+				<select class="form-control" ng-model="userBankId">
+					<option ng-repeat="b in userBankList" value="{{b.userBankId}}" ng-selected="userBankId = b.userBankId">{{getBankName(b.bankType)}} - {{b.accountNumber}}</option>
+				</select>
+			</div>
 		</div>
 		<div>
 			<label class="control-label text-left">提现金额：</label>
-			<div class="btn-group"><input type="text" class="form-control" /></div>
+			<div class="btn-group"><input type="text" class="form-control" ng-model="transCashs" ng-change="countCashoutFee()"/></div>
 			<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span><span class="text-danger">(提现操作平台将收取0.3%的手续费)</span></label>
 		</div>		
 		<div class="m-t-xs">			
-			<label>总计实际到账金额：</label><label class="text-danger">0</label> <label> 元</label>
+			<label>手续费总计：</label><label class="h3 text-danger font-thin h3">{{cashout.fee}}</label> <label> 元</label>
+			<label class="m-l-lg">实际到账金额总计：</label><label class="h3 text-danger font-thin h3">{{cashout.amount}}</label> <label> 元</label>
 		</div>
 		<div class="m-t-xs">
 			<p class="text-danger">注：预计2个工作日内（国家法定假日和双休日顺延）平台完成提现操作，到账时间已各大银行为准，预计3-5工作日左右</p>	
 		</div>
 		<div class="line b-b"></div> 
 		<div>
-			<h5 class="font-bold">3.确认支付</h5>
+			<h5 class="font-bold">确认支付</h5>
 			<label class="control-label text-left">支付密码：</label>
-			<div class="btn-group"><input type="text" class="form-control" /></div>
+			<div class="btn-group"><input type="password" class="form-control" ng-model="payPassword"/></div>
 			<label class="control-label text-left"><a class="text-info">找回支付密码</a></label>
 		</div>
 		<div class="line b-b"></div> 
 		<div class="m-t m-b">
-			<button class="btn btn-danger">申请提现</button>
+			<button class="btn btn-danger" ng-click="submitCashout()">申请提现</button>
 		</div>
 	</div>
 	<div class="line b-b"></div> 
-	<div class="bg-light m-t">
+	<div class="bg-white m-t">
         <h4 class="m-t-none font-bold">温馨提示：</h4>
         <p class="text-muted">1. 请确保您输入的提现金额，以及支付宝或银行账户信息准确无误。</p>
         <p class="text-muted">2. 如果您填写的提现信息不正确也可能会导致提现失败，由此产生的提现费用将不予退还。</p>
@@ -58,4 +90,5 @@
 		<p class="text-muted">4. 平台禁止洗钱、信用卡套现、虚假交易等行为，已经发现并确认，将终止该账户的使用。</p>
 		<p class="text-muted">5. 平台操作提现后，到账资金可能会分为几笔打入您的账户，查询时请注意计算到账总金额。</p>
      </div>
+     <br/><br/>
 </div>

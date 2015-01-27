@@ -1,0 +1,55 @@
+
+<div>
+  <ul class="breadcrumb bg-white b-b breadcrumb-custom">
+    <li><a href class="breadcrumb-font"><i class="fa fa-home"></i> 首页</a></li>
+    <li><a href class="breadcrumb-font">资金记录</a></li>
+    <li class="active breadcrumb-font">交易记录</li>
+  </ul>
+</div>
+<div class="wrapper-md bg-white" ng-controller="TransHistoryCtrl">
+	<h4 class="m-t-none m-b text-danger">交易记录</h4>
+	<div class="table-responsive">
+	    <table class="table table-striped bg-white">
+	      <thead>
+	        <tr class="bg-jzj">
+	          <th class="col-md-3 b-r" colspan="2"></th>
+	          <th class="col-md-2 b-r text-center" colspan="2">现金 + 冻结资金</th>
+	          <th class="col-md-2 b-r text-center" colspan="2">赚点</th>
+	          <th class="col-md-3 b-r text-center" colspan="3">余额</th>
+	          <th class="col-md-2"></th>
+	        </tr>
+	        <tr>
+	          <th class="col-md-1 b-r">单号</th>
+	          <th class="col-md-2 b-r">时间</th>
+	          <th class="col-md-1 b-r">收入</th>
+	          <th class="col-md-1 b-r">支出</th>
+	          <th class="col-md-1 b-r">收入</th>
+	          <th class="col-md-1 b-r">支出</th>
+	          <th class="col-md-1 b-r">赚点</th>
+	          <th class="col-md-1 b-r">现金</th>
+	          <!--买手没有这一列-->
+	          <th class="col-md-1 b-r">冻结资金</th>
+	          <th class="col-md-2">备注</th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	        <tr ng-repeat="t in transList">
+	          <td class="col-md-1 b-r">{{t.transactId}}</td>
+	          <td class="col-md-2 b-r">{{t.createdAt | date : 'yyyy.MM.dd HH:mm:ss' : 'Z'}}</td>
+	          <td class="col-md-1 b-r">{{t.cashIn}}</td>
+	          <td class="col-md-1 b-r">{{t.cashOut}}</td>
+	          <td class="col-md-1 b-r">{{t.pointsIn}}</td>
+	          <td class="col-md-1 b-r">{{t.pointsOut}}</td>
+	          <td class="col-md-1 b-r">{{t.pointsBalance}}</td>
+	          <td class="col-md-1 b-r">{{t.cashBalance}}</td>	
+	          <td class="col-md-1 b-r">{{t.frozenBalance}}</td>	          
+	          <td class="col-md-2 ">{{t.comment}}</td>
+	        </tr>	                
+	      </tbody>
+	    </table>
+	</div>
+	<div class="pagination pull-left">
+       <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="m-t-none m-b"></pagination>
+    </div>
+    <br/><br/>
+</div>

@@ -48,7 +48,7 @@ angular.module('app')
               .state('app', {
                   abstract: true,
                   url: '/app',
-                  templateUrl: 'tpl/app.html'                  
+                  templateUrl: 'tpl/app.html'               
               })
               .state('app.dashboard-v1', {
                   url: '/dashboard-v1',
@@ -265,31 +265,32 @@ angular.module('app')
                           return uiLoad.load( ['js/controllers/jzj.financial.js'] );
                       }]
                   }              
-              })
-              .state('app.financial.capital', {
-                  url: '/capital',
-                  templateUrl: 'tpl/capital.html'                  
+              })                        
+              .state('app.financial.recharge_history', {
+                  url: '/recharge_history',
+                  templateUrl: 'tpl/recharge_history.html'                  
               })              
-              .state('app.financial.deposit', {
-                  url: '/deposit',
-                  templateUrl: 'tpl/deposit.html'                  
+              .state('app.financial.cashout_history', {
+                  url: '/cashout_history',
+                  templateUrl: 'tpl/cashout_history.html'                  
               })
-              .state('app.financial.brokerage', {
-                  url: '/brokerage',
-                  templateUrl: 'tpl/brokerage.html'                  
+              .state('app.financial.points2cash_history', {
+                  url: '/points2cash_history',
+                  templateUrl: 'tpl/points2cash_history.html'                  
+              })  
+              .state('app.financial.trans_history', {
+                  url: '/trans_history',
+                  templateUrl: 'tpl/trans_history.html'                  
               })
-              .state('app.financial.piont', {
-                  url: '/piont',
-                  templateUrl: 'tpl/piont.html'                  
-              })
-              .state('app.financial.member', {
-                  url: '/member',
-                  templateUrl: 'tpl/member.html'                  
+              .state('app.financial.rechange', {
+                  url: '/rechange',
+                  templateUrl: 'tpl/rechange.html'                  
               })
               .state('app.financial.cashout', {
                   url: '/cashout',
                   templateUrl: 'tpl/cashout.html'                  
               })
+
       }
     ]
   );

@@ -41,54 +41,66 @@ app.factory('sessionInjector',  function(){
     };
 });
 //Promise Get的公共请求方式
-app.factory('promiseGet', ['$http','$q', function($http,$q){
+app.factory('promiseGet', ['$http','$q','toaster', function($http,$q,toaster){
 	return function(url){
 		var deferred = $q.defer();
 		$http.get(url)
 		.success(function(result){
-			if(angular.isUndefined(result.code)){
+			if(angular.isDefined(result.code)){				
+				deferred.reject(result);
+			}
+			else if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
-				deferred.reject(result);
+				deferred.resolve(result);
 			}
 		})
 		.error(function(reason){
+			toaster.pop('error', 'Server Error', reason);
 			deferred.reject(reason);
 		});
 		return deferred.promise;
 	};
 }]);
 //Promise Post的公共请求方式
-app.factory('promisePost', ['$http','$q', function($http,$q){
+app.factory('promisePost', ['$http','$q','toaster', function($http,$q,toaster){
 	return function(url,para){
 		var deferred = $q.defer();
 		$http.post(url,para)
 		.success(function(result){
-			if(angular.isUndefined(result.code)){
+			if(angular.isDefined(result.code)){
+				deferred.reject(result);
+			}
+			else if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
-				deferred.reject(result);
+				deferred.resolve(result);
 			}
 		})
 		.error(function(reason){
+			toaster.pop('error', 'Server Error', reason);
 			deferred.reject(reason);
 		});
 		return deferred.promise;
 	};
 }]);
 //Promise Put的公共请求方式
-app.factory('promisePut', ['$http','$q', function($http,$q){
+app.factory('promisePut', ['$http','$q','toaster', function($http,$q,toaster){
 	return function(url,para){
 		var deferred = $q.defer();
 		$http.put(url,para)
 		.success(function(result){
-			if(angular.isUndefined(result.code)){
+			if(angular.isDefined(result.code)){
+				deferred.reject(result);
+			}
+			else if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
-				deferred.reject(result);
+				deferred.resolve(result);
 			}
 		})
 		.error(function(reason){
+			toaster.pop('error', 'Server Error', reason);
 			deferred.reject(reason);
 		});
 		return deferred.promise;
@@ -387,12 +399,36 @@ app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet
 		}
 	};
 }]);
+//UserBank Type 定义
+app.factory('bankTypes',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		getAll : function (){
+			return [
+				{id : 1, name : "支付宝"},
+				{id : 2, name : "财富通"},
+				{id : 3, name : "银行卡"}
+			];
+		},
+		getZFB : function(){
+			return {id : 1, name : "支付宝"};
+		},
+		getCFT : function(){
+			return {id : 2, name : "财富通"};
+		},
+		getYHK : function(){
+			return {id : 3, name : "银行卡"};
+		}
+	};
+}]);
 //UserBank 对象数据交互 Service
 app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		get : function(userId, bankType){
 			//TODO: 获取一条User Bank记录，根据userid 和 banktype
 			return promiseGet('http://mc-ubuntu2.cloudapp.net/userBank/find?userId=' + userId + '&bankType=' + bankType);
+		},
+		query : function(userId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/userBank/find?userId=' + userId);	
 		},
 		add : function(userBank){
 			//TODO: 添加一条User Bank记录，可以是支付宝，财付通，银行卡等
@@ -407,7 +443,7 @@ app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promise
 			      "accountName": "", 
 			      "accountNumber": "", 
 			      "branch": "", 
-			      "Ccity": "", 
+			      "City": "", 
 			      "screenshot": ""
 			};
 		}
@@ -573,3 +609,105 @@ app.factory('productLocations',function(){
 		}
 	};
 });
+//交易状态配置
+app.factory('transStatus',function(){
+	return {
+		getAll : function(){
+			return [
+				{id : 1, name : "成功"},
+				{id : 2, name : "失败"},
+				{id : 3, name : "处理中"}
+			];
+		}
+	};
+});
+//交易状态配置
+app.factory('transType',function(){
+	return {
+		getAll : function(){
+			return [
+				{id : 1, name : "提现"},				
+				{id : 2, name : "充值现金"},
+				{id : 3, name : "充值押金"},
+				{id : 4, name : "充值赚点"},
+				{id : 5, name : "变现"}
+			];
+		}
+	};
+});
+//提现 Service
+app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		get : function(userId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/cashout/find?userId='+userId);
+		},
+		add : function(cashout){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/cashout', cashout);
+		},
+		newEmpty : function(){
+			return {
+			    "amount": 0,
+			    "points": 0,
+			    "fee": 0,
+			    "comment": "",
+			    "status": 3,
+			    "cashoutId": -1,
+			    "userId": -1,
+			    "cashoutTypeId": 3,
+			    "type": 1
+			};
+		}
+	};
+}]);
+//充值 Service
+app.factory('recharges',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		get : function(userId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/recharge/find?userId='+userId);
+		},
+		add : function(recharge){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/recharge', recharge);
+		},
+		newEmpty : function(){
+			return {
+			    "amount": 0,
+			    "points": 0,
+			    "comment": "",
+			    "rechargeId": -1,
+			    "userId": -1,
+			    "rechargeTypeId": 2,
+			    "type" : 1,
+			    "isFrozen" : false
+			};
+		}
+	};
+}]);
+//变现 Service
+app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		get : function(userId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/points2cash/find?userId='+userId);
+		},
+		add : function(points2cash){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/points2cash', points2cash);
+		},
+		newEmpty : function(){
+			return {
+			    "amount": 0,
+			    "points": 0,
+			    "fee": 0,
+			    "comment": "",
+			    "cashoutId": -1,
+			    "userId": -1
+			};
+		}
+	};
+}]);
+//变现 Service
+app.factory('transactions',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		get : function(userId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/transaction/find?userId='+userId);
+		}
+	};
+}]);

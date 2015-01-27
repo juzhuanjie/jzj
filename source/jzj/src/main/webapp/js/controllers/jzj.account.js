@@ -196,9 +196,9 @@ app.controller('HeadImageUploadCtrl', ['$scope', 'FileUploader', '$modalInstance
     };
 }]);
 //支付宝设置Controller
-app.controller('ZhiFuBaoCtrl', ['$scope', 'userBanks', function($scope, userBanks){
+app.controller('ZhiFuBaoCtrl', ['$scope', 'userBanks','bankTypes', function($scope, userBanks,bankTypes){
   var userId = app.userSession.userId;
-  var bankType = 1;
+  var bankType = bankTypes.getZFB().id;
   $scope.isEdit = true;
   $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;
@@ -235,9 +235,9 @@ app.controller('ZhiFuBaoCtrl', ['$scope', 'userBanks', function($scope, userBank
   };
 }]);
 //财付通设置Controller
-app.controller('CaiFuTongCtrl', ['$scope','userBanks', function($scope,userBanks){
+app.controller('CaiFuTongCtrl', ['$scope','userBanks','bankTypes', function($scope,userBanks,bankTypes){
   var userId = app.userSession.userId;
-  var bankType = 2;
+  var bankType = bankTypes.getCFT().id;
   $scope.isEdit = true;
   $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;
@@ -274,9 +274,9 @@ app.controller('CaiFuTongCtrl', ['$scope','userBanks', function($scope,userBanks
   };
 }]);
 //银行卡设置Controller
-app.controller('YinHangKaCtrl', ['$scope','userBanks', function($scope,userBanks){
+app.controller('YinHangKaCtrl', ['$scope','userBanks','bankTypes', function($scope,userBanks,bankTypes){
   var userId = app.userSession.userId;
-  var bankType = 3;
+  var bankType = bankTypes.getYHK().id;
   $scope.isEdit = true;
   $scope.account = userBanks.newEmpty(bankType);
   $scope.isShow = false;  
