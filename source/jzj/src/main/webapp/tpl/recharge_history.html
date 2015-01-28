@@ -6,8 +6,11 @@
     <li class="active breadcrumb-font">充值记录</li>
   </ul>
 </div>
-<div class="wrapper-md bg-white" ng-controller="RechargeHistoryCtrl">
-	<h4 class="m-t-none m-b text-danger">充值记录</h4>
+<div class="wrapper-md bg-white" ng-controller="RechargeHistoryCtrl">	
+	<div class="row wrapper">
+		<h4 class="pull-left m-t-none m-b text-danger">充值记录</h4>		
+		<a ui-sref="app.financial.rechange" class="pull-right btn m-b-xs btn-sm btn-info btn-addon m-l" ng-click="downloadCSV()"><i class="fa fa-external-link"></i>充值</a>		
+	</div>
 	<div class="table-responsive">
 	    <table class="table table-striped bg-white">
 	      <thead>
@@ -32,8 +35,8 @@
 	      </tbody>
 	    </table>
 	 </div>	
-	<div class="pagination pull-left">
-       <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" class="m-t-none m-b"></pagination>
+	<div class="pagination pull-left" ng-controller="PaginationCtrl">
+       <pagination ng-if="totalItems>0" boundary-links="true" items-per-page="pageSize" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged(currentPage)"></pagination>
     </div>
     <br/><br/>
 </div>

@@ -9,11 +9,18 @@ app.controller('TransHistoryCtrl',['$scope','transactions',function($scope,trans
   var userId = app.userSession.userId;
   $scope.transList = [];
   $scope.$watch('$viewContentLoaded',function(){  
-    loadTransHistory();
+    loadTransHistory(1,20);
   });
-  var loadTransHistory = function(){    
-    transactions.get(userId).then(function(result){
+  $scope.downloadCSV = function(){
+    transactions.downloadCSV(userId);
+  };
+  $scope.$on('pageChanged',function(event,data){
+        loadTransHistory(data.currentPage,data.pageSize);
+    });
+  var loadTransHistory = function(currentPage,pageSize){    
+    transactions.get(userId,currentPage,pageSize).then(function(result){
       $scope.transList = result;
+      //$scope.$broadcast('resultsLoaded', result);
     });
   };
 }]);
@@ -197,28 +204,5 @@ app.controller('CashoutCtrl',['$scope','cashouts','points2cashs','userBanks','ba
     },function(reason){
       toaster.pop('error', '申请提现', reason);
     });
-  };
-}]);
-//分页 ctrl
-app.controller('PaginationCtrl',['$scope','$timeout', function($scope,$timeout){
-  $scope.pageSize = 20;
-  $scope.maxSize = 10;
-  $scope.totalItems = 0;
-  $scope.currentPage = 1;
-  $scope.setPage = function (pageNo) {
-    $scope.currentPage = pageNo;
-  };
-  $scope.pageChanged = function(pageNo) {
-    $scope.$emit('pageChanged', {"currentPage" : pageNo, "pageSize" : $scope.pageSize});
-  };
-  $scope.$on('resultsLoaded',function(event,data){
-     $scope.totalItems = 0;
-     timeout(data);
-  });
-  var timeout = function(data){
-    $timeout(function(){
-        $scope.totalItems = data.totalItems;
-        $scope.currentPage = data.currentPage; 
-    },100);
   };
 }]);

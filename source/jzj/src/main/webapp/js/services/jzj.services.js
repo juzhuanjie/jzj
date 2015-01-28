@@ -1,4 +1,27 @@
 'use strict';
+//分页 ctrl
+app.controller('PaginationCtrl',['$scope','$timeout', function($scope,$timeout){
+  $scope.pageSize = 20;
+  $scope.maxSize = 10;
+  $scope.totalItems = 10;
+  $scope.currentPage = 1;
+  $scope.setPage = function (pageNo) {
+    $scope.currentPage = pageNo;
+  };
+  $scope.pageChanged = function(pageNo) {
+    $scope.$emit('pageChanged', {"currentPage" : pageNo, "pageSize" : $scope.pageSize});
+  };
+  $scope.$on('resultsLoaded',function(event,data){
+     //$scope.totalItems = 0;
+     //timeout(data);
+  });
+  var timeout = function(data){
+    $timeout(function(){
+        $scope.totalItems = data.totalItems;
+        $scope.currentPage = data.currentPage; 
+    },100);
+  };
+}]);
 //request 拦截器，为http请求加上header信息
 app.factory('sessionInjector',  function(){
 	return {
@@ -109,7 +132,7 @@ app.factory('promisePut', ['$http','$q','toaster', function($http,$q,toaster){
 //restAPI Get的公共请求方式
 app.factory('restAPIGet', ['$resource', function($resource){
 	return function(url){
-		return $resource(url);
+		return $resource(url).get();
 	};
 }]);
 //restAPI Post的公共请求方式
@@ -524,7 +547,7 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 					    "wangwang": "", 
 					    "province": "", 
 					    "city": "", 
-					    "district": ""
+					    "street": ""
 					} ;
 		}
 	};
@@ -704,10 +727,14 @@ app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,prom
 	};
 }]);
 //变现 Service
-app.factory('transactions',['promisePost','promiseGet',function(promisePost,promiseGet){
+app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(promisePost,promiseGet,restAPIGet){
 	return {
-		get : function(userId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/transaction/find?userId='+userId);
+		get : function(userId,currentPage,pageSize){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/transaction/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+		},
+		downloadCSV : function(userId){
+			//TODO: 导出交易记录CSV
+			window.open("http://mc-ubuntu2.cloudapp.net/transaction/csv");
 		}
 	};
 }]);

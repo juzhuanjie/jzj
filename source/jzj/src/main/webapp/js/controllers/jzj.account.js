@@ -488,7 +488,7 @@ app.controller('SellerShopCtrl', ['$scope','sellerShops','platforms', function($
       $scope.wangwang = result.wangwang;
       $scope.province = result.province;
       $scope.city = result.city;
-      $scope.district = result.district;
+      $scope.district = result.street;
       $scope.isShow = true;
       $scope.isEdit = true;
       $scope.currEditSellerShop = result;
@@ -502,7 +502,7 @@ app.controller('SellerShopCtrl', ['$scope','sellerShops','platforms', function($
       var sellerShop = $scope.currEditSellerShop;      
       sellerShop.province = $scope.province;
       sellerShop.city = $scope.city;
-      sellerShop.district = $scope.district;
+      sellerShop.street = $scope.district;
       sellerShops.update(sellerShop.shopId,sellerShop).then(function(result){
         initSellerShopList();
         $scope.isShow = false;
@@ -518,7 +518,7 @@ app.controller('SellerShopCtrl', ['$scope','sellerShops','platforms', function($
       sellerShop.wangwang = $scope.wangwang;
       sellerShop.province = $scope.province;
       sellerShop.city = $scope.city;
-      sellerShop.district = $scope.district;
+      sellerShop.street = $scope.district;
       sellerShops.add(sellerShop).then(function(result){
         if(angular.isObject(result)){
           $scope.sellerShopBinds.push(result);
