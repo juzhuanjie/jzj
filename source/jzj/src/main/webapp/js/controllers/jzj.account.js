@@ -355,14 +355,12 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms','userAd
   };
   $scope.editBuyerBind = function(buyerAccountId){
     buyerAccounts.get(buyerAccountId).then(function(result){
-      // $scope.wangwang = result.wangwang;
-      // $scope.wwScreenshot = result.wwScreenshot;
-      // $scope.accountLogin = result.accountLogin;
-      // $scope.userAddress.province = result.province;
-      // $scope.userAddress.city = result.city;
-      // $scope.userAddress.district = result.district;
-      // $scope.userAddress.shreetAddress = result.shreetAddress;
-      // $scope.userAddress.phone = result.phone;
+      $scope.buyerAccount.wangwang = result.wangwang;
+      $scope.wwScreenshot = result.wwScreenshot;
+      $scope.province = result.addressId.province;
+      $scope.city = result.addressId.city;
+      $scope.district = result.addressId.district;
+      $scope.userAddress = result.addressId;
       $scope.isShow = true;
       $scope.isEdit = true;
       $scope.currEditBuyerAccount = result;
@@ -374,20 +372,19 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms','userAd
   $scope.save = function(){
 
     if($scope.isEdit){
-      // var buyerAccount = $scope.currEditBuyerAccount;
-      // buyerAccount.accountLogin = $scope.accountLogin;
-      // buyerAccount.province = $scope.userAddress.province;
-      // buyerAccount.city = $scope.userAddress.city;
-      // buyerAccount.district = $scope.userAddress.district;
-      // buyerAccount.shreetAddress = $scope.userAddress.shreetAddress;
-      // buyerAccount.phone = $scope.userAddress.phone;
-      // buyerAccounts.update(buyerAccount.buyerAccountId,buyerAccount).then(function(result){
-      //   initBuyerAccountList();
-      //   $scope.isShow = false;
-      //   clear();
-      // },function(reason){
+      var buyerAccount = $scope.currEditBuyerAccount;
+      $scope.userAddress.province = $scope.province;
+      $scope.userAddress.city = $scope.city;
+      $scope.userAddress.district = $scope.district;
+      buyerAccount.addressId = $scope.userAddress;
+      alert(angular.toJson($scope.userAddress));
+      buyerAccounts.update(buyerAccount.buyerAccountId,buyerAccount).then(function(result){
+        initBuyerAccountList();
+        $scope.isShow = false;
+        clear();
+      },function(reason){
 
-      // });  
+      });  
     }else{
       $scope.buyerAccount.userId = userId; 
       $scope.buyerAccount.platformId = $scope.platform.id; 
@@ -399,7 +396,7 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms','userAd
       $scope.buyerAccount.addressId = $scope.userAddress;
       buyerAccounts.add($scope.buyerAccount).then(function(result){
         if(angular.isObject(result)){
-          $scope.buyerAccountBinds.push(result);
+          initBuyerAccountList();
           $scope.isShow = false;
           clear();
         } 
