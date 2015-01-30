@@ -8,7 +8,8 @@ app.controller('SigninFormController', ['$scope', 'users', '$state', '$window','
     $scope.login = function() {
       $scope.authError = null;
       var para = { "login" : $scope.user.email, "password" : $scope.user.password };
-      $http.post('http://mc-ubuntu2.cloudapp.net/user/login', para).success(function(result, status, headers, config) {
+      var api = app.global.host + '/user/login';
+      $http.post(api, para).success(function(result, status, headers, config) {
           $window.localStorage.setItem("userSession", angular.toJson(result));
           app.userSession = result;
           //app.userTokan = "";

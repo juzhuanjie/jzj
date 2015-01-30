@@ -242,7 +242,7 @@ app.controller('CashoutCtrl',['$scope','cashouts','points2cashs','userBanks','ba
   };
   $scope.submitCashout = function(){
     if($scope.payPassword == ''){
-      toaster.pop('error', '申请提现', '请填写支付密码支付密码');
+      toaster.pop('error', '申请提现', '请填写支付密码');
       return;
     }
     balances.checkPayPassword($scope.payPassword).then(function(result){

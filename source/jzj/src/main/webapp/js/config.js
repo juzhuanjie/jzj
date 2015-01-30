@@ -29,3 +29,9 @@ angular.module('app')
     // Tell the module to store the language in the local storage
     $translateProvider.useLocalStorage();
   }]);
+
+  //初始化global变量
+  app.global = {
+    "host" : "http://mc-ubuntu2.cloudapp.net"
+  };
+

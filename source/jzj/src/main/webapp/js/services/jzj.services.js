@@ -1,27 +1,9 @@
 'use strict';
-//分页 ctrl
-app.controller('PaginationCtrl',['$scope','$timeout', function($scope,$timeout){
-  $scope.pageSize = 20;
-  $scope.maxSize = 10;
-  $scope.totalItems = 10;
-  $scope.currentPage = 1;
-  $scope.setPage = function (pageNo) {
-    $scope.currentPage = pageNo;
-  };
-  $scope.pageChanged = function(pageNo) {
-    $scope.$emit('pageChanged', {"currentPage" : pageNo, "pageSize" : $scope.pageSize});
-  };
-  $scope.$on('resultsLoaded',function(event,data){
-     //$scope.totalItems = 0;
-     //timeout(data);
-  });
-  var timeout = function(data){
-    $timeout(function(){
-        $scope.totalItems = data.totalItems;
-        $scope.currentPage = data.currentPage; 
-    },100);
-  };
-}]);
+
+function joinHost(url){
+	return app.global.host + '' + url;
+}
+
 //request 拦截器，为http请求加上header信息
 app.factory('sessionInjector', ['toaster', function(toaster){
 	return {
@@ -33,7 +15,7 @@ app.factory('sessionInjector', ['toaster', function(toaster){
           }                    
           return config;
       },
-      response:function(response) {            
+      response:function(response) {     
             switch (response.status) {            	
                 case (200):
                 	//console.log(response.headers('token'));                	
@@ -65,26 +47,23 @@ app.factory('sessionInjector', ['toaster', function(toaster){
 app.factory('promiseGet', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
 	return function(url){
 		var deferred = $q.defer();
-		$http.get(url)
+		var api = joinHost(url);
+		$http.get(api)
 		.success(function(result){
 			if(angular.isDefined(result.code)){				
 				if(result.code == 'access_notloggedin'){
 					$location.path("/access/signin");
 				}
 				deferred.reject(result);
-			}
-			else if(angular.isObject(result)){
+			}else if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
 				deferred.resolve(result);
 			}
 		})
 		.error(function(reason){
-			var reasonObj = angular.fromJson(reason);
-			if(angular.isDefined(reasonObj)){
-				if(reasonObj.code == 'access_notloggedin'){
-					$location.path("/access/signin");
-				}
+			if(angular.isDefined(reason.code) && reason.code == 'access_notloggedin'){
+				$location.path("/access/signin");
 			}else{
 				toaster.pop('error', 'Server Error', reason);	
 			}						
@@ -97,28 +76,24 @@ app.factory('promiseGet', ['$http','$q','toaster','$location', function($http,$q
 app.factory('promisePost', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
 	return function(url,para){
 		var deferred = $q.defer();
-		$http.post(url,para)
+		var api = joinHost(url);
+		$http.post(api,para)
 		.success(function(result){
 			if(angular.isDefined(result.code)){
 				if(result.code == 'access_notloggedin'){
 					$location.path("/access/signin");
 				}
 				deferred.reject(result);
-			}
-			else if(angular.isObject(result)){
+			}else if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
 				deferred.resolve(result);
 			}
 		})
 		.error(function(reason){
-			var reasonObj = angular.fromJson(reason);
-			if(angular.isDefined(reasonObj)){
-				if(reasonObj.code == 'access_notloggedin'){
-					$location.path("/access/signin");
-				}
-			}
-			else{
+			if(angular.isDefined(reason.code) && reason.code == 'access_notloggedin'){
+				$location.path("/access/signin");
+			}else{
 				toaster.pop('error', 'Server Error', reason);	
 			}
 			deferred.reject(reason);
@@ -130,28 +105,24 @@ app.factory('promisePost', ['$http','$q','toaster','$location', function($http,$
 app.factory('promisePut', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
 	return function(url,para){
 		var deferred = $q.defer();
-		$http.put(url,para)
+		var api = joinHost(url);
+		$http.put(api,para)
 		.success(function(result){
 			if(angular.isDefined(result.code)){
 				if(result.code == 'access_notloggedin'){
 					$location.path("/access/signin");
 				}
 				deferred.reject(result);
-			}
-			else if(angular.isObject(result)){
+			}else if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
 				deferred.resolve(result);
 			}
 		})
 		.error(function(reason){
-			var reasonObj = angular.fromJson(reason);
-			if(angular.isDefined(reasonObj)){
-				if(reasonObj.code == 'access_notloggedin'){
-					$location.path("/access/signin");
-				}
-			}
-			else{
+			if(angular.isDefined(reason.code) && reason.code == 'access_notloggedin'){
+				$location.path("/access/signin");
+			}else{
 				toaster.pop('error', 'Server Error', reason);	
 			}
 			deferred.reject(reason);
@@ -162,13 +133,15 @@ app.factory('promisePut', ['$http','$q','toaster','$location', function($http,$q
 //restAPI Get的公共请求方式
 app.factory('restAPIGet', ['$resource', function($resource){
 	return function(url){
-		return $resource(url).get();
+		var api = joinHost(url);
+		return $resource(api).get();
 	};
 }]);
 //restAPI Post的公共请求方式
 app.factory('restAPIPost', ['$resource', function($resource){
 	return function(url,para){
-		return $resource(url, para);
+		var api = joinHost(url);
+		return $resource(api, para);
 	};
 }]);
 //平台操作Service
@@ -321,19 +294,19 @@ app.factory('flowDatas',function(){
 					model = taobao;
 					break;
 				case 2:
-					model = tmall;
+					model = taobao;
 					break;
 				case 3:
-					model = jd;
+					model = taobao;
 					break;
 				case 4:
-					model = dangdang;
+					model = taobao;
 					break;
 				case 5:
-					model = amazon;
+					model = taobao;
 					break;
 				case 6:
-					model = yhd;
+					model = taobao;
 					break;				
 				default:
 					model = taobao;
@@ -353,18 +326,18 @@ app.factory('flowDatas',function(){
 app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		add : function(shopTask){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/shopTask', shopTask);	
+			return promisePost('/shopTask', shopTask);	
 		},
 		save : function(taskId,shopTask){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/shopTask/' + taskId, shopTask);
+			return promisePost('/shopTask/' + taskId, shopTask);
 		},
 		queryByStatus : function(statusId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/find?status=' + statusId);
+			return promiseGet('/shopTask/find?status=' + statusId);
 		},
 		queryByPlatform : function(platformId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/find?PlatformId=' + platformId);
+			return promiseGet('/shopTask/find?PlatformId=' + platformId);
 		},
-		filter : function(statusId,condition){
+		filter : function(statusId,condition,currentPage,pageSize){
 			var queryPara = 'find?status=' + statusId;
 			if(angular.isDefined(condition.platformId) && condition.platformId != -1){
 				queryPara += '&PlatformId=' + condition.platformId;
@@ -375,14 +348,18 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 			if(angular.isDefined(condition.taskTypeId) && condition.taskTypeId != -1){
 				queryPara += '&taskTypeId=' + condition.taskTypeId;
 			}
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/' + queryPara);
+			queryPara += '&limit=' + pageSize + '&skip=' + currentPage;
+			return promiseGet('/shopTask/' + queryPara);
 		},
 		get : function(taksId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopTask/' + taksId);
+			return promiseGet('/shopTask/' + taksId);
 		},
 		statsShopOrderCount : function(shopId){
 			//TODO: 统计店铺最近发布任务的单数
 			return 1;
+		},
+		queryCount : function(){
+			//return promiseGet('/query/count/?model=task');
 		}		
 	};
 }]);
@@ -390,13 +367,13 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 app.factory('products', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		add : function(product){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/shopProduct', product);	
+			return promisePost('/shopProduct', product);	
 		},
 		get : function(productId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/shopProduct?id=' + productId);
+			return promiseGet('/shopProduct?id=' + productId);
 		},
 		save : function(productId,product){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/shopProduct/' + productId, product);
+			return promisePost('/shopProduct/' + productId, product);
 		},
 		newEmpty : function(){
 			return {
@@ -418,7 +395,7 @@ app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet
 		// login : function(email, password){
 		// 	//TODO: 用户登录, 返回USERID, SESSIONTOTAN
 		// 	var para = { "login" : email, "password" : password };
-		// 	return promisePost('http://mc-ubuntu2.cloudapp.net/user/login',para);
+		// 	return promisePost('/user/login',para);
 		// },
 		logout : function(){
 			//TODO: 退出登录
@@ -426,15 +403,15 @@ app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet
 		},
 		get : function(userId){
 			//TODO: 获取用户信息，根据userid
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/user?id=' + userId);			
+			return promiseGet('/user?id=' + userId);			
 		},
 		save : function(userId, user){
 			//TODO: 保存用户编辑信息
-			return promisePost('http://mc-ubuntu2.cloudapp.net/user/' + userId, user);
+			return promisePost('/user/' + userId, user);
 		},
 		add : function(user){
 			//TODO: 添加一个用户
-			return promisePost('http://mc-ubuntu2.cloudapp.net/user/create', user);	
+			return promisePost('/user/create', user);	
 		},
 		newEmpty : function(){
 			return {
@@ -478,14 +455,14 @@ app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promise
 	return {
 		get : function(userId, bankType){
 			//TODO: 获取一条User Bank记录，根据userid 和 banktype
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/userBank/find?userId=' + userId + '&bankType=' + bankType);
+			return promiseGet('/userBank/find?userId=' + userId + '&bankType=' + bankType);
 		},
 		query : function(userId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/userBank/find?userId=' + userId);	
+			return promiseGet('/userBank/find?userId=' + userId);	
 		},
 		add : function(userBank){
 			//TODO: 添加一条User Bank记录，可以是支付宝，财付通，银行卡等
-			return promisePost('http://mc-ubuntu2.cloudapp.net/userBank', userBank);	
+			return promisePost('/userBank', userBank);	
 		},
 		newEmpty : function(bankType){
 			//新建一个空对象
@@ -506,19 +483,19 @@ app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promise
 app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		get : function(buyerAccountId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/buyerAccount/'+buyerAccountId);
+			return promiseGet('/buyerAccount/'+buyerAccountId);
 		},
 		query : function(userId, platformId){
 			//TODO: 获取买号绑定信息，根据userid和platformid，返回的是一个数组
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/buyerAccount/find?userId=' + userId + '&platformId=' + platformId);			
+			return promiseGet('/buyerAccount/find?userId=' + userId + '&platformId=' + platformId);			
 		},
 		add : function(buyerAccount){
 			//TODO: 添加买号信息
-			return promisePost('http://mc-ubuntu2.cloudapp.net/buyerAccount', buyerAccount);
+			return promisePost('/buyerAccount', buyerAccount);
 		},
 		update : function(buyerAccountId,buyerAccount){
 			//TODO: 添加买号信息
-			return promisePost('http://mc-ubuntu2.cloudapp.net/buyerAccount/'+buyerAccountId, buyerAccount);
+			return promisePost('/buyerAccount/'+buyerAccountId, buyerAccount);
 		},
 		count : function(userId, platformId){
 			//TODO: 统计某个平台下的买号绑定数量，不能拿超过3个
@@ -542,13 +519,13 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 app.factory('userAddresses',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		get : function(addressId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/useraddress/'+addressId);
+			return promiseGet('/useraddress/'+addressId);
 		},
 		query : function(userId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/useraddress/find?userId'+userId);	
+			return promiseGet('/useraddress/find?userId'+userId);	
 		},
 		add : function(userAddress){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/useraddress/', userAddress);
+			return promisePost('/useraddress/', userAddress);
 		},
 		newEmpty : function(){
 			return {
@@ -570,22 +547,22 @@ app.factory('userAddresses',['promisePost','promiseGet',function(promisePost,pro
 app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		get : function(shopId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/sellerShop/'+shopId);
+			return promiseGet('/sellerShop/'+shopId);
 		},
 		query : function(userId, platformId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/sellerShop/find?userId=' + userId + '&platformId=' + platformId);	
+			return promiseGet('/sellerShop/find?userId=' + userId + '&platformId=' + platformId);	
 		},
 		getAllShops : function(userId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/sellerShop/find?userId=' + userId);	
+			return promiseGet('/sellerShop/find?userId=' + userId);	
 		},
 		add : function(sellerShop){
 			//TODO: 添加店铺绑定信息
-			return promisePost('http://mc-ubuntu2.cloudapp.net/sellerShop', sellerShop);
+			return promisePost('/sellerShop', sellerShop);
 		},
 		update : function(shopId,sellerShop){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/sellerShop/'+shopId, sellerShop);
+			return promisePost('/sellerShop/'+shopId, sellerShop);
 		},
 		count : function(userId, platformId){
 			//TODO: 统计某个平台下的店铺绑定数量，不能拿超过3个
@@ -716,13 +693,13 @@ app.factory('transType',function(){
 app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		get : function(userId,currentPage,pageSize){			
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/cashout/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+			return promiseGet('/cashout/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
 		},
 		add : function(cashout){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/cashout', cashout);
+			return promisePost('/trans/cashout', cashout);
 		},
 		queryCount : function(){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/count/?model=cashout&where={"rechargetypeId":1}');
+			return promiseGet('/query/count/?model=cashout&where={"rechargetypeId":1}');
 		},
 		newEmpty : function(){
 			return {
@@ -743,13 +720,13 @@ app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseG
 app.factory('recharges',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		get : function(userId,currentPage,pageSize){			
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/recharge/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+			return promiseGet('/recharge/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
 		},
 		add : function(recharge){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/recharge', recharge);
+			return promisePost('/trans/recharge', recharge);
 		},
 		queryCount : function(){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/count/?model=recharge&where={"rechargetypeId":1}');
+			return promiseGet('/query/count/?model=recharge&where={"rechargetypeId":1}');
 		},
 		newEmpty : function(){
 			return {
@@ -769,13 +746,13 @@ app.factory('recharges',['promisePost','promiseGet',function(promisePost,promise
 app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		get : function(userId,currentPage,pageSize){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/points2cash/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+			return promiseGet('/points2cash/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
 		},
 		add : function(points2cash){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/points2cash', points2cash);
+			return promisePost('/trans/points2cash', points2cash);
 		},
 		queryCount : function(){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/count/?model=points2cash&where={"rechargetypeId":1}');
+			return promiseGet('/query/count/?model=points2cash&where={"rechargetypeId":1}');
 		},
 		newEmpty : function(){
 			return {
@@ -793,14 +770,14 @@ app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,prom
 app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(promisePost,promiseGet,restAPIGet){
 	return {
 		get : function(userId,currentPage,pageSize){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/transaction/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+			return promiseGet('/transaction/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
 		},
 		downloadCSV : function(userId){
 			//TODO: 导出交易记录CSV
-			window.open("http://mc-ubuntu2.cloudapp.net/transaction/csv");
+			window.open("/transaction/csv");
 		},
 		queryCount : function(){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/count/?model=transaction&where={"rechargetypeId":1}');
+			return promiseGet('/query/count/?model=transaction&where={"rechargetypeId":1}');
 		}
 	};
 }]);
@@ -808,10 +785,10 @@ app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(pro
 app.factory('balances', ['promiseGet','promisePost',function(promiseGet,promisePost){
 	return {
 		get : function(userId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/balance?userId=' + userId);
+			return promiseGet('/query/balance?userId=' + userId);
 		},
 		checkPayPassword : function(payPassword){
-			return promisePost('http://mc-ubuntu2.cloudapp.net/service/checkPayPassword',{"password":payPassword});
+			return promisePost('/service/checkPayPassword',{"password":payPassword});
 		}
 	};
 }]);
