@@ -19,7 +19,7 @@
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
 				<div ng-if="isBindUserBank" class="btn-group">
 					<select class="form-control" ng-model="bankType">
-						<option ng-repeat="b in bankTypeList" value="{{b.id}}" ng-selected="bankType = b.id">{{b.name}}</option>
+						<option ng-repeat="b in userBankList" value="{{b.bankType}}" ng-selected="bankType = b.bankType">{{getBankName(b.bankType)}} - {{b.accountNumber}}</option>
 					</select>
 				</div>
 			</div>
@@ -35,13 +35,13 @@
 			<div class="m-t-xs">
 				<p class="text-danger">注：预计2个工作日内（国家法定假日和双休日顺延）平台完成提现操作，到账时间已各大银行为准，预计3-5工作日左右</p>	
 			</div>
-			<div class="line b-b"></div> 
+			<!-- <div class="line b-b"></div> 
 			<div>
 				<h5 class="font-bold">确认支付</h5>
 				<label class="control-label text-left">支付密码：</label>
 				<div class="btn-group"><input type="password" class="form-control" ng-model="payPassword"/></div>
 				<label class="control-label text-left"><a class="text-info">找回支付密码</a></label>
-			</div>
+			</div> -->
 			<div class="line b-b"></div> 
 			<div class="m-t m-b">
 				<button class="btn btn-danger" ng-click="rechargeCash()">确认</button>

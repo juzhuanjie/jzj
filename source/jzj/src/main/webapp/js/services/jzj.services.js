@@ -23,53 +23,54 @@ app.controller('PaginationCtrl',['$scope','$timeout', function($scope,$timeout){
   };
 }]);
 //request 拦截器，为http请求加上header信息
-app.factory('sessionInjector',  function(){
+app.factory('sessionInjector', ['toaster', function(toaster){
 	return {
       request: function (config) {
           //如果User Session信息已经保存了，包在request的header发回去给服务器
           if (angular.isObject(app.userSession)) {            
-            config.headers['user-session-token'] = app.userSession.Tokan;
+            //config.headers['token'] = app.userSession.Tokan;
+            config.headers['token'] = '123';
           }                    
           return config;
       },
-      response:function(response)
-        {            
-            switch (response.status) {
+      response:function(response) {            
+            switch (response.status) {            	
                 case (200):
-                    if(!angular.isObject(response.data))
-                    {
-                        //这里可以做自己相应的处理,跳到登录页面
-                        if(response.data.indexOf("location.replace(\"/views/login.html\")")>0){
-                            window.location = "/views/login.html";
-                        }
-                    }
+                	//console.log(response.headers('token'));                	
+                	
+                    if(angular.isObject(response.data)){
+                		
+                	}
                     break;
                 case (500):
-                    alert("服务器系统内部错误");
+                    toaster.pop('error', 'Server Error', "服务器系统内部错误");
                     break;
                 case (401):
-                    alert("未登录");
+                    toaster.pop('error', 'Server Error', "未登录");
                     break;
                 case (403):
-                    alert("无权限执行此操作");
+                    toaster.pop('error', 'Server Error', "无权限执行此操作");
                     break;
                 case (408):
-                    alert("请求超时");
+                    toaster.pop('error', 'Server Error', "请求超时");
                     break;
                 default:
-                    alert("未知错误");
+                    toaster.pop('error', 'Server Error', "未知错误");
             }
             return response;
         }
     };
-});
+}]);
 //Promise Get的公共请求方式
-app.factory('promiseGet', ['$http','$q','toaster', function($http,$q,toaster){
+app.factory('promiseGet', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
 	return function(url){
 		var deferred = $q.defer();
 		$http.get(url)
 		.success(function(result){
 			if(angular.isDefined(result.code)){				
+				if(result.code == 'access_notloggedin'){
+					$location.path("/access/signin");
+				}
 				deferred.reject(result);
 			}
 			else if(angular.isObject(result)){
@@ -79,19 +80,29 @@ app.factory('promiseGet', ['$http','$q','toaster', function($http,$q,toaster){
 			}
 		})
 		.error(function(reason){
-			toaster.pop('error', 'Server Error', reason);
+			var reasonObj = angular.fromJson(reason);
+			if(angular.isDefined(reasonObj)){
+				if(reasonObj.code == 'access_notloggedin'){
+					$location.path("/access/signin");
+				}
+			}else{
+				toaster.pop('error', 'Server Error', reason);	
+			}						
 			deferred.reject(reason);
 		});
 		return deferred.promise;
 	};
 }]);
 //Promise Post的公共请求方式
-app.factory('promisePost', ['$http','$q','toaster', function($http,$q,toaster){
+app.factory('promisePost', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
 	return function(url,para){
 		var deferred = $q.defer();
 		$http.post(url,para)
 		.success(function(result){
 			if(angular.isDefined(result.code)){
+				if(result.code == 'access_notloggedin'){
+					$location.path("/access/signin");
+				}
 				deferred.reject(result);
 			}
 			else if(angular.isObject(result)){
@@ -101,19 +112,30 @@ app.factory('promisePost', ['$http','$q','toaster', function($http,$q,toaster){
 			}
 		})
 		.error(function(reason){
-			toaster.pop('error', 'Server Error', reason);
+			var reasonObj = angular.fromJson(reason);
+			if(angular.isDefined(reasonObj)){
+				if(reasonObj.code == 'access_notloggedin'){
+					$location.path("/access/signin");
+				}
+			}
+			else{
+				toaster.pop('error', 'Server Error', reason);	
+			}
 			deferred.reject(reason);
 		});
 		return deferred.promise;
 	};
 }]);
 //Promise Put的公共请求方式
-app.factory('promisePut', ['$http','$q','toaster', function($http,$q,toaster){
+app.factory('promisePut', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
 	return function(url,para){
 		var deferred = $q.defer();
 		$http.put(url,para)
 		.success(function(result){
 			if(angular.isDefined(result.code)){
+				if(result.code == 'access_notloggedin'){
+					$location.path("/access/signin");
+				}
 				deferred.reject(result);
 			}
 			else if(angular.isObject(result)){
@@ -123,7 +145,15 @@ app.factory('promisePut', ['$http','$q','toaster', function($http,$q,toaster){
 			}
 		})
 		.error(function(reason){
-			toaster.pop('error', 'Server Error', reason);
+			var reasonObj = angular.fromJson(reason);
+			if(angular.isDefined(reasonObj)){
+				if(reasonObj.code == 'access_notloggedin'){
+					$location.path("/access/signin");
+				}
+			}
+			else{
+				toaster.pop('error', 'Server Error', reason);	
+			}
 			deferred.reject(reason);
 		});
 		return deferred.promise;
@@ -385,11 +415,11 @@ app.factory('products', ['promisePost','promiseGet',function(promisePost,promise
 //User 对象数据交互 Service
 app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		login : function(email, password){
-			//TODO: 用户登录, 返回USERID, SESSIONTOTAN
-			var para = { "login" : email, "password" : password };
-			return promisePost('http://mc-ubuntu2.cloudapp.net/user/login',para);
-		},
+		// login : function(email, password){
+		// 	//TODO: 用户登录, 返回USERID, SESSIONTOTAN
+		// 	var para = { "login" : email, "password" : password };
+		// 	return promisePost('http://mc-ubuntu2.cloudapp.net/user/login',para);
+		// },
 		logout : function(){
 			//TODO: 退出登录
 								
@@ -502,13 +532,37 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 					    "platformId": -1, 
 					    "accountLogin": "", 
 					    "wangwang": "", 
-					    "province": "", 
-					    "city": "", 
-					    "district": "", 
-					    "shreetAddress": "", 
-					    "phone": "", 
-					    "screenshot": ""
+					    "addressId" : null,
+					    "wwScreenshot": ""
 					};
+		}
+	};
+}]);
+//买手收货地址 Service
+app.factory('userAddresses',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		get : function(addressId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/useraddress/'+addressId);
+		},
+		query : function(userId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/useraddress/find?userId'+userId);	
+		},
+		add : function(userAddress){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/useraddress/', userAddress);
+		},
+		newEmpty : function(){
+			return {
+		        "recipient": "",
+		        "province": null,
+		        "city": null,
+		        "district": null,
+		        "phone": null,
+		        "addressId": -1,
+		        "userId": -1,
+		        "addressTypeId": null,
+		        "streetAddress": "",
+		        "postalCode": ""
+		    };
 		}
 	};
 }]);
@@ -661,11 +715,14 @@ app.factory('transType',function(){
 //提现 Service
 app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(userId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/cashout/find?userId='+userId);
+		get : function(userId,currentPage,pageSize){			
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/cashout/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
 		},
 		add : function(cashout){
 			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/cashout', cashout);
+		},
+		queryCount : function(){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/count/?model=cashout&where={"rechargetypeId":1}');
 		},
 		newEmpty : function(){
 			return {
@@ -685,11 +742,14 @@ app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseG
 //充值 Service
 app.factory('recharges',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(userId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/recharge/find?userId='+userId);
+		get : function(userId,currentPage,pageSize){			
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/recharge/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
 		},
 		add : function(recharge){
 			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/recharge', recharge);
+		},
+		queryCount : function(){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/count/?model=recharge&where={"rechargetypeId":1}');
 		},
 		newEmpty : function(){
 			return {
@@ -708,11 +768,14 @@ app.factory('recharges',['promisePost','promiseGet',function(promisePost,promise
 //变现 Service
 app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(userId){
-			return promiseGet('http://mc-ubuntu2.cloudapp.net/points2cash/find?userId='+userId);
+		get : function(userId,currentPage,pageSize){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/points2cash/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
 		},
 		add : function(points2cash){
 			return promisePost('http://mc-ubuntu2.cloudapp.net/trans/points2cash', points2cash);
+		},
+		queryCount : function(){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/count/?model=points2cash&where={"rechargetypeId":1}');
 		},
 		newEmpty : function(){
 			return {
@@ -735,6 +798,20 @@ app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(pro
 		downloadCSV : function(userId){
 			//TODO: 导出交易记录CSV
 			window.open("http://mc-ubuntu2.cloudapp.net/transaction/csv");
+		},
+		queryCount : function(){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/count/?model=transaction&where={"rechargetypeId":1}');
+		}
+	};
+}]);
+//余额查询 Service 
+app.factory('balances', ['promiseGet','promisePost',function(promiseGet,promisePost){
+	return {
+		get : function(userId){
+			return promiseGet('http://mc-ubuntu2.cloudapp.net/query/balance?userId=' + userId);
+		},
+		checkPayPassword : function(payPassword){
+			return promisePost('http://mc-ubuntu2.cloudapp.net/service/checkPayPassword',{"password":payPassword});
 		}
 	};
 }]);

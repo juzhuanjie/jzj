@@ -18,7 +18,7 @@
           <tbody>
             <tr ng-repeat="b in buyerAccountBinds">
               <td><span>{{b.accountLogin}}</span></td>
-              <td><span>{{b.province}} {{b.city}} {{b.district}} {{b.shreetAddress}}</span></td>
+              <td><span>收货人：{{b.addressId.recipient}} | 地址：{{b.addressId.province}} {{b.addressId.city}} {{b.addressId.district}} {{b.addressId.streetAddress}} | 电话：{{b.addressId.phone}}</span></td>
               <td><span>审核地址</span></td>
               <td><a ng-click="editBuyerBind({{b.buyerAccountId}})"><span>修改地址</span></a></td>
             </tr>            
@@ -36,7 +36,7 @@
             <label><span class="text-danger">*</span>旺旺ID</label>
           </div>
           <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="wangwang" ng-disabled="isEdit"/>
+            <input type="text" class="form-control" ng-model="buyerAccount.wangwang" ng-disabled="isEdit"/>
           </div>
           <div class="col-md-6">
             <span class="m-t text-muted">(旺旺ID绑定后无法修改，严禁绑定相似的买号，如：小符01)</span>
@@ -64,7 +64,7 @@
             <label><span class="text-danger">*</span>收货人姓名</label>
           </div>
           <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="accountLogin"/>
+            <input type="text" class="form-control" ng-model="userAddress.recipient"/>
           </div>                                    
         </div>
         <div class="row m-t m-b">
@@ -86,7 +86,7 @@
             <label><span class="text-danger">*</span>街道地址</label>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" ng-model="shreetAddress"/>
+            <input type="text" class="form-control" ng-model="userAddress.streetAddress"/>
           </div>                                               
         </div>
         <div class="row m-t m-b">
@@ -94,7 +94,7 @@
             <label><span class="text-danger">*</span>收货人手机</label>
           </div>
           <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="phone"/>
+            <input type="text" class="form-control" ng-model="userAddress.phone"/>
           </div>                                                    
         </div>
         <div class="row m-t m-b">

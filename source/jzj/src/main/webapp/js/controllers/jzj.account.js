@@ -336,21 +336,18 @@ app.controller('BuyerCtrl', ['$scope','platforms', function($scope,platforms) {
   };
 }]);
 //绑定买手详细Controller
-app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms', function($scope,buyerAccounts,platforms) {
+app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms','userAddresses', function($scope,buyerAccounts,platforms,userAddresses) {
   var userId = app.userSession.userId;
   $scope.platform = {};
   $scope.buyerAccountBinds = [];
-  $scope.wangwang="";
-  $scope.screenshot = "";
-  $scope.accountLogin = "";
   $scope.province = "";
   $scope.city = "";
   $scope.district = "";
-  $scope.shreetAddress = "";
-  $scope.phone = "";
   $scope.isShow = false;
   $scope.isEdit = true;
   $scope.currEditBuyerAccount = null;
+  $scope.userAddress = {};
+  $scope.buyerAccount = {};
   $scope.addBuyerBind = function(){
     $scope.isShow = true;
     $scope.isEdit = false;
@@ -358,14 +355,14 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms', functi
   };
   $scope.editBuyerBind = function(buyerAccountId){
     buyerAccounts.get(buyerAccountId).then(function(result){
-      $scope.wangwang = result.wangwang;
-      $scope.screenshot = result.screenshot;
-      $scope.accountLogin = result.accountLogin;
-      $scope.province = result.province;
-      $scope.city = result.city;
-      $scope.district = result.district;
-      $scope.shreetAddress = result.shreetAddress;
-      $scope.phone = result.phone;
+      // $scope.wangwang = result.wangwang;
+      // $scope.wwScreenshot = result.wwScreenshot;
+      // $scope.accountLogin = result.accountLogin;
+      // $scope.userAddress.province = result.province;
+      // $scope.userAddress.city = result.city;
+      // $scope.userAddress.district = result.district;
+      // $scope.userAddress.shreetAddress = result.shreetAddress;
+      // $scope.userAddress.phone = result.phone;
       $scope.isShow = true;
       $scope.isEdit = true;
       $scope.currEditBuyerAccount = result;
@@ -377,33 +374,30 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms', functi
   $scope.save = function(){
 
     if($scope.isEdit){
-      var buyerAccount = $scope.currEditBuyerAccount;
-      buyerAccount.accountLogin = $scope.accountLogin;
-      buyerAccount.province = $scope.province;
-      buyerAccount.city = $scope.city;
-      buyerAccount.district = $scope.district;
-      buyerAccount.shreetAddress = $scope.shreetAddress;
-      buyerAccount.phone = $scope.phone;
-      buyerAccounts.update(buyerAccount.buyerAccountId,buyerAccount).then(function(result){
-        initBuyerAccountList();
-        $scope.isShow = false;
-        clear();
-      },function(reason){
+      // var buyerAccount = $scope.currEditBuyerAccount;
+      // buyerAccount.accountLogin = $scope.accountLogin;
+      // buyerAccount.province = $scope.userAddress.province;
+      // buyerAccount.city = $scope.userAddress.city;
+      // buyerAccount.district = $scope.userAddress.district;
+      // buyerAccount.shreetAddress = $scope.userAddress.shreetAddress;
+      // buyerAccount.phone = $scope.userAddress.phone;
+      // buyerAccounts.update(buyerAccount.buyerAccountId,buyerAccount).then(function(result){
+      //   initBuyerAccountList();
+      //   $scope.isShow = false;
+      //   clear();
+      // },function(reason){
 
-      });  
+      // });  
     }else{
-      var buyerAccount = buyerAccounts.newEmpty();
-      buyerAccount.userId = userId; 
-      buyerAccount.platformId = $scope.platform.id; 
-      buyerAccount.wangwang = $scope.wangwang;
-      buyerAccount.screenshot = $scope.screenshot;
-      buyerAccount.accountLogin = $scope.accountLogin;
-      buyerAccount.province = $scope.province;
-      buyerAccount.city = $scope.city;
-      buyerAccount.district = $scope.district;
-      buyerAccount.shreetAddress = $scope.shreetAddress;
-      buyerAccount.phone = $scope.phone;
-      buyerAccounts.add(buyerAccount).then(function(result){
+      $scope.buyerAccount.userId = userId; 
+      $scope.buyerAccount.platformId = $scope.platform.id; 
+      $scope.buyerAccount.accountLogin = $scope.userAddress.recipient; 
+      $scope.userAddress.province = $scope.province;
+      $scope.userAddress.city = $scope.city;
+      $scope.userAddress.district = $scope.district;
+      $scope.userAddress.userId = userId;
+      $scope.buyerAccount.addressId = $scope.userAddress;
+      buyerAccounts.add($scope.buyerAccount).then(function(result){
         if(angular.isObject(result)){
           $scope.buyerAccountBinds.push(result);
           $scope.isShow = false;
@@ -415,17 +409,22 @@ app.controller('BuyerAccountCtrl', ['$scope','buyerAccounts','platforms', functi
     }        
   };
   var clear = function(){
-    $scope.wangwang="";
-    $scope.screenshot = "";
-    $scope.accountLogin = "";
+    $scope.buyerAccount.wangwang="";
+    $scope.buyerAccount.wwScreenshot = "";
+    $scope.buyerAccount.accountLogin = "";
+    $scope.userAddress.province = "";
+    $scope.userAddress.city = "";
+    $scope.userAddress.district = "";
+    $scope.userAddress.streetAddress = "";
+    $scope.userAddress.phone = "";
     $scope.province = "";
     $scope.city = "";
     $scope.district = "";
-    $scope.shreetAddress = "";
-    $scope.phone = "";
   };
   $scope.$watch('$viewContentLoaded',function(){
     $scope.platform = platforms.getDefault();
+    $scope.userAddress = userAddresses.newEmpty();
+    $scope.buyerAccount = buyerAccounts.newEmpty(); 
     initBuyerAccountList();    
   });
   $scope.$on('select_platform',function(event,data){
