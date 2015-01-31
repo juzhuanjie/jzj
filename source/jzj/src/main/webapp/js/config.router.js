@@ -20,7 +20,7 @@ angular.module('app')
           //在注册一个路由事件，监听ui-route stats的改变
           $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             //如果没有登录就跳到登录页面
-            if(toState.name != "access.signin"  && (angular.isUndefined(app.userSession) || app.userSession == null)){
+            if(toState.name.indexOf('access') < 0  && (angular.isUndefined(app.userSession) || app.userSession == null)){
               //event.preventDefault(); 
               //$location.path("/access/signin");
               toState.name = "access.signin";
@@ -92,7 +92,7 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
-                          return uiLoad.load( ['js/controllers/jzj.signin.js'] );
+                          return uiLoad.load( ['js/controllers/jzj.user.js'] );
                       }]
                   }
               })
@@ -102,13 +102,29 @@ angular.module('app')
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
-                          return uiLoad.load( ['js/controllers/jzj.signup.js'] );
+                          return uiLoad.load( ['js/controllers/jzj.user.js'] );
                       }]
                   }
               })
               .state('access.forgotpwd', {
                   url: '/forgotpwd',
-                  templateUrl: 'tpl/page_forgotpwd.html'
+                  templateUrl: 'tpl/page_forgotpwd.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.user.js'] );
+                      }]
+                  }
+              })
+              .state('access.resetpwd', {
+                  url: '/resetpwd',
+                  templateUrl: 'tpl/page_resetpwd.html',
+                  resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/jzj.user.js'] );
+                      }]
+                  }
               })
               .state('access.404', {
                   url: '/404',

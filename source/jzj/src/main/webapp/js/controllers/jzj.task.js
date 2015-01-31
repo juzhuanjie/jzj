@@ -47,8 +47,9 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 	$scope.$on('change-platform',function(event, platformId){
 		$scope.platformId = platformId;		
 		$scope.flowData = flowDatas.create($scope.platformId);	
+		$scope.flowData.platformId = platformId;
 		$scope.flowItem = $scope.flowData.taskDetail.flowItem;
-		$scope.flowData.taskDetail.PlatformId = platformId;
+		$scope.flowData.taskDetail.platformId = platformId;
 	});
 	$scope.$on('next-step',function(event,data){		
 		var index = 0;
@@ -177,8 +178,8 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 	};
 	$scope.changePlatform = function(platformId){
 		$scope.selectedPlatform = platformId;
-		$scope.flowData.PlatformId = platformId;
-		$scope.flowData.taskDetail.PlatformId = platformId;
+		$scope.flowData.platformId = platformId;
+		$scope.flowData.taskDetail.platformId = platformId;
 		loadShop(platformId);
 		$scope.$emit('change-platform', platformId);
 	};
@@ -499,12 +500,43 @@ app.controller('TaskFlowItem6Ctrl',['$scope','$timeout', function($scope,$timeou
 	};
 }]);
 //待处理的任务
-app.controller('PeddingTaskCtrl',['$scope','$stateParams','platforms',function($scope,$stateParams,platforms){
+app.controller('PeddingTaskCtrl',['$scope','$stateParams','platforms','tasks',function($scope,$stateParams,platforms,tasks){
 	$scope.platformName = "";
+	$scope.platformId = -1;
+	$scope.statusId = 3;
+	$scope.taskList = [];
 	$scope.$watch('$viewContentLoaded',function(){
-		var platformId = $stateParams.platformId;
-		$scope.platformName = platforms.getPlatformName(platformId);
+		$scope.platformId = $stateParams.platformId;
+		$scope.platformName = platforms.getPlatformName($scope.platformId);
+		filterTasks(1,4);
+		queryCount();
 	});
+	$scope.filterByStatus = function(statusId){
+		$scope.statusId = statusId;
+		filterTasks(1,4);
+	};
+	$scope.$on('pageChanged',function(event,data){
+	    filterTasks(data.currentPage,data.pageSize);
+	});
+	$scope.getShopName = function(json){
+		return angular.fromJson(json).shopName;
+	};
+	$scope.getTaskTotalCach = function(json){
+		return angular.fromJson(json).totalCash;
+	};
+	$scope.getTaskTotalPoint = function(json){
+		return angular.fromJson(json).totalPoint;
+	};
+	var filterTasks = function(currentPage,pageSize){
+		tasks.filter($scope.statusId,{'platformId' : $scope.platformId},currentPage,pageSize).then(function(result){
+			$scope.taskList = result;
+		});		
+	};
+	var queryCount = function(){
+	    // tasks.queryCount().then(function(result){
+	    //   $scope.$broadcast('resultsLoaded', result);
+	    // });
+	};
 }]);
 //查询任务
 app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss','tasks',function($scope,$stateParams,taskStatuss,tasks){

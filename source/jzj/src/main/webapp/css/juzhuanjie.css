@@ -78,3 +78,11 @@
 .filter-control{
     width: 100px;
 }
+.status-filter a:hover
+{
+    color:#428bca;
+}
+.status-filter a.filter-active:hover 
+{
+    color:#fff;   
+}

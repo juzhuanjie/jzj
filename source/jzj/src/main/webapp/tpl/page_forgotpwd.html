@@ -1,20 +1,20 @@
-<div class="container w-xl w-auto-xs" ng-init="app.settings.container = false;">
+<div class="container w-xl w-auto-xs" ng-init="app.settings.container = false;" ng-controller="ForgotpwdController">
   <a href class="navbar-brand block m-t">{{app.name}}</a>
   <div class="m-b-lg">
     <div class="wrapper text-center">
-      <strong>Input your email to reset your password</strong>
+      <strong>请输入您的邮箱地址去重设登录密码</strong>
     </div>
-    <form name="reset" ng-init="isCollapsed=true">
+    <form name="form">
       <div class="list-group list-group-sm">
         <div class="list-group-item">
           <input type="email" placeholder="Email" ng-model="email" class="form-control no-border" required>
         </div>
       </div>
-      <button type="submit" ng-disabled="reset.$invalid" class="btn btn-lg btn-primary btn-block"  ng-click="isCollapsed = !isCollapsed" >Send</button>
+      <button type="submit" ng-disabled="form.$invalid" class="btn btn-lg btn-primary btn-block"  ng-click="send()" >发送</button>
     </form>
     <div collapse="isCollapsed" class="m-t">
       <div class="alert alert-success">
-        <p>A reset link sent to your email address, please check it in 7 days. <a ui-sref="access.signin" class="btn btn-sm btn-success">Sign in</a></p>
+        <p>重设密码的链接已经发送到您的邮箱，请注意查收！<a ui-sref="access.signin" class="btn btn-sm btn-success">登录</a></p>
       </div>
     </div>
   </div>

@@ -5,12 +5,20 @@
           <strong>Sign up to find interesting thing</strong>
         </div>
         <form name="form" class="form-validation">
+          <div class="checkbox m-b-md m-t-none text-center">
+            <label class="i-checks">
+              <input type="radio" name="usertype" ng-click="selectUserType(1)" value="1" ng-checked="user.userTypeId == 1" required><i></i> 商家
+            </label>
+            <label class="i-checks">
+              <input type="radio" name="usertype" ng-click="selectUserType(2)" value="2" ng-checked="user.userTypeId == 2" required><i></i> 买手
+            </label>
+          </div>
           <div class="text-danger wrapper text-center" ng-show="authError">
               {{authError}}
           </div>
           <div class="list-group list-group-sm">
             <div class="list-group-item">
-              <input placeholder="Name" class="form-control no-border" ng-model="user.name" required>
+              <input placeholder="Name" class="form-control no-border" ng-model="user.userLogin" required>
             </div>
             <div class="list-group-item">
               <input type="email" placeholder="Email" class="form-control no-border" ng-model="user.email" required>

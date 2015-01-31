@@ -6,13 +6,13 @@
   </div> 
   <div class="wrapper bg-remind">
     <label>本次任务发布<span class="text-danger" ng-bind="flowData.taskDetail.totalTasks"></span>单</label>
-    <label class="pull-right">需押金： <span class="text-danger">{{totalDeposit | currency:"￥"}}</span>元  人气符：<span class="text-danger">{{totalPoint | number : 2}}</span>点</label>
+    <label class="pull-right">需押金： <span class="text-danger">{{totalDeposit | currency:"￥"}}</span>元  赚点：<span class="text-danger">{{totalPoint | number : 2}}</span>点</label>
   </div>  
 
   <div class="row wrapper no-p-b">
-    <h4 class="font-bold">选择支付方式<label class="h5 m-l font-normal text-muted">当前押金、符点足够支付，若需要使用网银支付方式，请先取消选择使用押金、符点支付</label></h4>
+    <h4 class="font-bold">选择支付方式<label class="h5 m-l font-normal text-muted">当前押金、赚点足够支付，若需要使用网银支付方式，请先取消选择使用押金、赚点支付</label></h4>
     <div class="wrapper-sm bg-remind">
-      <label class="checkbox-inline"><input type="checkbox" value="true" ng-model="flowData.taskDetail.paymentPiont"/>使用人气符点支付（可用人气符：<span class="text-danger">{{myPoint | number : 2}}</span>点）1点 = 1元</label> 
+      <label class="checkbox-inline"><input type="checkbox" value="true" ng-model="flowData.taskDetail.paymentPiont"/>使用赚点支付（可用赚点：<span class="text-danger">{{myPoint | number : 2}}</span>点）1点 = 1元</label> 
     </div>       
     <div class="wrapper-sm bg-remind m-t">
       <label class="checkbox-inline"><input type="checkbox" value="true" ng-model="flowData.taskDetail.paymentDeposit"/>使用押金支付（可用押金：<span class="text-danger">{{myDeposit | currency:"￥"}}</span>元）</label>     

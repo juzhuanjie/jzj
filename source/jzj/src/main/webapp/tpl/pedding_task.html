@@ -14,126 +14,48 @@
         <span class="text-danger font-bold"><span class="label bg-danger">T</span> {{platformName}}待处理的任务</span>
       </div> 
       <div class="panel-body">
-        <div class="task-list">
-          <div class="panel-item">
-            <div class="panel-heading">
-              <span class="h5 font-bold">买手已付款，待发货</span>
-              <span class="text-muted">请及时复制运单号到对应平台操作订单发货</span>
-            </div>
-            <div class="panel-body">
-              暂无
-            </div>
-          </div>
-          <div class="line line-dashed b-b"></div>
-          <div class="panel-item">
-            <div class="panel-heading">
-              <span class="h5 font-bold">买手已收货，待退款</span>
-              <span class="text-muted">请在48小时内给买手退款，否则平台将扣除任务押金中的退款保证金</span>
-            </div>
-            <div class="panel-body">
-              <div class="text-muted">
-                <span>待商家返款：</span>
-              </div>
-              <div class="m-t text-muted">
-                <span>待平台返款：</span>
-              </div>
-            </div>
-          </div>
-          <div class="line line-dashed b-b"></div>
-          <div class="panel-item">
-            <div class="panel-heading">
-              <span class="h5 font-bold">买手已好评，待评选</span>
-              <span class="text-muted">请对买手提交的评价内容进行优质好评的评选</span>
-            </div>
-            <div class="panel-body">
-              暂无
-            </div>
-          </div>
-        </div>
-      </div>      
-    </div>
-
-    <!--任务进展-->  
-    <div class="panel panel-default m-t b-default hide" ng-controller="TaskListCtrl" ng-init="initTaskByPlatform()">
-      <div class="panel-heading">
-        <span class="text-danger font-bold"><span class="label bg-danger">T</span> 任务进展</span>
-      </div> 
-      <div class="panel-body">
-        
         <div class="row padder-md l-h-3x">
-          <ul class="ul-t">
-            <li ng-click='filterByStatusId(-1)'><a class="wrapper-xs text-white bg-danger">所有任务<span>({{taskStats.all}})</span></a></li>  
-            <li ng-click='filterByStatusId(4)'><a class="text-danger">进行中的任务<span>({{taskStats.doing}})</span></a></li>  
-            <li ng-click='filterByStatusId(1)'><a class="text-danger">已完成的任务<span>({{taskStats.finish}})</span></a></li>    
+          <ul class="ul-t status-filter">
+            <li><a class="text-danger" ng-class="{'filter-active wrapper-xs text-white bg-danger':statusId==3}" ng-click="filterByStatus(3)">买手已付款，待发货<span>(1)</span></a></li>  
+            <li><a class="text-danger" ng-class="{'filter-active wrapper-xs text-white bg-danger':statusId==6}" ng-click="filterByStatus(6)">买手已收货，待退款<span>(1)</span></a></li>  
+            <li><a class="text-danger" ng-class="{'filter-active wrapper-xs text-white bg-danger':statusId==7}" ng-click="filterByStatus(7)">买手已好评，待评选<span>(0)</span></a></li>    
           </ul>    
         </div>
         <div class="line text-danger b-b"></div>
-        <div class="row padder-md">
-          <!--过滤条件-->
-          <div class="row m-t-xs" ng-controller="TaskFilterCtrl">            
-            <div class="col-md-2">
-              <label class="font-bold">店铺：</label>      
-              <div class="btn-group">
-                <select class="form-control filter-control" ng-model="condition.shopId">
-                  <option value="-1">全部</option>
-                  <option ng-repeat="s in shops" value="{{s.shopId}}">{{s.wangwang}}</option>
-                </select>
-              </div>
-            </div> 
-            <div class="col-md-3">
-              <label class="font-bold">任务类型：</label>
-              <div class="btn-group">
-                <select class="form-control filter-control" ng-model="condition.taskTypeId">
-                  <option value="-1">全部</option>
-                  <option ng-repeat="t in taskTypes" value="{{t.id}}">{{t.name}}</option>
-                </select>
-              </div>
+        <div class="task-list">
+
+          <div ng-show="statusId==3" class="text-muted m-t m-b">注：请及时复制运单号到对应平台操作订单发货</div>
+          <div ng-show="statusId==6" class="text-muted m-t m-b">注：请在48小时内给买手退款，否则平台将扣除任务押金中的退款保证金</div>
+          <div ng-show="statusId==7" class="text-muted m-t m-b">注：请对买手提交的评价内容进行优质好评的评选</div>
+          <!--list item-->
+          <div class="panel panel-danger" ng-repeat="t in taskList">
+            <div class="panel-heading">                    
+              <span><span class="label bg-danger">T</span> {{getShopName(t.taskDetail)}}<span class="m-l">任务编号：</span><span>{{t.taskId}}</span> [<a ui-sref="app.task({id:{{t.taskId}}})" class="text-info">详情</a>]</span>
+              <span class="pull-right">
+                <span>任务单数：</span><span>{{t.totalTasks}}单</span>
+                <span class="m-l">任务押金：</span><span>{{getTaskTotalCach(t.taskDetail)}}元</span>
+                <span class="m-l">赚点：</span><span>{{getTaskTotalPoint(t.taskDetail)}}点</span>
+              </span>
             </div>
-            <div class="col-md-2">
-              <label class="font-bold">终端：</label>      
-              <div class="btn-group">
-                <select class="form-control filter-control" ng-model="condition.terminalId">
-                  <option value="-1">全部</option>
-                  <option ng-repeat="t in terminals" value="{{t.id}}">{{t.name}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <button class="btn btn-danger" ng-click="query()">查询</button>
-            </div> 
-          </div>
-          <!--任务列表-->
-          <div class="row wrapper">
-            <div class="task-list">
-              <!--task item-->
-              <div class="panel panel-danger" ng-repeat="t in taskList">
-                <div class="panel-heading">                    
-                  <span><span class="label bg-danger">T</span> {{getShopName(t.taskDetail)}}<span class="m-l">任务编号：</span><span>{{t.taskId}}</span> [<a ui-sref="app.task({id:{{t.taskId}}})" class="text-info">详情</a>]</span>
-                  <span class="pull-right">
-                    <span>任务单数：</span><span>{{t.totalTasks}}单</span>
-                    <span class="m-l">任务押金：</span><span>{{getTaskTotalCach(t.taskDetail)}}元</span>
-                    <span class="m-l">人气符：</span><span>{{getTaskTotalPoint(t.taskDetail)}}点</span>
-                  </span>
+            <div class="panel-body">
+              <article class="media" >
+                <span class="pull-left m-r"><i class="fa fa-file-o fa-5x"></i></span>
+                <div class="pull-right l-h-lg">
+                  <a href class="btn btn-info">查看详情</a>
                 </div>
-                <div class="panel-body">
-                  <article class="media" >
-                    <span class="pull-left m-r"><i class="fa fa-file-o fa-5x"></i></span>
-                    <div class="pull-right l-h-lg">
-                      <a href class="btn btn-info">重新发布</a>
-                    </div>
-                    <div class="media-body l-h-lg">   
-                      <a href class="h4">{{t.productId.productName}}</a>
-                    </div>
-                  </article>
+                <div class="media-body l-h-lg">   
+                  <a href class="h4">{{t.productId.productName}}</a>
                 </div>
-              </div>
-              <!--task item-->
-            </div>
-            <div class="pagination pull-left" ng-controller="PaginationCtrl">
-              <pagination ng-if="totalItems>0" boundary-links="true" items-per-page="pageSize" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged(currentPage)"></pagination>
-            </div>
+              </article>
+            </div>            
           </div>
+          <!--list item-->
         </div>
+
+        <div class="pagination pull-left" ng-controller="PaginationCtrl">
+          <pagination ng-if="totalItems>0" boundary-links="true" items-per-page="pageSize" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged(currentPage)"></pagination>
+        </div>
+
       </div>      
     </div>
   </div>

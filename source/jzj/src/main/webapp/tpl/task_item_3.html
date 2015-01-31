@@ -61,7 +61,7 @@
   <div class="row wrapper-md no-p-t hide">
       <h5 class="font-bold">2.请设置订单分布 <span  class="font-normal text-muted">( 注：电脑端、手机端/Pad端订单总数需要为<span class="text-danger">1</span>单 )</span></h5>
       <label class="">电脑端<input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.pcOrderQuantity" ng-change="countPoint()"/>单</label>
-      <label class="m-l" >手机 | Pad客户端<input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.padOrderQuantity" ng-change="countPoint()"/>单 <span>( 手机订单 每单加<span class="text-danger">0.5</span>符点)</span></label>
+      <label class="m-l" >手机 | Pad客户端<input type="text" class="w-xxs input-control-xs" ng-model="flowData.taskDetail.padOrderQuantity" ng-change="countPoint()"/>单 <span>( 手机订单 每单加<span class="text-danger">0.5</span>赚点)</span></label>
   </div>  
 
   <div class="line b-b hide"></div> 
@@ -83,8 +83,8 @@
   <div class="row wrapper-md no-p-t">
       <h5 class="font-bold">费用小计</h5>
       <div class="row wrapper bg-remind">
-         <label class="">刷单费用：<sapn class="text-danger">16.6</sapn>人气符点/单 X <sapn class="text-danger">{{totalTasks}}</sapn>单</label>         
-         <label class="pull-right"><sapn class="text-danger">{{totalPoint | number:2}}</sapn>人气符点</label>
+         <label class="">刷单费用：<sapn class="text-danger">16.6</sapn>赚点/单 X <sapn class="text-danger">{{totalTasks}}</sapn>单</label>         
+         <label class="pull-right"><sapn class="text-danger">{{totalPoint | number:2}}</sapn>赚点</label>
       </div>      
   </div>
 

@@ -225,9 +225,11 @@ app.factory('taskStatuss',['promisePost','promiseGet',function(promisePost,promi
 			return [
 				{id : 1, name : "已完成"},
 				{id : 2, name : "未发布"},
-				{id : 3, name : "待处理"},
+				{id : 3, name : "待发货"},
 				{id : 4, name : "进行中"},
-				{id : 5, name : "已发布"}
+				{id : 5, name : "已发布"},
+				{id : 6, name : "待退款"},
+				{id : 7, name : "待评选"}
 			];
 		}	
 	};
@@ -340,7 +342,7 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 		filter : function(statusId,condition,currentPage,pageSize){
 			var queryPara = 'find?status=' + statusId;
 			if(angular.isDefined(condition.platformId) && condition.platformId != -1){
-				queryPara += '&PlatformId=' + condition.platformId;
+				queryPara += '&platformId=' + condition.platformId;
 			}
 			if(angular.isDefined(condition.shopId) && condition.shopId != -1){
 				queryPara += '&shopId=' + condition.shopId;
@@ -348,7 +350,8 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 			if(angular.isDefined(condition.taskTypeId) && condition.taskTypeId != -1){
 				queryPara += '&taskTypeId=' + condition.taskTypeId;
 			}
-			queryPara += '&limit=' + pageSize + '&skip=' + currentPage;
+			var skip = pageSize * (currentPage - 1);
+			queryPara += '&limit=' + pageSize + '&skip=' + skip;
 			return promiseGet('/shopTask/' + queryPara);
 		},
 		get : function(taksId){
@@ -389,6 +392,17 @@ app.factory('products', ['promisePost','promiseGet',function(promisePost,promise
 		}		
 	};
 }]);
+//User Type Service
+app.factory('userTypes',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		getAll : function(){
+			return [
+				{id : 1, name : '商家'},
+				{id : 2, name : '买手'}
+			];
+		}
+	};
+}]);
 //User 对象数据交互 Service
 app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
@@ -413,10 +427,16 @@ app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet
 			//TODO: 添加一个用户
 			return promisePost('/user/create', user);	
 		},
+		resetPasswordRequest : function(email){
+			return promisePost('/user/resetPasswordRequest', {"email" : email});
+		},
+		resetPassword : function(email,password,thecode){
+			return promisePost('/user/resetPassword', { "email" : email, "password" : password, "thecode" : thecode });
+		},
 		newEmpty : function(){
 			return {
 		        "userId": -1, 
-		        "userType": -1, 
+		        "userTypeId": 1, 
 		        "userLogin": "", 
 		        "password": "", 
 		        "payPassword": "", 
@@ -692,8 +712,9 @@ app.factory('transType',function(){
 //提现 Service
 app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(userId,currentPage,pageSize){			
-			return promiseGet('/cashout/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+		get : function(userId,currentPage,pageSize){	
+			var skip = pageSize * (currentPage - 1);		
+			return promiseGet('/cashout/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(cashout){
 			return promisePost('/trans/cashout', cashout);
@@ -719,8 +740,9 @@ app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseG
 //充值 Service
 app.factory('recharges',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(userId,currentPage,pageSize){			
-			return promiseGet('/recharge/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+		get : function(userId,currentPage,pageSize){	
+			var skip = pageSize * (currentPage - 1);		
+			return promiseGet('/recharge/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(recharge){
 			return promisePost('/trans/recharge', recharge);
@@ -746,7 +768,8 @@ app.factory('recharges',['promisePost','promiseGet',function(promisePost,promise
 app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		get : function(userId,currentPage,pageSize){
-			return promiseGet('/points2cash/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+			var skip = pageSize * (currentPage - 1);
+			return promiseGet('/points2cash/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(points2cash){
 			return promisePost('/trans/points2cash', points2cash);
@@ -770,7 +793,8 @@ app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,prom
 app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(promisePost,promiseGet,restAPIGet){
 	return {
 		get : function(userId,currentPage,pageSize){
-			return promiseGet('/transaction/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + currentPage);
+			var skip = pageSize * (currentPage - 1);
+			return promiseGet('/transaction/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
 		},
 		downloadCSV : function(userId){
 			//TODO: 导出交易记录CSV
