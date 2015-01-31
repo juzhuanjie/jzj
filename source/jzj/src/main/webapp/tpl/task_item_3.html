@@ -51,7 +51,7 @@
         <label class="">元</label>
         <label class="m-l m-r">|</label>
         <label >商品所在地</label>        
-        <select class="input-control-xs" ng-model="flowData.taskDetail.searchProductLocation"><option ng-repeat="location in productLocation" value="{{location}}">{{location}}</option></select>
+        <select class="input-control-xs" ng-model="flowData.taskDetail.searchProductLocation"><option ng-repeat="location in productLocation" value="{{location}}" ng-selected="flowData.taskDetail.searchProductLocation == location">{{location}}</option></select>
       </div>
     </div>
   </div>

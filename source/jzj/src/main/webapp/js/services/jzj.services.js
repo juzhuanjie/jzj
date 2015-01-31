@@ -383,11 +383,12 @@ app.factory('products', ['promisePost','promiseGet',function(promisePost,promise
 				"productId" : -1,
 				"shopId" : -1,
 				"productName" : "",
-				"productLink" : "",
+				"productUrl" : "",
 				"productDesc" : { "color" : "", "size" : ""},
 				"productPrice" : 0,
 				"productPrice2" : "",
-				"productImage" : ""
+				"productImage" : "",
+				"productExtID" : -1
 			};
 		}		
 	};
