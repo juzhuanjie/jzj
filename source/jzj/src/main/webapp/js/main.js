@@ -37,6 +37,7 @@ angular.module('app')
           container: false
         }
       }
+      $scope.userLogin = app.userSession.userLogin;
       $scope.platforms = [];
       $scope.$on('$viewContentLoaded',function(){
         $scope.platforms = platforms.getAll();
