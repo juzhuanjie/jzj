@@ -754,9 +754,9 @@ app.factory('transType',function(){
 //提现 Service
 app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(userId,currentPage,pageSize){	
+		get : function(currentPage,pageSize){	
 			var skip = pageSize * (currentPage - 1);		
-			return promiseGet('/cashout/?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
+			return promiseGet('/cashout/?limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(cashout){
 			return promisePost('/trans/cashout', cashout);
@@ -782,9 +782,9 @@ app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseG
 //充值 Service
 app.factory('recharges',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(userId,currentPage,pageSize){	
+		get : function(currentPage,pageSize){	
 			var skip = pageSize * (currentPage - 1);		
-			return promiseGet('/recharge/?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
+			return promiseGet('/recharge/?limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(recharge){
 			return promisePost('/trans/recharge', recharge);
@@ -809,9 +809,9 @@ app.factory('recharges',['promisePost','promiseGet',function(promisePost,promise
 //变现 Service
 app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
-		get : function(userId,currentPage,pageSize){
+		get : function(currentPage,pageSize){
 			var skip = pageSize * (currentPage - 1);
-			return promiseGet('/points2cash/?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
+			return promiseGet('/points2cash/?limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(points2cash){
 			return promisePost('/trans/points2cash', points2cash);
@@ -834,9 +834,9 @@ app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,prom
 //变现 Service
 app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(promisePost,promiseGet,restAPIGet){
 	return {
-		get : function(userId,currentPage,pageSize){
+		get : function(currentPage,pageSize){
 			var skip = pageSize * (currentPage - 1);
-			return promiseGet('/transaction/?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
+			return promiseGet('/transaction/?limit=' + pageSize + '&skip=' + skip);
 		},
 		downloadCSV : function(userId){
 			//TODO: 导出交易记录CSV
@@ -850,8 +850,8 @@ app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(pro
 //余额查询 Service 
 app.factory('balances', ['promiseGet','promisePost',function(promiseGet,promisePost){
 	return {
-		get : function(userId){
-			return promiseGet('/query/balance?userId=' + userId);
+		get : function(){
+			return promiseGet('/query/balance');
 		},
 		checkPayPassword : function(payPassword){
 			return promisePost('/service/checkPayPassword',{"password":payPassword});

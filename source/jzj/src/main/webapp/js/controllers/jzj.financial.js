@@ -19,7 +19,7 @@ app.controller('TransHistoryCtrl',['$scope','transactions',function($scope,trans
       loadTransHistory(data.currentPage,data.pageSize);
   });
   var loadTransHistory = function(currentPage,pageSize){    
-    transactions.get(userId,currentPage,pageSize).then(function(result){
+    transactions.get(currentPage,pageSize).then(function(result){
       $scope.transList = result;
       //$scope.$broadcast('resultsLoaded', result);
     });
@@ -42,7 +42,7 @@ app.controller('Points2cashHistoryCtrl',['$scope','points2cashs',function($scope
       loadPoints2cashHistory(data.currentPage,data.pageSize);
   });
   var loadPoints2cashHistory = function(currentPage,pageSize){    
-    points2cashs.get(userId,currentPage,pageSize).then(function(result){
+    points2cashs.get(currentPage,pageSize).then(function(result){
       $scope.points2cashList = result;
     });
   };
@@ -64,7 +64,7 @@ app.controller('RechargeHistoryCtrl',['$scope','recharges',function($scope,recha
       loadRechargeHistory(data.currentPage,data.pageSize);
   });
   var loadRechargeHistory = function(currentPage,pageSize){    
-    recharges.get(userId,currentPage,pageSize).then(function(result){
+    recharges.get(currentPage,pageSize).then(function(result){
       $scope.rechargeList = result;
     });
   };
@@ -86,7 +86,7 @@ app.controller('CashoutHistoryCtrl',['$scope','cashouts',function($scope,cashout
       loadCashoutHistory(data.currentPage,data.pageSize);
   });
   var loadCashoutHistory = function(currentPage,pageSize){    
-    cashouts.get(userId,currentPage,pageSize).then(function(result){
+    cashouts.get(currentPage,pageSize).then(function(result){
       $scope.cashoutList = result;
     });
   };
@@ -199,7 +199,7 @@ app.controller('CashoutCtrl',['$scope','cashouts','points2cashs','userBanks','ba
   });
   var getBalance = function(){
     //TODO: 获取可提现金额
-    balances.get(userId).then(function(result){
+    balances.get().then(function(result){
       $scope.totalCashs = result.cash;
       $scope.totalPoints = result.points;
     });    
