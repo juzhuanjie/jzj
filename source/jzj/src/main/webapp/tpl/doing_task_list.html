@@ -1,0 +1,110 @@
+
+<div ng-controller="VTaskListCtrl">
+<div>
+  <ul class="breadcrumb bg-white b-b breadcrumb-custom">
+    <li><a href class="breadcrumb-font"><i class="fa fa-home"></i> 首页</a></li>
+    <li><a href class="breadcrumb-font">任务列表</a></li>
+    <li class="active breadcrumb-font">{{statusName}}任务</li>
+  </ul>
+</div>
+<div class="wrapper-md bg-white">
+    <!--过滤条件-->
+    <div class="row" ng-controller="TaskFilterCtrl" ng-init="initTaskByStatus()">
+      <div class="col-md-2">
+        <label class="font-bold">平台：</label>
+        <div class="btn-group">
+          <select class="form-control" ng-model="condition.platformId">
+            <option value="-1">全部</option>
+            <option ng-repeat="p in platforms" value="{{p.id}}">{{p.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <label class="font-bold">店铺：</label>      
+        <div class="btn-group">
+          <select class="form-control" ng-model="condition.shopId">
+            <option value="-1">全部</option>
+            <option ng-repeat="s in shops" value="{{s.shopId}}">{{s.wangwang}}</option>
+          </select>
+        </div>
+      </div> 
+      <div class="col-md-3">
+        <label class="font-bold">任务类型：</label>
+        <div class="btn-group">
+          <select class="form-control" ng-model="condition.taskTypeId">
+            <option value="-1">全部</option>
+            <option ng-repeat="t in taskTypes" value="{{t.id}}">{{t.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2 hide">
+        <label class="font-bold">终端：</label>      
+        <div class="btn-group">
+          <select class="form-control" ng-model="condition.terminalId">
+            <option value="-1">全部</option>
+            <option ng-repeat="t in terminals" value="{{t.id}}">{{t.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-danger" ng-click="query()">查询</button>
+      </div>
+    </div>
+    <!--任务列表-->
+    <div class="row wrapper-md">
+      <div class="task-list">
+        <!--task item-->
+        <div class="panel panel-danger" ng-repeat="t in taskList">
+          <div class="panel-heading">    
+            <div class="row">
+              <div class="col-md-1">店铺</div>                
+              <div class="col-md-3">商品</div>                
+              <div class="col-md-1">购买件数</div>   
+              <div class="col-md-1">商品单价</div>                
+              <div class="col-md-2">垫付资金</div>                
+              <div class="col-md-1">佣金</div>                
+              <div class="col-md-1">任务总数</div>                
+              <div class="col-md-1">领取进度</div>     
+              <div class="col-md-1">接手状态</div>                
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-1"><label class="h4"><span class="label bg-danger">T</span>{{t.shopName}}</label></div>                
+              <div class="col-md-3"><a ng-click="viewDetail(t.taskId)" class="text-info">{{t.productName}}</a></div>                
+              <div class="col-md-1">{{t.shopProductPrice}}</div>                
+              <div class="col-md-1">{{t.taskProductPrice / t.shopProductPrice}}</div>                
+              <div class="col-md-2">{{t.taskProductPrice}}</div>                
+              <div class="col-md-1">{{t.commission}}赚点</div>                
+              <div class="col-md-1">{{t.totalTasks}}单</div>                
+              <div class="col-md-1">
+                <div ui-options="{
+                      percent: {{(t.assigned / t.totalTasks) * 100}},
+                      lineWidth: 3,
+                      trackColor: '#e8eff0',
+                      barColor: '#23b7e5',
+                      scaleColor: false,
+                      color: '#fff',
+                      size: 40,
+                      lineCap: 'butt',
+                      rotate: 90,
+                      animate: 1000
+                    }" ui-jq="easyPieChart" class="easyPieChart" style="width: 65px; height: 65px; line-height: 65px;">
+                    <div>
+                      <span class="step">{{(t.assigned / t.totalTasks) * 100}}</span>%
+                    </div>
+                  <canvas height="40" width="40"></canvas>
+                </div>
+              </div>                
+              <div class="col-md-1">等待接手</div>     
+            </div>    
+          </div>
+        </div>
+        <!--task item-->
+      </div>
+      <div class="pagination pull-left" ng-controller="PaginationCtrl">
+        <pagination ng-if="totalItems>0" boundary-links="true" items-per-page="pageSize" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged(currentPage)"></pagination>
+      </div>
+    </div>
+  </div>
+  </div>

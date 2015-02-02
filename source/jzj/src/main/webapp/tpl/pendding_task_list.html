@@ -27,29 +27,31 @@
           <div ng-show="statusId==3" class="text-muted m-t m-b">注：请及时复制运单号到对应平台操作订单发货</div>
           <div ng-show="statusId==6" class="text-muted m-t m-b">注：请在48小时内给买手退款，否则平台将扣除任务押金中的退款保证金</div>
           <div ng-show="statusId==7" class="text-muted m-t m-b">注：请对买手提交的评价内容进行优质好评的评选</div>
-          <!--list item-->
+          <!--task item-->
           <div class="panel panel-danger" ng-repeat="t in taskList">
-            <div class="panel-heading">                    
-              <span><span class="label bg-danger">T</span> {{getShopName(t.taskDetail)}}<span class="m-l">任务编号：</span><span>{{t.taskId}}</span> [<a ui-sref="app.task({id:{{t.taskId}}})" class="text-info">详情</a>]</span>
-              <span class="pull-right">
-                <span>任务单数：</span><span>{{t.totalTasks}}单</span>
-                <span class="m-l">任务押金：</span><span>{{getTaskTotalCach(t.taskDetail)}}元</span>
-                <span class="m-l">赚点：</span><span>{{getTaskTotalPoint(t.taskDetail)}}点</span>
-              </span>
+            <div class="panel-body" ng-controller="AccordingCtrl">
+              <div class="row">
+                <div class="col-md-1"><label class="h4"><span class="label bg-danger">T</span>{{getShopName(t.taskDetail)}}</label></div>                
+                <div class="col-md-3"><a ng-click="viewDetail(t.taskId)" class="text-info">{{t.productId.productName}}</a></div>                
+                <div class="col-md-2">买手已付款，待发货 （7）</div>
+                <div class="col-md-2"><a class="text-info" ng-click="toggleOpen()">查看</a></div>     
+              </div>   
+              <div ng-show="expanded" ng-init="">
+                <div class="line text-danger b-b"></div>
+                <ui class="list-group">
+                  <li class="list-group-item" style="border:none;">123456</li>
+                  <li class="list-group-item" style="border:none;">123456</li>
+                  <li class="list-group-item" style="border:none;">123456</li>
+                  <li class="list-group-item" style="border:none;">123456</li>
+                  <li class="list-group-item" style="border:none;">123456</li>
+                  <li class="list-group-item" style="border:none;">123456</li>
+                  <li class="list-group-item" style="border:none;">123456</li>
+                </ul>
+              </div> 
             </div>
-            <div class="panel-body">
-              <article class="media" >
-                <span class="pull-left m-r"><i class="fa fa-file-o fa-5x"></i></span>
-                <div class="pull-right l-h-lg">
-                  <a href class="btn btn-info">查看详情</a>
-                </div>
-                <div class="media-body l-h-lg">   
-                  <a href class="h4">{{t.productId.productName}}</a>
-                </div>
-              </article>
-            </div>            
           </div>
-          <!--list item-->
+          <!--task item-->
+
         </div>
 
         <div class="pagination pull-left" ng-controller="PaginationCtrl">

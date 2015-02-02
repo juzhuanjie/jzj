@@ -32,6 +32,6 @@ angular.module('app')
 
   //初始化global变量
   app.global = {
-    "host" : "http://mc-ubuntu2.cloudapp.net"
+    "host" : "http://119.29.22.94:1337"
   };
 

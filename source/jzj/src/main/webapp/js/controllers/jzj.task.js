@@ -109,8 +109,11 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 		tasks.save($scope.flowData.taskId,$scope.flowData).then(function(result){
 			$scope.flowData = result;
 			$scope.flowData.taskDetail = angular.fromJson($scope.flowData.taskDetail);
-			//TODO: 处理支付事件
-			$location.url('/app/tasklist/4');
+			//发布task
+			tasks.pubishTask($scope.flowData).then(function(result){
+				//TODO: 处理支付事件
+				$location.url('/app/tasklist/4');
+			});			
 		});
 	});
 	$scope.$on('pay-cancel',function(event,data){
@@ -500,7 +503,7 @@ app.controller('TaskFlowItem6Ctrl',['$scope','$timeout', function($scope,$timeou
 	};
 }]);
 //待处理的任务
-app.controller('PeddingTaskCtrl',['$scope','$stateParams','platforms','tasks',function($scope,$stateParams,platforms,tasks){
+app.controller('PeddingTaskCtrl',['$scope','$stateParams','platforms','tasks','$modal',function($scope,$stateParams,platforms,tasks,$modal){
 	$scope.platformName = "";
 	$scope.platformId = -1;
 	$scope.statusId = 3;
@@ -537,6 +540,91 @@ app.controller('PeddingTaskCtrl',['$scope','$stateParams','platforms','tasks',fu
 	    //   $scope.$broadcast('resultsLoaded', result);
 	    // });
 	};
+	$scope.viewDetail = function (taskId) {
+      var modalInstance = $modal.open({
+        templateUrl: 'tpl/modal/task_detail.html',
+        controller: 'TaskDetailCtrl',
+        resolve: {
+          data: function () {
+            return { "id": taskId};
+          }
+        }
+      });
+    };
+}]);
+app.controller('AccordingCtrl',['$scope',function($scope){
+	$scope.expanded = false;
+	$scope.toggleOpen = function(){
+		$scope.expanded = !$scope.expanded;
+	};
+}]);
+//进行中的任务
+app.controller('VTaskListCtrl',['$scope','$stateParams','platforms','taskStatuss','taskLists','$modal','tasks','toaster',function($scope,$stateParams,platforms,taskStatuss,taskLists,$modal,tasks,toaster){
+	$scope.statusId = 1;
+	$scope.platformId = 1;
+	$scope.statusName = "";
+	$scope.taskList = [];
+	$scope.condition = { platformId : -1,shopId : -1,taskTypeId : -1,terminalId : -1 };
+	$scope.$watch('$viewContentLoaded',function(){
+		$scope.statusId = $stateParams.status;
+		var statuss = taskStatuss.getAll();
+		angular.forEach(statuss,function(value){
+			if(value.id == $scope.statusId){
+				$scope.statusName = value.name;
+			}
+		});
+		filterTasksByCondition($scope.condition,1,4);
+	});
+	//查询已完成的任务
+	var filterTasksByCondition = function(condition,currentPage,pageSize){		
+		taskLists.filter($scope.statusId,condition,currentPage,pageSize).then(function(result){
+			$scope.taskList = result;
+		});
+	};
+	$scope.$on('filterTaskLoaded',function(event,data){
+		$scope.condition = data;
+		filterTasksByCondition(data,1,4);
+	});
+	var queryCount = function(){
+	    // tasks.queryCount().then(function(result){
+	    //   $scope.$broadcast('resultsLoaded', result);
+	    // });
+	};
+	$scope.$on('pageChanged',function(event,data){
+	    filterTasksByCondition($scope.condition,data.currentPage,data.pageSize);
+	});
+	$scope.publishTask = function(taskId){
+		tasks.get(taskId).then(function(result){
+			tasks.pubishTask(result).then(function(result){
+				//TODO: 发布任务的返回值格式需要修改, 而且，在发布的时候应该也把任务的状态给改了
+				toaster.pop('success', '一键发布', '任务发布成功！');
+				filterTasksByCondition($scope.condition,1,4);
+			});
+		});		
+	};
+	$scope.viewDetail = function (taskId) {
+      var modalInstance = $modal.open({
+        templateUrl: 'tpl/modal/task_detail.html',
+        controller: 'TaskDetailCtrl',
+        resolve: {
+          data: function () {
+            return { "id": taskId};
+          }
+        }
+      });
+    };    
+}]);
+//查看任务详细 Ctrl
+app.controller('TaskDetailCtrl',['$scope', '$modalInstance','data', 'tasks',function($scope, $modalInstance, data, tasks){
+	$scope.taskDetail = {};
+	$scope.$watch('$viewContentLoaded',function(){
+		tasks.get(data.id).then(function(result){
+			$scope.taskDetail = result;
+		});
+	});
+	$scope.close = function () {
+      $modalInstance.close();
+    };
 }]);
 //查询任务
 app.controller('TaskListCtrl',['$scope','$stateParams','taskStatuss','tasks',function($scope,$stateParams,taskStatuss,tasks){

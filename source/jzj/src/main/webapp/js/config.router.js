@@ -249,28 +249,30 @@ angular.module('app')
                   templateUrl: 'tpl/task_item_6.html'                  
               })
               .state('app.tasklist', {
-                  url: '/tasklist/:status',
-                  templateUrl: 'tpl/task_list.html',
+                  url: '/tasklist',
+                  template: '<div ui-view></div>',
                   resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){
                           return uiLoad.load( ['js/controllers/jzj.task.js'] );
                       }]
-                  }                   
+                  }  
               })
-              .state('app.tasklist.filter', {
-                  url: '/filter/:filter',
-                  templateUrl: 'tpl/task_list.html'                  
+              .state('app.tasklist.finish', {
+                  url: '/finish/:status',
+                  templateUrl: 'tpl/finish_task_list.html'                  
               })
-              .state('app.peddingtask', {
-                  url: '/peddingtask/:platformId',
-                  templateUrl: 'tpl/pedding_task.html',
-                  resolve: {
-                      deps: ['uiLoad',
-                        function( uiLoad ){
-                          return uiLoad.load( ['js/controllers/jzj.task.js'] );
-                      }]
-                  }                   
+              .state('app.tasklist.doing', {
+                  url: '/doing/:status',
+                  templateUrl: 'tpl/doing_task_list.html'                  
+              })
+              .state('app.tasklist.pendding', {
+                  url: '/pendding/:platformId',
+                  templateUrl: 'tpl/pendding_task_list.html'                  
+              })
+              .state('app.tasklist.unpublish', {
+                  url: '/unpublish/:status',
+                  templateUrl: 'tpl/unpublish_task_list.html'                 
               })
               .state('app.financial', {
                   url: '/financial',

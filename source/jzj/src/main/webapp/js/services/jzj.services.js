@@ -218,18 +218,27 @@ app.factory('terminals',['promisePost','promiseGet',function(promisePost,promise
 		}
 	};
 }]);
-//终端
+//大任务状态
 app.factory('taskStatuss',['promisePost','promiseGet',function(promisePost,promiseGet){
 	return {
 		getAll : function(){
 			return [
 				{id : 1, name : "已完成"},
 				{id : 2, name : "未发布"},
-				{id : 3, name : "待发货"},
-				{id : 4, name : "进行中"},
-				{id : 5, name : "已发布"},
-				{id : 6, name : "待退款"},
-				{id : 7, name : "待评选"}
+				{id : 3, name : "待处理"},
+				{id : 4, name : "进行中"}
+			];
+		}	
+	};
+}]);
+//子任务状态
+app.factory('subTaskStatuss',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		getAll : function(){
+			return [
+				{id : 1, name : "待发货"},
+				{id : 2, name : "待退款"},
+				{id : 3, name : "待评选"}				
 			];
 		}	
 	};
@@ -330,17 +339,20 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 		add : function(shopTask){
 			return promisePost('/shopTask', shopTask);	
 		},
+		pubishTask : function(shopTask){
+			return promisePost('/shopTask/publish', { taskJson : shopTask });
+		},
 		save : function(taskId,shopTask){
 			return promisePost('/shopTask/' + taskId, shopTask);
 		},
 		queryByStatus : function(statusId){
-			return promiseGet('/shopTask/find?status=' + statusId);
+			return promiseGet('/shopTask/?status=' + statusId);
 		},
 		queryByPlatform : function(platformId){
-			return promiseGet('/shopTask/find?PlatformId=' + platformId);
+			return promiseGet('/shopTask/?PlatformId=' + platformId);
 		},
 		filter : function(statusId,condition,currentPage,pageSize){
-			var queryPara = 'find?status=' + statusId;
+			var queryPara = '?status=' + statusId;
 			if(angular.isDefined(condition.platformId) && condition.platformId != -1){
 				queryPara += '&platformId=' + condition.platformId;
 			}
@@ -364,6 +376,35 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 		queryCount : function(){
 			//return promiseGet('/query/count/?model=task');
 		}		
+	};
+}]);
+//TaskList Service 
+app.factory('taskLists',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		queryByStatus : function(statusId){
+			return promiseGet('/VWShopTask/?status=' + statusId);
+		},
+		queryByPlatform : function(platformId){
+			return promiseGet('/VWShopTask/?PlatformId=' + platformId);
+		},
+		filter : function(statusId,condition,currentPage,pageSize){
+			var queryPara = '?status=' + statusId;
+			if(angular.isDefined(condition.platformId) && condition.platformId != -1){
+				queryPara += '&platformId=' + condition.platformId;
+			}
+			if(angular.isDefined(condition.shopId) && condition.shopId != -1){
+				queryPara += '&shopId=' + condition.shopId;
+			}
+			if(angular.isDefined(condition.taskTypeId) && condition.taskTypeId != -1){
+				queryPara += '&taskTypeId=' + condition.taskTypeId;
+			}
+			var skip = pageSize * (currentPage - 1);
+			queryPara += '&limit=' + pageSize + '&skip=' + skip;
+			return promiseGet('/VWShopTask/' + queryPara);
+		},
+		queryCount : function(){
+			//return promiseGet('/query/count/?model=task');
+		}
 	};
 }]);
 //ShopProduct 对象数据交互 Service
@@ -426,7 +467,7 @@ app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet
 		},
 		add : function(user){
 			//TODO: 添加一个用户
-			return promisePost('/user/create', user);	
+			return promisePost('/user/', user);	
 		},
 		resetPasswordRequest : function(email){
 			return promisePost('/user/resetPasswordRequest', {"email" : email});
@@ -476,10 +517,10 @@ app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promise
 	return {
 		get : function(userId, bankType){
 			//TODO: 获取一条User Bank记录，根据userid 和 banktype
-			return promiseGet('/userBank/find?userId=' + userId + '&bankType=' + bankType);
+			return promiseGet('/userBank/?userId=' + userId + '&bankType=' + bankType);
 		},
 		query : function(userId){
-			return promiseGet('/userBank/find?userId=' + userId);	
+			return promiseGet('/userBank/?userId=' + userId);	
 		},
 		add : function(userBank){
 			//TODO: 添加一条User Bank记录，可以是支付宝，财付通，银行卡等
@@ -508,7 +549,7 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 		},
 		query : function(userId, platformId){
 			//TODO: 获取买号绑定信息，根据userid和platformid，返回的是一个数组
-			return promiseGet('/buyerAccount/find?userId=' + userId + '&platformId=' + platformId);			
+			return promiseGet('/buyerAccount/?userId=' + userId + '&platformId=' + platformId);			
 		},
 		add : function(buyerAccount){
 			//TODO: 添加买号信息
@@ -543,7 +584,7 @@ app.factory('userAddresses',['promisePost','promiseGet',function(promisePost,pro
 			return promiseGet('/useraddress/'+addressId);
 		},
 		query : function(userId){
-			return promiseGet('/useraddress/find?userId'+userId);	
+			return promiseGet('/useraddress/?userId'+userId);	
 		},
 		add : function(userAddress){
 			return promisePost('/useraddress/', userAddress);
@@ -572,11 +613,11 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 		},
 		query : function(userId, platformId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组
-			return promiseGet('/sellerShop/find?userId=' + userId + '&platformId=' + platformId);	
+			return promiseGet('/sellerShop/?userId=' + userId + '&platformId=' + platformId);	
 		},
 		getAllShops : function(userId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组
-			return promiseGet('/sellerShop/find?userId=' + userId);	
+			return promiseGet('/sellerShop/?userId=' + userId);	
 		},
 		add : function(sellerShop){
 			//TODO: 添加店铺绑定信息
@@ -715,7 +756,7 @@ app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseG
 	return {
 		get : function(userId,currentPage,pageSize){	
 			var skip = pageSize * (currentPage - 1);		
-			return promiseGet('/cashout/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
+			return promiseGet('/cashout/?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(cashout){
 			return promisePost('/trans/cashout', cashout);
@@ -743,7 +784,7 @@ app.factory('recharges',['promisePost','promiseGet',function(promisePost,promise
 	return {
 		get : function(userId,currentPage,pageSize){	
 			var skip = pageSize * (currentPage - 1);		
-			return promiseGet('/recharge/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
+			return promiseGet('/recharge/?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(recharge){
 			return promisePost('/trans/recharge', recharge);
@@ -770,7 +811,7 @@ app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,prom
 	return {
 		get : function(userId,currentPage,pageSize){
 			var skip = pageSize * (currentPage - 1);
-			return promiseGet('/points2cash/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
+			return promiseGet('/points2cash/?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
 		},
 		add : function(points2cash){
 			return promisePost('/trans/points2cash', points2cash);
@@ -795,7 +836,7 @@ app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(pro
 	return {
 		get : function(userId,currentPage,pageSize){
 			var skip = pageSize * (currentPage - 1);
-			return promiseGet('/transaction/find?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
+			return promiseGet('/transaction/?userId=' + userId + '&limit=' + pageSize + '&skip=' + skip);
 		},
 		downloadCSV : function(userId){
 			//TODO: 导出交易记录CSV

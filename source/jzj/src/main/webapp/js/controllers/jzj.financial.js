@@ -246,7 +246,7 @@ app.controller('CashoutCtrl',['$scope','cashouts','points2cashs','userBanks','ba
       return;
     }
     balances.checkPayPassword($scope.payPassword).then(function(result){
-      if(!angular.isObject(result) && result == true){
+      if(angular.isObject(result) && result.result == true){
         $scope.cashout.userId = userId;
         $scope.cashout.userBankId = $scope.userBankId;
         $scope.cashout.type = 1; //提现

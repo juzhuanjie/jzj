@@ -4,13 +4,13 @@
     <span>任务管理</span>
   </li>  
   <li ui-sref-active="active">
-    <a ui-sref="app.tasklist({status:1})">
+    <a ui-sref="app.tasklist.finish({status:1})">
       <i class="glyphicon glyphicon-th-large icon text-success"></i>
       <span>已完成的任务</span>
     </a>
   </li> 
   <li ui-sref-active="active">
-    <a ui-sref="app.tasklist({status:4})">
+    <a ui-sref="app.tasklist.doing({status:4})">
       <i class="glyphicon glyphicon-th  icon text-info-lter"></i>
       <span>进行中的任务</span>
     </a>
@@ -31,7 +31,7 @@
         </a>
       </li>
       <li ui-sref-active="active" ng-repeat="p in platforms">
-        <a ui-sref="app.peddingtask({platformId:p.id})">
+        <a ui-sref="app.tasklist.pendding({platformId:p.id})">
           <b class="badge bg-info pull-right">0</b>          
           <span>{{p.name}}任务</span>
         </a>
@@ -39,7 +39,7 @@
     </ul>
   </li>
   <li ui-sref-active="active">
-    <a ui-sref="app.tasklist({status:2})">
+    <a ui-sref="app.tasklist.unpublish({status:2})">
       <i class="glyphicon glyphicon-th  icon text-info-lter"></i>
       <span>未发布任务</span>
     </a>

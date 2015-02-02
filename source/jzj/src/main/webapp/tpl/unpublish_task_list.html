@@ -55,25 +55,12 @@
       <div class="task-list">
         <!--task item-->
         <div class="panel panel-danger" ng-repeat="t in taskList">
-          <div class="panel-heading">                    
-            <span><span class="label bg-danger">T</span> {{getShopName(t.taskDetail)}}<span class="m-l">任务编号：</span><span>{{t.taskId}}</span> [<a ui-sref="app.task({id:{{t.taskId}}})" class="text-info">详情</a>]</span>
-            <span class="pull-right">
-              <span>任务单数：</span><span>{{t.totalTasks}}单</span>
-              <span class="m-l">任务押金：</span><span>{{getTaskTotalCach(t.taskDetail)}}元</span>
-              <span class="m-l">赚点：</span><span>{{getTaskTotalPoint(t.taskDetail)}}点</span>
-            </span>
-          </div>
           <div class="panel-body">
-            <article class="media" >
-              <span class="pull-left m-r"><i class="fa fa-file-o fa-5x"></i></span>
-              <div class="pull-right l-h-lg">
-                <a ng-if="statusId==2" ui-sref="app.task({id:{{t.taskId}}})" class="btn btn-info">继续发布</a>
-                <a ng-if="statusId==1" href class="btn btn-info">一键发布</a>
-              </div>
-              <div class="media-body l-h-lg">   
-                <a href class="h4">{{t.productId.productName}}</a>
-              </div>
-            </article>
+            <div class="row">
+                <div class="col-md-2"><label><span class="label bg-danger">T</span>{{getShopName(t.taskDetail)}}</label></div>                
+                <div class="col-md-4"><a ui-sref="app.task({id:{{t.taskId}}})" class="text-info">{{t.productId.productName}}</a></div>                
+                <div class="col-md-6 text-right"><a ui-sref="app.task({id:{{t.taskId}}})" class="btn btn-info ">继续发布</a></div>
+            </div>              
           </div>
         </div>
         <!--task item-->
