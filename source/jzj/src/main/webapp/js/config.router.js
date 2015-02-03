@@ -266,9 +266,9 @@ angular.module('app')
                   url: '/doing/:status',
                   templateUrl: 'tpl/doing_task_list.html'                  
               })
-              .state('app.tasklist.pendding', {
-                  url: '/pendding/:platformId',
-                  templateUrl: 'tpl/pendding_task_list.html'                  
+              .state('app.tasklist.pending', {
+                  url: '/pending/:platformId',
+                  templateUrl: 'tpl/pending_task_list.html'                  
               })
               .state('app.tasklist.unpublish', {
                   url: '/unpublish/:status',

@@ -403,8 +403,25 @@ app.factory('taskLists',['promisePost','promiseGet',function(promisePost,promise
 			queryPara += '&limit=' + pageSize + '&skip=' + skip;
 			return promiseGet('/VWShopTask/' + queryPara);
 		},
+		pending : function(platformId,currentPage,pageSize){
+			//TODO: 按平台来过滤，暂时没有实现
+			var skip = pageSize * (currentPage - 1);
+			var queryPara = 'limit=' + pageSize + '&skip=' + skip;
+			return promiseGet('/VWShopTask/pending/?' + queryPara);
+		},
 		queryCount : function(){
 			//return promiseGet('/query/count/?model=task');
+		}
+	};
+}]);
+//TaskBuyer 买手接单子任务 Service
+app.factory('taskBuyers',['promisePost','promiseGet',function(promisePost,promiseGet){
+	return {
+		filter : function(taskId,statusId,currentPage,pageSize){
+			var queryPara = '?taskId=' + taskId + '&statusId=' + statusId;
+			var skip = pageSize * (currentPage - 1);
+			queryPara += '&limit=' + pageSize + '&skip=' + skip;
+			return promiseGet('/TaskBuyer/' + queryPara);
 		}
 	};
 }]);
