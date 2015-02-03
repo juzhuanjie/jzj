@@ -374,8 +374,8 @@ app.factory('tasks', ['promisePost','promiseGet',function(promisePost,promiseGet
 			//TODO: 统计店铺最近发布任务的单数
 			return 1;
 		},
-		queryCount : function(){
-			//return promiseGet('/query/count/?model=task');
+		queryCount : function(condition){
+			return promiseGet('/query/count/?model=task&where=' + condition);
 		}		
 	};
 }]);
@@ -405,12 +405,13 @@ app.factory('taskLists',['promisePost','promiseGet',function(promisePost,promise
 		},
 		pending : function(platformId,currentPage,pageSize){
 			//TODO: 按平台来过滤，暂时没有实现
+			var queryPara = "where={\"platformId\":" + platformId + "}";
 			var skip = pageSize * (currentPage - 1);
-			var queryPara = 'limit=' + pageSize + '&skip=' + skip;
+			queryPara += '&limit=' + pageSize + '&skip=' + skip;
 			return promiseGet('/VWShopTask/pending/?' + queryPara);
 		},
-		queryCount : function(){
-			//return promiseGet('/query/count/?model=task');
+		queryCount : function(condition){
+			return promiseGet('/query/count/?model=task&where=' + condition);
 		}
 	};
 }]);
@@ -780,7 +781,7 @@ app.factory('cashouts',['promisePost','promiseGet',function(promisePost,promiseG
 			return promisePost('/trans/cashout', cashout);
 		},
 		queryCount : function(){
-			return promiseGet('/query/count/?model=cashout&where={"rechargetypeId":1}');
+			return promiseGet('/query/count/?model=cashout');
 		},
 		newEmpty : function(){
 			return {
@@ -808,7 +809,7 @@ app.factory('recharges',['promisePost','promiseGet',function(promisePost,promise
 			return promisePost('/trans/recharge', recharge);
 		},
 		queryCount : function(){
-			return promiseGet('/query/count/?model=recharge&where={"rechargetypeId":1}');
+			return promiseGet('/query/count/?model=recharge');
 		},
 		newEmpty : function(){
 			return {
@@ -835,7 +836,7 @@ app.factory('points2cashs',['promisePost','promiseGet',function(promisePost,prom
 			return promisePost('/trans/points2cash', points2cash);
 		},
 		queryCount : function(){
-			return promiseGet('/query/count/?model=points2cash&where={"rechargetypeId":1}');
+			return promiseGet('/query/count/?model=points2cash');
 		},
 		newEmpty : function(){
 			return {
@@ -861,7 +862,7 @@ app.factory('transactions',['promisePost','promiseGet','restAPIGet',function(pro
 			window.open("/transaction/csv");
 		},
 		queryCount : function(){
-			return promiseGet('/query/count/?model=transaction&where={"rechargetypeId":1}');
+			return promiseGet('/query/count/?model=transaction');
 		}
 	};
 }]);

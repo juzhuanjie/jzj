@@ -13,8 +13,7 @@
 		<tabset class="tab-container">
 		  <!--充值现金-->
           <tab heading="充值现金">
-			<div>
-				<h5 class="font-bold">填写充值信息</h5>
+			<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
 				<div ng-if="isBindUserBank" class="btn-group">
@@ -23,26 +22,12 @@
 					</select>
 				</div>
 			</div>
-			<div>
+			<div class="m-t">
 				<label class="control-label text-left">充值金额：</label>
 				<div class="btn-group"><input type="text" class="form-control" ng-model="cash.amount"/></div>
-				<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span><span class="text-danger">(提现操作平台将收取0.3%的手续费)</span></label>
+				<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span></label>
 			</div>		
-			<div class="m-t-xs">			
-				<label>手续费总计：</label><label class="text-danger">0</label> <label> 元</label>		
-				<label class="m-l-lg">实际到账金额总计：</label><label class="text-danger">0</label> <label> 元</label>
-			</div>
-			<div class="m-t-xs">
-				<p class="text-danger">注：预计2个工作日内（国家法定假日和双休日顺延）平台完成提现操作，到账时间已各大银行为准，预计3-5工作日左右</p>	
-			</div>
-			<!-- <div class="line b-b"></div> 
-			<div>
-				<h5 class="font-bold">确认支付</h5>
-				<label class="control-label text-left">支付密码：</label>
-				<div class="btn-group"><input type="password" class="form-control" ng-model="payPassword"/></div>
-				<label class="control-label text-left"><a class="text-info">找回支付密码</a></label>
-			</div> -->
-			<div class="line b-b"></div> 
+
 			<div class="m-t m-b">
 				<button class="btn btn-danger" ng-click="rechargeCash()">确认</button>
 			</div>
@@ -58,36 +43,20 @@
           </tab>
           <!--充值押金-->
           <tab heading="充值押金">
-          	<div>
-				<h5 class="font-bold">填写充值信息</h5>
+          	<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
 				<div ng-if="isBindUserBank" class="btn-group">
 					<select class="form-control" ng-model="bankType">
-						<option ng-repeat="b in bankTypeList" value="{{b.id}}" ng-selected="bankType = b.id">{{b.name}}</option>
+						<option ng-repeat="b in userBankList" value="{{b.bankType}}" ng-selected="bankType = b.bankType">{{getBankName(b.bankType)}} - {{b.accountNumber}}</option>
 					</select>
 				</div>
 			</div>
-			<div>
+			<div class="m-t">
 				<label class="control-label text-left">充值金额：</label>
 				<div class="btn-group"><input type="text" class="form-control" ng-model="deposit.amount"/></div>
-				<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span><span class="text-danger">(提现操作平台将收取0.3%的手续费)</span></label>
+				<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span></label>
 			</div>		
-			<div class="m-t-xs">	
-				<label>手续费总计：</label><label class="text-danger">0</label> <label> 元</label>		
-				<label class="m-l-lg">实际到账金额总计：</label><label class="text-danger">0</label> <label> 元</label>
-			</div>
-			<div class="m-t-xs">
-				<p class="text-danger">注：预计2个工作日内（国家法定假日和双休日顺延）平台完成提现操作，到账时间已各大银行为准，预计3-5工作日左右</p>	
-			</div>
-			<div class="line b-b"></div> 
-			<div>
-				<h5 class="font-bold">确认支付</h5>
-				<label class="control-label text-left">支付密码：</label>
-				<div class="btn-group"><input type="password" class="form-control" ng-model="payPassword"/></div>
-				<label class="control-label text-left"><a class="text-info">找回支付密码</a></label>
-			</div>
-			<div class="line b-b"></div> 
 			<div class="m-t m-b">
 				<button class="btn btn-danger" ng-click="rechargeDeposit()">确认</button>
 			</div>
@@ -103,36 +72,20 @@
           </tab>
           <!--充值赚点-->
           <tab heading="充值赚点">
-          	<div>
-				<h5 class="font-bold">填写充值信息</h5>
+          	<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
 				<div ng-if="isBindUserBank" class="btn-group">
 					<select class="form-control" ng-model="bankType">
-						<option ng-repeat="b in bankTypeList" value="{{b.id}}" ng-selected="bankType = b.id">{{b.name}}</option>
+						<option ng-repeat="b in userBankList" value="{{b.bankType}}" ng-selected="bankType = b.bankType">{{getBankName(b.bankType)}} - {{b.accountNumber}}</option>
 					</select>
 				</div>
 			</div>
-			<div>
+			<div class="m-t">
 				<label class="control-label text-left">充值点数：</label>
 				<div class="btn-group"><input type="text" class="form-control" ng-model="point.points"/></div>
-				<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span><span class="text-danger">(提现操作平台将收取0.3%的手续费)</span></label>
+				<label class="control-label text-left"></label>
 			</div>		
-			<div class="m-t-xs">			
-				<label>手续费总计：</label><label class="text-danger">0</label> <label> 元</label>		
-				<label class="m-l-lg">实际支付金额总计：</label><label class="text-danger">0</label> <label> 元</label>
-			</div>
-			<div class="m-t-xs">
-				<p class="text-danger">注：预计2个工作日内（国家法定假日和双休日顺延）平台完成提现操作，到账时间已各大银行为准，预计3-5工作日左右</p>	
-			</div>
-			<div class="line b-b"></div> 
-			<div>
-				<h5 class="font-bold">确认支付</h5>
-				<label class="control-label text-left">支付密码：</label>
-				<div class="btn-group"><input type="password" class="form-control" ng-model="payPassword"/></div>
-				<label class="control-label text-left"><a class="text-info">找回支付密码</a></label>
-			</div>
-			<div class="line b-b"></div> 
 			<div class="m-t m-b">
 				<button class="btn btn-danger" ng-click="rechargePoint()">确认</button>
 			</div>

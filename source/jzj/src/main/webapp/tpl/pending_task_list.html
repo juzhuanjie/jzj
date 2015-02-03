@@ -1,0 +1,104 @@
+
+<div ng-controller="PendingTaskCtrl">
+  <div>
+    <ul class="breadcrumb bg-white b-b breadcrumb-custom">
+      <li><a href class="breadcrumb-font"><i class="fa fa-home"></i> 首页</a></li>
+      <li><a href class="breadcrumb-font">待处理任务</a></li>
+      <li class="active breadcrumb-font">{{platformName}}任务</li>
+    </ul>
+  </div>
+  <div class="wrapper-md bg-white">
+      <div class="m-b">      
+        <span class="text-danger font-bold">{{platformName}}待处理的任务</span>
+      </div>
+      <div class="task-list">
+        <!--task item-->
+        <div ng-repeat="t in taskList">
+          <div class="panel panel-danger" ng-controller="TaskBuyerCtrl">
+            <div class="panel-heading">    
+              <div class="row">
+                <div class="col-md-1">店铺</div>                
+                <div class="col-md-2">商品</div>                
+                <div class="col-md-1">购买件数</div>   
+                <div class="col-md-1">商品单价</div>                
+                <div class="col-md-1">垫付资金</div>                
+                <div class="col-md-1">佣金</div>                
+                <div class="col-md-1">任务总数</div>                
+                <div class="col-md-1">领取进度</div>     
+                <div class="col-md-1">接手状态</div> 
+                <div class="col-md-1">待处理</div> 
+                <div class="col-md-1">操作</div>                
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-1"><label class="h4"><span class="label bg-danger">T</span>{{t.shopName}}</label></div>                
+                <div class="col-md-2"><a ng-click="viewDetail(t.taskId)" class="text-info">{{t.productName}}</a></div>                
+                <div class="col-md-1">{{t.shopProductPrice}}</div>                
+                <div class="col-md-1">{{t.taskProductPrice / t.shopProductPrice}}</div>                
+                <div class="col-md-1">{{t.taskProductPrice}}</div>                
+                <div class="col-md-1">{{t.commission}}赚点</div>                
+                <div class="col-md-1">{{t.totalTasks}}单</div>                
+                <div class="col-md-1">
+                  <div ui-options="{
+                        percent: {{(t.assigned / t.totalTasks) * 100}},
+                        lineWidth: 3,
+                        trackColor: '#e8eff0',
+                        barColor: '#23b7e5',
+                        scaleColor: false,
+                        color: '#fff',
+                        size: 40,
+                        lineCap: 'butt',
+                        rotate: 90,
+                        animate: 1000
+                      }" ui-jq="easyPieChart" class="easyPieChart" style="width: 65px; height: 65px; line-height: 65px;">
+                      <div>
+                        <span class="step">{{(t.assigned / t.totalTasks) * 100}}</span>%
+                      </div>
+                    <canvas height="40" width="40"></canvas>
+                  </div>
+                </div>                
+                <div class="col-md-1">等待接手</div>     
+                <div class="col-md-1"><b class="badge bg-danger">3</b></div>     
+                <div class="col-md-1">
+                    <a ng-show="!expanded" class="text-info" ng-click="toggleOpen(t.taskId)">查看</a>
+                    <a ng-show="expanded" class="text-info" ng-click="toggleClose()">关闭</a>
+                  </div>
+              </div>    
+            </div>
+            <!--展开-->
+            <div ng-show="expanded" class="wrapper">                
+              <div class="line text-danger b-b"></div>
+              <div class="row padder-md l-h-3x">
+                <ul class="ul-t status-filter">
+                  <li><a class="text-danger" ng-class="{'filter-active wrapper-xs text-white bg-danger':statusId==1}" ng-click="filterTaskBuyer(1)">买手已付款，待发货<span>(1)</span></a></li>  
+                  <li><a class="text-danger" ng-class="{'filter-active wrapper-xs text-white bg-danger':statusId==2}" ng-click="filterTaskBuyer(2)">买手已收货，待退款<span>(1)</span></a></li>  
+                  <li><a class="text-danger" ng-class="{'filter-active wrapper-xs text-white bg-danger':statusId==3}" ng-click="filterTaskBuyer(3)">买手已好评，待评选<span>(0)</span></a></li>    
+                </ul>    
+              </div>                
+              <div class="line text-danger b-b"></div>
+              <!--子项-->
+              <ul class="list-group no-borders">
+                <li class="list-group-item" ng-repeat="b in taskBuyerList">
+                  {{b.taskDetail}}
+                  <a class="text-info">查看</a>
+                  <a ng-if="statusId==1" class="text-info">已发货</a>
+                  <a ng-if="statusId==2" class="text-info">已退款</a>
+                  <a ng-if="statusId==3" class="text-info">已评价</a>
+                </li>
+              </ul>
+              <!--子项-->
+            </div> 
+            <!--展开-->
+          </div>
+        </div>
+        <!--task item-->
+      </div>
+
+      <div class="pagination pull-left" ng-controller="TaskPaginationCtrl">
+        <pagination ng-if="totalItems>0" boundary-links="true" items-per-page="pageSize" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged(currentPage)"></pagination>
+      </div>
+
+      <br/><br/>
+    </div>
+  </div>
