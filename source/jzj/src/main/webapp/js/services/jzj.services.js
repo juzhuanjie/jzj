@@ -5,7 +5,7 @@ function joinHost(url){
 }
 
 //request 拦截器，为http请求加上header信息
-app.factory('sessionInjector', ['toaster', function(toaster){
+app.factory('sessionInjector', ['toaster','$location','$q', function(toaster,$location,$q){
 	return {
       request: function (config) {
           //如果User Session信息已经保存了，包在request的header发回去给服务器
@@ -15,116 +15,117 @@ app.factory('sessionInjector', ['toaster', function(toaster){
           }                    
           return config;
       },
+      requestError: function(reason) {
+            toaster.pop('error', '请求失败', reason);
+      },
       response:function(response) {     
             switch (response.status) {            	
                 case (200):
-                	//console.log(response.headers('token'));                	
-                	
-                    if(angular.isObject(response.data)){
-                		
-                	}
+                    //TODO: 保存session token
                     break;
                 case (500):
-                    toaster.pop('error', 'Server Error', "服务器系统内部错误");
+                    toaster.pop('error', '响应错误', "错误码：500，服务器系统内部错误");
                     break;
                 case (401):
-                    toaster.pop('error', 'Server Error', "未登录");
+                    toaster.pop('error', '响应错误', "错误码：401，未登录");
                     break;
                 case (403):
-                    toaster.pop('error', 'Server Error', "无权限执行此操作");
+                    toaster.pop('error', '响应错误', "错误码：403，无权限执行此操作");
                     break;
                 case (408):
-                    toaster.pop('error', 'Server Error', "请求超时");
+                    toaster.pop('error', '响应错误', "错误码：408，请求超时");
+                    break;
+                case (404):
+                    toaster.pop('error', '响应错误', "错误码：404，服务没找到");
                     break;
                 default:
-                    toaster.pop('error', 'Server Error', "未知错误");
+                    toaster.pop('error', '响应错误', "未知错误, 错误消息：" + reason);
             }
             return response;
+        },
+        responseError : function(reason){
+        	var deferred = $q.defer();
+        	if(angular.isDefined(reason.data.code) && reason.data.code == 'login_password_wrong'){
+        		deferred.reject(reason);
+        	}else if(angular.isDefined(reason.data.code) && reason.data.code == 'access_notloggedin'){
+        		$location.path("/access/signin");
+        	}else{
+        		switch (reason.status) {            	
+	                case (500):
+	                	toaster.pop('error', '响应错误', "错误码：500，服务器系统内部错误");
+	                    break;
+	                case (401):
+	                    toaster.pop('error', '响应错误', "错误码：401，未登录");
+	                    break;
+	                case (403):
+	                    toaster.pop('error', '响应错误', "错误码：403，无权限执行此操作");
+	                    break;
+	                case (408):
+	                    toaster.pop('error', '响应错误', "错误码：408，请求超时");
+	                    break;
+	                case (404):
+	                    toaster.pop('error', '响应错误', "错误码：404，服务没找到");
+	                    break;
+	                default:
+	                    toaster.pop('error', '响应错误', "未知错误, 错误消息：" + angular.toJson(reason));
+	            }
+        	}        	
+			return deferred.promise;
         }
     };
 }]);
 //Promise Get的公共请求方式
-app.factory('promiseGet', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
+app.factory('promiseGet', ['$http','$q', function($http,$q){
 	return function(url){
 		var deferred = $q.defer();
 		var api = joinHost(url);
 		$http.get(api)
 		.success(function(result){
-			if(angular.isDefined(result.code)){				
-				if(result.code == 'access_notloggedin'){
-					$location.path("/access/signin");
-				}
-				deferred.reject(result);
-			}else if(angular.isObject(result)){
+			if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
 				deferred.resolve(result);
 			}
 		})
-		.error(function(reason){
-			if(angular.isDefined(reason.code) && reason.code == 'access_notloggedin'){
-				$location.path("/access/signin");
-			}else{
-				toaster.pop('error', 'Server Error', reason);	
-			}						
+		.error(function(reason){					
 			deferred.reject(reason);
 		});
 		return deferred.promise;
 	};
 }]);
 //Promise Post的公共请求方式
-app.factory('promisePost', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
+app.factory('promisePost', ['$http','$q', function($http,$q){
 	return function(url,para){
 		var deferred = $q.defer();
 		var api = joinHost(url);
 		$http.post(api,para)
 		.success(function(result){
-			if(angular.isDefined(result.code)){
-				if(result.code == 'access_notloggedin'){
-					$location.path("/access/signin");
-				}
-				deferred.reject(result);
-			}else if(angular.isObject(result)){
+			if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
 				deferred.resolve(result);
 			}
 		})
 		.error(function(reason){
-			if(angular.isDefined(reason.code) && reason.code == 'access_notloggedin'){
-				$location.path("/access/signin");
-			}else{
-				toaster.pop('error', 'Server Error', reason);	
-			}
 			deferred.reject(reason);
 		});
 		return deferred.promise;
 	};
 }]);
 //Promise Put的公共请求方式
-app.factory('promisePut', ['$http','$q','toaster','$location', function($http,$q,toaster,$location){
+app.factory('promisePut', ['$http','$q', function($http,$q){
 	return function(url,para){
 		var deferred = $q.defer();
 		var api = joinHost(url);
 		$http.put(api,para)
 		.success(function(result){
-			if(angular.isDefined(result.code)){
-				if(result.code == 'access_notloggedin'){
-					$location.path("/access/signin");
-				}
-				deferred.reject(result);
-			}else if(angular.isObject(result)){
+			if(angular.isObject(result)){
 				deferred.resolve(angular.fromJson(result));	
 			}else{			
 				deferred.resolve(result);
 			}
 		})
 		.error(function(reason){
-			if(angular.isDefined(reason.code) && reason.code == 'access_notloggedin'){
-				$location.path("/access/signin");
-			}else{
-				toaster.pop('error', 'Server Error', reason);	
-			}
 			deferred.reject(reason);
 		});
 		return deferred.promise;
@@ -463,8 +464,8 @@ app.factory('users', ['promisePost','promiseGet',function(promisePost,promiseGet
 		},
 		save : function(userId, user){
 			//TODO: 保存用户编辑信息
-			return promisePost('/user/' + userId, user);
-		},
+			return promisePost('/user/update/' + userId, user);
+		},		
 		add : function(user){
 			//TODO: 添加一个用户
 			return promisePost('/user/', user);	

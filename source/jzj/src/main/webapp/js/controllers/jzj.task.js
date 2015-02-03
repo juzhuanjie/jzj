@@ -735,7 +735,7 @@ app.controller('TaskFilterCtrl',['$scope','$stateParams','platforms','sellerShop
 	};
 }]);
 //分页 controller
-app.controller('PaginationCtrl',['$scope', function($scope){
+app.controller('TaskPaginationCtrl',['$scope', function($scope){
     $scope.pageSize = 4;
     $scope.maxSize = 10;
     $scope.totalItems = 50;

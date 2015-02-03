@@ -15,7 +15,7 @@ angular.module('app')
               app.userSession = angular.fromJson($window.localStorage.getItem("userSession"));
             }else{
               app.userSession = null;
-            }            
+            }      
           };  
           //在注册一个路由事件，监听ui-route stats的改变
           $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {

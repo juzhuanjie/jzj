@@ -102,7 +102,7 @@
         </div>
         <!--task item-->
       </div>
-      <div class="pagination pull-left" ng-controller="PaginationCtrl">
+      <div class="pagination pull-left" ng-controller="TaskPaginationCtrl">
         <pagination ng-if="totalItems>0" boundary-links="true" items-per-page="pageSize" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged(currentPage)"></pagination>
       </div>
     </div>

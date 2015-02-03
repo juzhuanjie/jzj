@@ -5568,8 +5568,12 @@ button.close {
   min-height: 16.42857143px;
   padding: 5px;
   border-bottom: 1px solid #e5e5e5;
-  background: none repeat scroll 0 0 #e67814;
+  background: none repeat scroll 0 0 #1199c4;
   color: #fff;
+  /*text-shadow: 0 1px 0 #000;*/
+}
+.modal-header h3{
+  font-size: 20px;
 }
 .modal-header .close {
   margin-top: -2px;

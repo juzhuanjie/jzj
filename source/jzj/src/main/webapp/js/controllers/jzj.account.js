@@ -20,8 +20,7 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         }
       });
       modalInstance.result.then(function (data) {        
-        $scope.user.password = data;
-        save();
+        save({'password':data});   
       });
     };
     $scope.openSetPayPwd = function () {
@@ -34,9 +33,8 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
           }
         }
       });
-      modalInstance.result.then(function (data) {    
-        $scope.user.payPassword = data;    
-        save();
+      modalInstance.result.then(function (data) {      
+        save({'payPassword':data});   
       });
     };
     $scope.openSetQQ = function () {
@@ -49,9 +47,8 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
           }
         }
       });
-      modalInstance.result.then(function (data) {    
-        $scope.user.qq = data;    
-        save();
+      modalInstance.result.then(function (data) {      
+        save({'qq':data});   
       });
     };
     $scope.openSetEmail = function () {
@@ -65,8 +62,7 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         }
       });
       modalInstance.result.then(function (data) {
-        $scope.user.email = data;
-        save();       
+        save({'email':data});       
       });
     };
     $scope.openSetPhone = function () {
@@ -79,9 +75,8 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
           }
         }
       });
-      modalInstance.result.then(function (data) {  
-        $scope.user.mobile = data;      
-        save();
+      modalInstance.result.then(function (data) {      
+        save({'mobile':data}); 
       });
     };
     $scope.openSetHeadImage = function () {
@@ -95,9 +90,8 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
           }
         }
       });
-      modalInstance.result.then(function (data) {  
-        $scope.user.image = data;      
-        save();        
+      modalInstance.result.then(function (data) {        
+        save({'image':data});      
       });
     };
     $scope.$watch('$viewContentLoaded',function(){      
@@ -105,8 +99,8 @@ app.controller('UserCtrl', ['$scope', '$modal','users', function($scope, $modal,
         $scope.user = result;
       });
     }); 
-    var save = function(){
-      users.save(userId, $scope.user).then(function(result){
+    var save = function(json){
+      users.save(userId, json).then(function(result){
         $scope.user = result;
       });      
     }
