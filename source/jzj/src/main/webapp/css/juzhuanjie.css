@@ -23,6 +23,13 @@
     background-color: #e67814;
     color: #fff;
 }
+.text-jzj{
+    color: #e67814;
+}
+.btn-jzj{
+    background-color: #e67814;
+    color: #fff;
+}
 .l-h-lg{
     line-height: 75px;
 }
@@ -62,15 +69,13 @@
 }
 .m-panel-heading a:hover{
     color: #fff;
-    background: #f05050;
+    background: #e67814;
 }
 .m-panel .title-danger{
     color: #fff;
-    background: #f05050;
 }
 .m-panel .title-default{
     color: #000;
-    background: none;
 }
 .m-panel-body{
     padding: 10px;

@@ -12,7 +12,7 @@
 	<div class="form-horizontal m-t">
 		<tabset class="tab-container">
 		  <!--充值现金-->
-          <tab heading="充值现金">
+          <tab heading="充值现金" active="transType == 2" ng-click="transType=2">
 			<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
@@ -42,7 +42,7 @@
 		     </div>
           </tab>
           <!--充值押金-->
-          <tab heading="充值押金">
+          <tab heading="充值押金" active="transType == 3" ng-click="transType=3">
           	<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
@@ -71,7 +71,7 @@
 		     </div>
           </tab>
           <!--充值赚点-->
-          <tab heading="充值赚点">
+          <tab heading="充值赚点" active="transType == 4" ng-click="transType=4">
           	<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>

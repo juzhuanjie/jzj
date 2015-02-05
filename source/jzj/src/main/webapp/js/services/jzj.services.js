@@ -423,6 +423,9 @@ app.factory('taskBuyers',['promisePost','promiseGet',function(promisePost,promis
 			var skip = pageSize * (currentPage - 1);
 			queryPara += '&limit=' + pageSize + '&skip=' + skip;
 			return promiseGet('/TaskBuyer/' + queryPara);
+		},
+		queryCount : function(condition){
+			return promiseGet('/query/count/?model=TaskBuyer&where=' + condition);
 		}
 	};
 }]);

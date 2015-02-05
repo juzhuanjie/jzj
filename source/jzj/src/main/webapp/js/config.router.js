@@ -10,12 +10,13 @@ angular.module('app')
           $rootScope.$state = $state;
           $rootScope.$stateParams = $stateParams;
           function init(){
-            //从浏览器缓存里获取用户session
-            if (angular.isObject(angular.fromJson($window.localStorage.getItem("userSession")))) {
+            //从浏览器缓存里获取用户session            
+            if ($window.localStorage.getItem("userSession") != null && angular.isObject(angular.fromJson($window.localStorage.getItem("userSession")))) {
               app.userSession = angular.fromJson($window.localStorage.getItem("userSession"));
             }else{
               app.userSession = null;
             }      
+            
           };  
           //在注册一个路由事件，监听ui-route stats的改变
           $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -56,7 +57,7 @@ angular.module('app')
                   resolve: {
                     deps: ['$ocLazyLoad',
                       function( $ocLazyLoad ){
-                        return $ocLazyLoad.load(['js/controllers/chart.js']);
+                        return $ocLazyLoad.load(['js/controllers/jzj.home.js']);
                     }]
                   }
               })
@@ -300,9 +301,9 @@ angular.module('app')
                   url: '/trans_history',
                   templateUrl: 'tpl/trans_history.html'                  
               })
-              .state('app.financial.rechange', {
-                  url: '/rechange',
-                  templateUrl: 'tpl/rechange.html'                  
+              .state('app.financial.recharge', {
+                  url: '/recharge/:transType',
+                  templateUrl: 'tpl/recharge.html'                  
               })
               .state('app.financial.cashout', {
                   url: '/cashout',

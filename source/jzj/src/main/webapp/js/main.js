@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 'users', '$state','platforms',
-    function(              $scope,   $translate,   $localStorage, $window , users, $state, platforms) {
+  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 'users', '$state','platforms','balances',
+    function(              $scope,   $translate,   $localStorage, $window , users, $state, platforms,balances) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -31,7 +31,7 @@ angular.module('app')
           navbarCollapseColor: 'bg-white-only',
           asideColor: 'bg-black',
           headerFixed: true,
-          asideFixed: false,
+          asideFixed: true,
           asideFolded: false,
           asideDock: false,
           container: false
@@ -39,11 +39,14 @@ angular.module('app')
       }
       $scope.userLogin = "";
       $scope.platforms = [];
+       $scope.userTypeId = 0;
       $scope.$on('$viewContentLoaded',function(){
         $scope.platforms = platforms.getAll();
-        if(angular.isDefined(app.userSession.userLogin) && app.userSession.userLogin != null){
+        if(app.userSession != null && angular.isDefined(app.userSession.userLogin) && app.userSession.userLogin != null){
           $scope.userLogin = app.userSession.userLogin;
+          $scope.userTypeId = app.userSession.userTypeId;
         }
+        getBalance();
       });
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
@@ -84,5 +87,11 @@ angular.module('app')
           // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
           return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
       }
-
+      $scope.balance = {};
+      var getBalance = function(){
+        balances.get().then(function(result){
+          $scope.balance = result;
+        });    
+      };
+      
   }]);
