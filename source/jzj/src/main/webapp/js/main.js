@@ -45,8 +45,8 @@ angular.module('app')
         if(app.userSession != null && angular.isDefined(app.userSession.userLogin) && app.userSession.userLogin != null){
           $scope.userLogin = app.userSession.userLogin;
           $scope.userTypeId = app.userSession.userTypeId;
-        }
-        getBalance();
+          getBalance();
+        }        
       });
       // save settings to local storage
       if ( angular.isDefined($localStorage.settings) ) {
