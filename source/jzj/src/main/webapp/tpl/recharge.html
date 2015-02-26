@@ -7,12 +7,12 @@
   </ul>
 </div>
 <div class="wrapper-md bg-white" ng-controller="RechargeCtrl">
-	<h4 class="m-t-none m-b text-danger">充值</h4>
+	<h4 class="m-t-none m-b text-jzj">充值</h4>
 	<div class="line b-b"></div> 
 	<div class="form-horizontal m-t">
 		<tabset class="tab-container">
 		  <!--充值现金-->
-          <tab heading="充值现金" active="transType == 2" ng-click="transType=2">
+          <tab heading="充值现金" ng-init="activeCash = (transType==2)" active="activeCash" ng-click="transType=2">
 			<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
@@ -29,20 +29,20 @@
 			</div>		
 
 			<div class="m-t m-b">
-				<button class="btn btn-danger" ng-click="rechargeCash()">确认</button>
+				<button class="btn btn-jzj" ng-click="rechargeCash()">确认</button>
 			</div>
 			<div class="line b-b"></div> 
 			<div class="m-t">
 		        <h4 class="m-t-none font-bold">温馨提示：</h4>
-		        <p class="text-muted">1. 请确保您输入的提现金额，以及支付宝或银行账户信息准确无误。</p>
-		        <p class="text-muted">2. 如果您填写的提现信息不正确也可能会导致提现失败，由此产生的提现费用将不予退还。</p>
-				<p class="text-muted">3. 在国家法定节假日和双休日期间，用户可以申请提现，聚赚界会在7个工作日内进行处理。由此造成的不便，请多多原谅。</p>
-				<p class="text-muted">4. 平台禁止洗钱、信用卡套现、虚假交易等行为，已经发现并确认，将终止该账户的使用。</p>
-				<p class="text-muted">5. 平台操作提现后，到账资金可能会分为几笔打入您的账户，查询时请注意计算到账总金额。</p>
+		        <p class="text-muted">1. 充值现金可以使用 商品押金 运费押金 退款保证金  三部分。</p>
+		        <p class="text-muted">2. 请注意您的银行卡充值限制，以免造成不便。<a class="text-info" href="#">查看如何提高充值限额</a></p>
+				<p class="text-muted">3. 禁止洗钱、信用卡套现、虚假交易等行为，一经发现并确认，将终止该账号的使用。</p>
+				<p class="text-muted">4. 如果充值金额没有及时到账。请联系客服。</p>
+				<p class="text-muted">5. 关于商家<span class="text-danger font-bold">押金</span>提现，平台是按照“<span class="text-danger font-bold">原路返回</span>”的原则给商家返还押金。</p>
 		     </div>
           </tab>
           <!--充值押金-->
-          <tab heading="充值押金" active="transType == 3" ng-click="transType=3">
+          <tab heading="充值押金" ng-init="activeDeposit = (transType==3)" active="activeDeposit" ng-click="transType=3">
           	<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
@@ -58,20 +58,20 @@
 				<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span></label>
 			</div>		
 			<div class="m-t m-b">
-				<button class="btn btn-danger" ng-click="rechargeDeposit()">确认</button>
+				<button class="btn btn-jzj" ng-click="rechargeDeposit()">确认</button>
 			</div>
 			<div class="line b-b"></div> 
 			<div class="m-t">
 		        <h4 class="m-t-none font-bold">温馨提示：</h4>
-		        <p class="text-muted">1. 请确保您输入的提现金额，以及支付宝或银行账户信息准确无误。</p>
-		        <p class="text-muted">2. 如果您填写的提现信息不正确也可能会导致提现失败，由此产生的提现费用将不予退还。</p>
-				<p class="text-muted">3. 在国家法定节假日和双休日期间，用户可以申请提现，聚赚界会在7个工作日内进行处理。由此造成的不便，请多多原谅。</p>
-				<p class="text-muted">4. 平台禁止洗钱、信用卡套现、虚假交易等行为，已经发现并确认，将终止该账户的使用。</p>
-				<p class="text-muted">5. 平台操作提现后，到账资金可能会分为几笔打入您的账户，查询时请注意计算到账总金额。</p>
+		        <p class="text-muted">1. 充值押金可以使用 商品押金 运费押金 退款保证金  三部分。</p>
+		        <p class="text-muted">2. 请注意您的银行卡充值限制，以免造成不便。<a class="text-info" href="#">查看如何提高充值限额</a></p>
+				<p class="text-muted">3. 禁止洗钱、信用卡套现、虚假交易等行为，一经发现并确认，将终止该账号的使用。</p>
+				<p class="text-muted">4. 如果充值金额没有及时到账。请联系客服。</p>
+				<p class="text-muted">5. 关于商家<span class="text-danger font-bold">押金</span>提现，平台是按照“<span class="text-danger font-bold">原路返回</span>”的原则给商家返还押金。</p>
 		     </div>
           </tab>
           <!--充值赚点-->
-          <tab heading="充值赚点" active="transType == 4" ng-click="transType=4">
+          <tab heading="充值赚点" ng-init="activePoint = (transType==4)" active="activePoint" ng-click="transType=4">
           	<div class="m-t">
 				<label>充值账号：</label>
 				<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
@@ -87,16 +87,16 @@
 				<label class="control-label text-left"></label>
 			</div>		
 			<div class="m-t m-b">
-				<button class="btn btn-danger" ng-click="rechargePoint()">确认</button>
+				<button class="btn btn-jzj" ng-click="rechargePoint()">确认</button>
 			</div>
 			<div class="line b-b"></div> 
 			<div class="m-t">
 		        <h4 class="m-t-none font-bold">温馨提示：</h4>
-		        <p class="text-muted">1. 请确保您输入的提现金额，以及支付宝或银行账户信息准确无误。</p>
-		        <p class="text-muted">2. 如果您填写的提现信息不正确也可能会导致提现失败，由此产生的提现费用将不予退还。</p>
-				<p class="text-muted">3. 在国家法定节假日和双休日期间，用户可以申请提现，聚赚界会在7个工作日内进行处理。由此造成的不便，请多多原谅。</p>
-				<p class="text-muted">4. 平台禁止洗钱、信用卡套现、虚假交易等行为，已经发现并确认，将终止该账户的使用。</p>
-				<p class="text-muted">5. 平台操作提现后，到账资金可能会分为几笔打入您的账户，查询时请注意计算到账总金额。</p>
+		        <p class="text-muted">1. 充值赚点可以使用 商品押金 运费押金 退款保证金  三部分。</p>
+		        <p class="text-muted">2. 请注意您的银行卡充值限制，以免造成不便。<a class="text-info" href="#">查看如何提高充值限额</a></p>
+				<p class="text-muted">3. 禁止洗钱、信用卡套现、虚假交易等行为，一经发现并确认，将终止该账号的使用。</p>
+				<p class="text-muted">4. 如果充值金额没有及时到账。请联系客服。</p>
+				<p class="text-muted">5. 关于商家<span class="text-danger font-bold">押金</span>提现，平台是按照“<span class="text-danger font-bold">原路返回</span>”的原则给商家返还押金。</p>
 		     </div>
           </tab>          
         </tabset>		

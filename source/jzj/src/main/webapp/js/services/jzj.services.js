@@ -191,10 +191,10 @@ app.factory('taskTypes',['promisePost','promiseGet',function(promisePost,promise
 		//TODO: 根据平台查询任务类型
 		query : function(platformId){
 			return [
-				{id : 1, name : "文字好评订单", point : 10.5},
-				{id : 2, name : "图文好评订单", point : 14.5},
-				{id : 3, name : "聚划算", point : 10.5},
-				{id : 4, name : "直通车订单", point : 10.5}
+				{id : 1, name : "文字好评订单", point : 10.5}
+				// {id : 2, name : "图文好评订单", point : 14.5},
+				// {id : 3, name : "聚划算", point : 10.5},
+				// {id : 4, name : "直通车订单", point : 10.5}
 			];
 		},
 		//获取所有的任务类型

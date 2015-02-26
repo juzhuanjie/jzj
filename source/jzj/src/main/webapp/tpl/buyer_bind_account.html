@@ -28,7 +28,7 @@
       <div class="line b-b"></div>   
       <h5 class="m-t-none m-b text-center">提示：买号提交审核后，平台预计在24小时内完成审核操作，只有审核通过的买号才能接手任务</h5>
       <div class="">
-        <a ng-click="addBuyerBind()"><span class="text-info font-bold"> + 绑定{{platform.name}} </span><small class="text-muted"> (最多允许绑定3个买号)</small></a>
+        <a class="btn btn-jzj" ng-click="addBuyerBind()"><span class="text-info font-bold"> + 绑定{{platform.name}} </span></a><small class="text-muted"> (最多允许绑定3个买号)</small>
       </div>  
       <div ng-show="isShow" class="b wrapper-md pos-rlt m-t bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
         <div class="row m-t m-b">
@@ -99,7 +99,7 @@
         </div>
         <div class="row m-t m-b">
           <div class="col-md-12">
-            <button class="btn btn-danger" ng-click="save()">确认</button>     
+            <button class="btn btn-jzj" ng-click="save()">确认</button>     
             <button class="btn btn-default" ng-click="cancel()">关闭</button>     
           </div>
         </div>
