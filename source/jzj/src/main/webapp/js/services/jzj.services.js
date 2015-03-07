@@ -578,7 +578,7 @@ app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promise
 			      "accountName": "", 
 			      "accountNumber": "", 
 			      "branch": "", 
-			      "City": "", 
+			      "city": "", 
 			      "screenshot": ""
 			};
 		}
