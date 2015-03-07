@@ -186,7 +186,7 @@ angular.module('app')
                   }
               })
               .state('app.seller.shop', {
-                  url: '/shop',
+                  url: '/shop/:platformId',
                   templateUrl:'tpl/seller_bind_shop.html'
               })
               .state('app.seller.taobao', {

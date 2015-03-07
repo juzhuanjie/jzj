@@ -163,6 +163,15 @@ app.factory('platforms', ['promisePost','promiseGet',function(promisePost,promis
 		getDefault : function(){
 			return {id : 1, name: '淘宝', filter:'taobao', color:'#23b7e5', active : false};
 		},
+		getPlatform : function(platformId){
+			var platform = {};
+			angular.forEach(platformList,function(value){
+				if(value.id == platformId){
+					platform = value;
+				}
+			});
+			return platform;
+		},
 		getAllWithShopCount : function(){
 			//TODO: 需要从后台的API来获取
 			return [
@@ -520,7 +529,10 @@ app.factory('bankTypes',['promisePost','promiseGet',function(promisePost,promise
 			return [
 				{id : 1, name : "支付宝"},
 				{id : 2, name : "财富通"},
-				{id : 3, name : "银行卡"}
+				{id : 3, name : "中国工商银行"},
+				{id : 4, name : "中国建设银行"},
+				{id : 5, name : "中国农业银行"},
+				{id : 6, name : "中国银行"}
 			];
 		},
 		getZFB : function(){
@@ -529,8 +541,13 @@ app.factory('bankTypes',['promisePost','promiseGet',function(promisePost,promise
 		getCFT : function(){
 			return {id : 2, name : "财富通"};
 		},
-		getYHK : function(){
-			return {id : 3, name : "银行卡"};
+		getYHKTypes: function(){
+			return [
+				{id : 3, name : "中国工商银行"},
+				{id : 4, name : "中国建设银行"},
+				{id : 5, name : "中国农业银行"},
+				{id : 6, name : "中国银行"}
+			];
 		}
 	};
 }]);
@@ -540,6 +557,10 @@ app.factory('userBanks',['promisePost','promiseGet',function(promisePost,promise
 		get : function(userId, bankType){
 			//TODO: 获取一条User Bank记录，根据userid 和 banktype
 			return promiseGet('/userBank/?userId=' + userId + '&bankType=' + bankType);
+		},
+		getAllYHKBanks : function(userId){
+			//TODO: 获取一条User Bank记录，根据userid 和 banktype
+			return promiseGet('/userBank/?userId=' + userId);
 		},
 		query : function(userId){
 			return promiseGet('/userBank/?userId=' + userId);	

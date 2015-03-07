@@ -13,7 +13,8 @@
         <li class="list-group-item" ng-controller="ZhiFuBaoCtrl">
           <div class="row">
           	<span class="col-md-2 h4 m-b-sm block">支付宝</span>  
-          	<img ng-show="!isShow" ng-if="account.userBankId > 0" src="img/zhifubao.jpg" height="50" width="60" />
+          	<!-- <img ng-show="!isShow" ng-if="account.userBankId > 0" src="img/zhifubao.jpg" height="50" width="60" /> -->
+          	<span class="text-info h4">{{bankName}}</span>
           	<a class="col-md-1 text-info text-right pull-right" ng-click="showDetails()">
           		<span ng-if="account.userBankId < 0">绑定</span>
               	<span ng-if="account.userBankId > 0">查看</span>
@@ -69,7 +70,8 @@
         <li class="list-group-item" ng-controller="CaiFuTongCtrl">
           <div class="row">
           	<span class="col-md-2 h4 m-b-sm block">财付通</span>          	
-          	<img ng-show="!isShow" ng-if="account.userBankId > 0" src="img/caifutong.jpg" height="50" width="60" />
+<!--           	<img ng-show="!isShow" ng-if="account.userBankId > 0" src="img/caifutong.jpg" height="50" width="60" /> -->
+          	<span class="text-info h4">{{bankName}}</span>
           	<a class="col-md-1 text-info text-right pull-right" ng-click="showDetails()">
           		<span ng-if="account.userBankId < 0">绑定</span>
               	<span ng-if="account.userBankId > 0">查看</span>
@@ -125,7 +127,7 @@
         <li class="list-group-item" ng-controller="YinHangKaCtrl" >
           	<div class="row">
 	          	<span class="col-md-2 h4 m-b-sm block">银行卡</span>      
-	          	<img ng-show="!isShow" ng-if="account.userBankId > 0" src="img/yinghang.jpg" height="50" width="60" />
+	          	<span class="text-info h4">{{bankName}}</span>
 	          	<a class="col-md-1 text-info text-right pull-right" ng-click="showDetails()">
 	          		<span ng-if="account.userBankId < 0">绑定</span>
 	              	<span ng-if="account.userBankId > 0">查看</span>
@@ -149,7 +151,9 @@
 			            <label>选择银行</label>
 			          </div>
 			          <div class="col-md-2">
-			            <select class="form-control" ng-model="account.BankType" ng-disabled="isEdit"><option>选择银行</option></select>
+			            <select class="form-control" ng-model="account.bankType" ng-disabled="isEdit">
+			            	<option ng-repeat="yhk in bankYHKList" value="{{yhk.id}}" ng-selected="yhk.id==account.bankType">{{yhk.name}}</option>
+			            </select>
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
@@ -157,7 +161,7 @@
 			            <label>开户城市</label>
 			          </div>
 			          <div class="col-md-2">
-			            <select class="form-control" ng-model="account.City" ng-disabled="isEdit"><option>选择开户城市</option></select>
+			          	<input type="text" class="form-control" ng-model="account.City" ng-disabled="isEdit" />
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">
@@ -165,7 +169,7 @@
 			            <label>开户支行名称</label>
 			          </div>
 			          <div class="col-md-4">
-			            <select class="form-control" ng-model="account.Branch" ng-disabled="isEdit"><option>选择开户支行名称</option></select>
+			          	<input type="text" class="form-control" ng-model="account.Branch" ng-disabled="isEdit" />
 			          </div>                                               
 			        </div>
 			        <div class="row m-t m-b">

@@ -156,7 +156,7 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 	};
 }]);
 //选择任务类型
-app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskTypes', 'platforms','tasks', function($scope,flowDatas,sellerShops,taskTypes,platforms,tasks){
+app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskTypes', 'platforms','tasks','$location','$modal', function($scope,flowDatas,sellerShops,taskTypes,platforms,tasks,$location,$modal){
 	var userId = app.userSession.userId;
 	$scope.thisItem = "app.task.item1";
 	$scope.selectedPlatform = -1;
@@ -200,6 +200,9 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 		$scope.flowData.taskTypeId = taskTypeId;
 		$scope.flowData.taskDetail.taskTypeId = taskTypeId;
 	};
+	$scope.go2BindSellerShop = function(){
+		$location.path('/app/seller/shop/' + $scope.selectedPlatform);
+	};
 	var statsShopOrder = function(shopId){
 		$scope.shopOrderCount = 1;
 	};
@@ -213,6 +216,17 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 		  });	
 	    });
 	};
+	$scope.viewTaskRule = function () {
+      var modalInstance = $modal.open({
+        templateUrl: 'tpl/modal/task_rule.html',
+        controller: 'TaskRuleCtrl'
+      });
+    };
+}]);
+app.controller('TaskRuleCtrl',['$scope','$modalInstance',function($scope,$modalInstance){
+	$scope.close = function () {
+      $modalInstance.close();
+    };
 }]);
 //填写商品信息
 app.controller('TaskFlowItem2Ctrl',['$scope','products', function($scope,products){

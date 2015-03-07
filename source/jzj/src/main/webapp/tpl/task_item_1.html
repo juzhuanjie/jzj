@@ -11,10 +11,10 @@
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="s in shops"><label ng-click="changeShop(s.shopId,s.wangwang)"><input type="radio" name="shop" value="{{s.shopId}}" ng-model="selectedShop"/><span class="m-l">{{s.wangwang}}</span></label></li>
       </ul>   
-      <div class="h5 text-muted text-right">(还可以绑定2个店铺) + 绑定更多店铺</div>
+      <div class="h5 text-muted text-right">(还可以绑定2个店铺) <a class="text-info" href ng-click="go2BindSellerShop()">+ 绑定更多店铺</a></div>
     </div>
     <div class="col-md-4  b-l b-lignt">      
-      <div class="wrapper h4">第三步：选择任务类型<small class="text-muted"> 点击查看任务收费规则</small></div>
+      <div class="wrapper h4">第三步：选择任务类型<a class="text-info h5" ng-click="viewTaskRule()"> 点击查看任务收费规则</a></div>
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="t in tasktypes"><label ng-click="changeTaskType(t.id)"><input type="radio" name="tasktype" value="{{t.id}}"  ng-model="selectedTaksType"/><span class="m-l">{{t.name}}</span></label><small class="text-muted pull-right">{{t.point}}</small></li>
       </ul>
