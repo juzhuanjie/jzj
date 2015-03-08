@@ -30,12 +30,13 @@
         <a class="btn btn-jzj" ng-click="addSellerBind()"><span class="font-bold"> + 绑定店铺 </span></a><small class="text-muted"> (最多允许绑定3个店铺)</small>
       </div>  
       <div ng-show="isShow" class="b wrapper-md pos-rlt m-t bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
+        <form role="form" name="sellerShopForm" class="form-horizontal">
         <div class="row m-t m-b">
           <div class="col-md-2">
             <label><span class="text-danger">*</span>店铺首页网址</label>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" ng-model="url" ng-disabled="isEdit"/>
+            <input type="text" class="form-control" ng-model="url" ng-disabled="isEdit" required />
           </div>
           <div class="col-md-4">
             <span class="m-t text-muted">(店铺绑定后无法修改)</span>
@@ -46,7 +47,7 @@
             <label><span class="text-danger">*</span>店铺主旺旺ID</label>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" ng-model="wangwang" ng-disabled="isEdit"/>
+            <input type="text" class="form-control" ng-model="wangwang" ng-disabled="isEdit" required />
           </div>
           <div class="col-md-4">
             <span class="m-t text-muted">(店铺主旺旺ID绑定后无法修改)</span>
@@ -57,7 +58,7 @@
             <label><span class="text-danger">*</span>所在地区</label>
           </div>
           <div class="col-md-2">
-            <provincedropdown class="form-control" value="{{province}}" ></provincedropdown>
+            <provincedropdown class="form-control" value="{{province}}" required></provincedropdown>
           </div>          
           <div class="col-md-2">
             <citydropdown class="form-control" province="{{province}}" value="{{city}}"></citydropdown>
@@ -68,12 +69,13 @@
         </div>        
         <div class="row m-t m-b">
           <div class="col-md-12">
-            <button class="btn btn-jzj" ng-click="save()">确认</button>   
-            <button class="btn btn-default" ng-click="cancel()">关闭</button>      
+            <button class="btn btn-jzj" ng-disabled="sellerShopForm.$invalid" ng-click="save(sellerShopForm.$valid)">确认</button>   
+            <button type="button" class="btn btn-default" ng-click="cancel()">关闭</button>      
           </div>
         </div>
+        </form>
       </div>
-
+      
       <div class="bg-light lter text-muted m-t">
         <h4 class="m-t-none font-bold">温馨提示：</h4>
         <p>1. 店铺请填写自己店铺首页地址，不可绑定其他卖家的地址；</p>

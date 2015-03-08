@@ -85,13 +85,13 @@ angular.module('app')
                       'vendor/modules/angular-bootstrap-nav-tree/abn_tree.css'
                   ]
               },
-              {
-                  name: 'toaster',
-                  files: [
-                      'vendor/modules/angularjs-toaster/toaster.js',
-                      'vendor/modules/angularjs-toaster/toaster.css'
-                  ]
-              },
+              // {
+              //     name: 'toaster',
+              //     files: [
+              //         'vendor/modules/angularjs-toaster/toaster.js',
+              //         'vendor/modules/angularjs-toaster/toaster.css'
+              //     ]
+              // },
               {
                   name: 'textAngular',
                   files: [

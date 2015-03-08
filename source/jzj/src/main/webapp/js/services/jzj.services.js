@@ -304,11 +304,11 @@ app.factory('flowDatas',function(){
 						"paymentBank" : false
 					}					
 				};
-			var tmall = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
-			var jd = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
-			var yhd = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
-			var dangdang = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
-			var amazon = { "platformId" : 1, "shopId" : 1, "taskTypeId" : 1 };
+			var tmall = { "platformId" : 2, "shopId" : -1, "taskTypeId" : 1 };
+			var jd = { "platformId" : 3, "shopId" : -1, "taskTypeId" : 1 };
+			var yhd = { "platformId" : 4, "shopId" : -1, "taskTypeId" : 1 };
+			var dangdang = { "platformId" : 5, "shopId" : -1, "taskTypeId" : 1 };
+			var amazon = { "platformId" : 6, "shopId" : -1, "taskTypeId" : 1 };
 			var model;
 			switch(platformId){
 				case 1:
@@ -590,9 +590,9 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 		get : function(buyerAccountId){
 			return promiseGet('/buyerAccount/'+buyerAccountId);
 		},
-		query : function(userId, platformId){
+		query : function(platformId){
 			//TODO: 获取买号绑定信息，根据userid和platformid，返回的是一个数组
-			return promiseGet('/buyerAccount/?userId=' + userId + '&platformId=' + platformId);			
+			return promiseGet('/buyerAccount/?platformId=' + platformId);			
 		},
 		add : function(buyerAccount){
 			//TODO: 添加买号信息
@@ -601,6 +601,16 @@ app.factory('buyerAccounts', ['promisePost','promiseGet',function(promisePost,pr
 		update : function(buyerAccountId,buyerAccount){
 			//TODO: 添加买号信息
 			return promisePost('/buyerAccount/'+buyerAccountId, buyerAccount);
+		},
+		checkAccount : function(platformId,accountLogin){
+			var para = { "platformId" : platformId, "accountLogin" : accountLogin };
+			//TODO: 检查买号信息
+			return promisePost('/buyerAccount/checkAccount/', para);
+		},
+		checkww : function(platformId,wangwang){
+			var para = { "platformId" : platformId, "wangwang" : wangwang };
+			//TODO: 检查买号信息
+			return promisePost('/buyerAccount/checkww/', para);
 		},
 		count : function(userId, platformId){
 			//TODO: 统计某个平台下的买号绑定数量，不能拿超过3个
@@ -654,9 +664,9 @@ app.factory('sellerShops', ['promisePost','promiseGet',function(promisePost,prom
 		get : function(shopId){
 			return promiseGet('/sellerShop/'+shopId);
 		},
-		query : function(userId, platformId){
+		query : function(platformId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组
-			return promiseGet('/sellerShop/?userId=' + userId + '&platformId=' + platformId);	
+			return promiseGet('/sellerShop/?platformId=' + platformId);	
 		},
 		getAllShops : function(userId){
 			//TODO: 获取店铺绑定信息, 返回的是一个数组

@@ -28,15 +28,16 @@
       <div class="line b-b"></div>   
       <h5 class="m-t-none m-b text-center">提示：买号提交审核后，平台预计在24小时内完成审核操作，只有审核通过的买号才能接手任务</h5>
       <div class="">
-        <a class="btn btn-jzj" ng-click="addBuyerBind()"><span class="text-info font-bold"> + 绑定{{platform.name}} </span></a><small class="text-muted"> (最多允许绑定3个买号)</small>
+        <a class="btn btn-jzj" ng-click="addBuyerBind()"><span class="font-bold"> + 绑定{{platform.name}} </span></a><small class="text-muted"> (最多允许绑定3个买号)</small>
       </div>  
       <div ng-show="isShow" class="b wrapper-md pos-rlt m-t bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
+        <form role="form" name="buyerAccountForm" class="form-horizontal">
         <div class="row m-t m-b">
           <div class="col-md-2">
             <label><span class="text-danger">*</span>旺旺ID</label>
           </div>
           <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="buyerAccount.wangwang" ng-disabled="isEdit"/>
+            <input type="text" class="form-control" ng-model="buyerAccount.wangwang" ng-disabled="isEdit" required/>
           </div>
           <div class="col-md-6">
             <span class="m-t text-muted">(旺旺ID绑定后无法修改，严禁绑定相似的买号，如：小符01)</span>
@@ -64,7 +65,7 @@
             <label><span class="text-danger">*</span>收货人姓名</label>
           </div>
           <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="userAddress.recipient"/>
+            <input type="text" class="form-control" ng-model="userAddress.recipient" required/>
           </div>                                    
         </div>
         <div class="row m-t m-b">
@@ -72,10 +73,10 @@
             <label><span class="text-danger">*</span>所在地区</label>
           </div>
           <div class="col-md-2">
-            <provincedropdown class="form-control" value="{{province}}" ></provincedropdown>
+            <provincedropdown class="form-control" value="{{province}}" required></provincedropdown>
           </div>          
           <div class="col-md-2">
-            <citydropdown class="form-control" province="{{province}}" value="{{city}}"></citydropdown>
+            <citydropdown class="form-control" province="{{province}}" value="{{city}}" ></citydropdown>
           </div>  
           <div class="col-md-4">
             <districtdropdown class="form-control" province="{{province}}" city="{{city}}" value="{{district}}"></districtdropdown>
@@ -86,7 +87,7 @@
             <label><span class="text-danger">*</span>街道地址</label>
           </div>
           <div class="col-md-6">
-            <input type="text" class="form-control" ng-model="userAddress.streetAddress"/>
+            <input type="text" class="form-control" ng-model="userAddress.streetAddress" required/>
           </div>                                               
         </div>
         <div class="row m-t m-b">
@@ -94,15 +95,16 @@
             <label><span class="text-danger">*</span>收货人手机</label>
           </div>
           <div class="col-md-2">
-            <input type="text" class="form-control" ng-model="userAddress.phone"/>
+            <input type="text" class="form-control" ng-model="userAddress.phone" ng-pattern="/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/" required/>
           </div>                                                    
         </div>
         <div class="row m-t m-b">
           <div class="col-md-12">
-            <button class="btn btn-jzj" ng-click="save()">确认</button>     
+            <button class="btn btn-jzj" ng-disabled="buyerAccountForm.$invalid" ng-click="save(buyerAccountForm.$valid)">确认</button>     
             <button class="btn btn-default" ng-click="cancel()">关闭</button>     
           </div>
         </div>
+        </form>
       </div>    
       <div class="bg-light lter text-warning m-t">
         <h4 class="m-t-none font-bold">请注意：</h4>

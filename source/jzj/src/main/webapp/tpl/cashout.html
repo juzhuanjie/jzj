@@ -27,39 +27,42 @@
 	          	<a ng-show="!isVisibelPoints2cash" class="text-info" ng-click="showPoints2cash()">变现</a>
 	          </div>
 	          <div ng-show="isVisibelPoints2cash" class="b wrapper-md pos-rlt bg-light r r-2x"><span class="arrow top pull-left arrow-light"></span>
-	          	<div class="m-t-xs">
-					<p class="text-danger">注：赚点变现操作平台将收取5%的手续费</p>	
-				</div>
-	          	<div>
-					<label class="control-label text-left">变现赚点：</label>
-					<div class="btn-group"><input type="text" class="form-control" ng-model="transPoints" ng-change="countPoints2cashFee()"/></div>
-					<label class="control-label text-left"><span class="text-muted">单次最少变现100点 </span></label>
-				</div>		
-				<div class="m-t-xs">			
-					<label>变现手续费：</label><label class="h3 text-danger font-thin h3">{{points2cash.fee}}</label> <label> 元</label>
-					<label class="m-l-lg">变现实际到账金额：</label><label class="h3 text-danger font-thin h3r">{{points2cash.amount}}</label> <label> 元</label>
-				</div>
-				<div class="m-t m-b">
-					<button class="btn btn-jzj" ng-click="submitPoints2cash()">确定</button>
-					<button class="btn btn-default" ng-click="cancelPoints2cash()">取消</button>
-				</div>
+	          	<form role="form" name="point2cashForm" class="form-horizontal">
+		          	<div class="m-t-xs">
+						<p class="text-danger">注：赚点变现操作平台将收取5%的手续费</p>	
+					</div>
+		          	<div>
+						<label class="control-label text-left">变现赚点：</label>
+						<div class="btn-group"><input type="number" ng-pattern="/^\d{3,9}/" required class="form-control" ng-model="transPoints" ng-change="countPoints2cashFee()"/></div>
+						<label class="control-label text-left"><span class="text-muted">单次最少变现100点 </span></label>
+					</div>		
+					<div class="m-t-xs">			
+						<label>变现手续费：</label><label class="h3 text-danger font-thin h3">{{points2cash.fee}}</label> <label> 元</label>
+						<label class="m-l-lg">变现实际到账金额：</label><label class="h3 text-danger font-thin h3r">{{points2cash.amount}}</label> <label> 元</label>
+					</div>
+					<div class="m-t m-b">
+						<button class="btn btn-jzj" ng-disabled="point2cashForm.$invalid" ng-click="submitPoints2cash(point2cashForm.$valid)">确定</button>
+						<button type="button" class="btn btn-default" ng-click="cancelPoints2cash()">取消</button>
+					</div>
+				</form>
 	          </div>          
 	        </div>
 	    </div>
 	  	<div class="line b-b"></div> 
+	  	<form role="form" name="cashoutForm" class="form-horizontal">
 		<div class="m-t">
 			<h5 class="font-bold">填写提现信息</h5>
 			<label>提现账号：</label>
 			<div ng-if="!isBindUserBank" class="btn-group"><label>暂未添加提现账号，请先<a ui-sref="app.account.userbank" class="text-info">添加</a></label></div>
 			<div ng-if="isBindUserBank" class="btn-group">
-				<select class="form-control" ng-model="userBankId">
+				<select class="form-control" ng-model="userBankId" required>
 					<option ng-repeat="b in userBankList" value="{{b.userBankId}}" ng-selected="userBankId = b.userBankId">{{getBankName(b.bankType)}} - {{b.accountNumber}}</option>
 				</select>
 			</div>
 		</div>
 		<div>
 			<label class="control-label text-left">提现金额：</label>
-			<div class="btn-group"><input type="text" class="form-control" ng-model="transCashs" ng-change="countCashoutFee()"/></div>
+			<div class="btn-group"><input type="number" class="form-control" ng-model="transCashs" ng-change="countCashoutFee()" ng-pattern="/^\d{3,9}/" required/></div>
 			<label class="control-label text-left"><span class="text-muted">单次最少提现100元 </span><span class="text-danger">(提现操作平台将收取0.3%的手续费)</span></label>
 		</div>		
 		<div class="m-t-xs">			
@@ -73,13 +76,14 @@
 		<div>
 			<h5 class="font-bold">确认支付</h5>
 			<label class="control-label text-left">支付密码：</label>
-			<div class="btn-group"><input type="password" class="form-control" ng-model="payPassword"/></div>
+			<div class="btn-group"><input type="password" class="form-control" ng-model="payPassword" required/></div>
 			<label class="control-label text-left"><a class="text-info">找回支付密码</a></label>
 		</div>
 		<div class="line b-b"></div> 
 		<div class="m-t m-b">
-			<button class="btn btn-jzj" ng-click="submitCashout()">申请提现</button>
+			<button class="btn btn-jzj" ng-disabled="cashoutForm.$invalid" ng-click="submitCashout(cashoutForm.$valid)">申请提现</button>
 		</div>
+		</form>
 	</div>
 	<div class="line b-b"></div> 
 	<div class="bg-white m-t">

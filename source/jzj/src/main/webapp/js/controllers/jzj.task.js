@@ -15,7 +15,7 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 	$scope.flowData = {}; 
 	$scope.isFirstPost = true;
 	$scope.$on('$viewContentLoaded',function(){						
-		if($location.path() == '/app/taskflow/new'){
+		if($location.path() == '/app/taskflow/new' || $location.path() == '/app/taskflow/new/item1'){
 			//如果是create,设置默认值
 			$scope.platformId = 1;			
 			$scope.flowData = flowDatas.create($scope.platformId);
@@ -72,12 +72,17 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 				$scope.flowData.taskDetail = angular.fromJson($scope.flowData.taskDetail);
 				$state.go($scope.flowItem[index]);
 			});
-		}else{
-			tasks.add($scope.flowData).then(function(result){
-				$scope.flowData = result;
-				$scope.flowData.taskDetail = angular.fromJson($scope.flowData.taskDetail);
+		}else{	
+			if($scope.currItemIndex > 1){/*第一步不保存*/
+				tasks.add($scope.flowData).then(function(result){
+					$scope.flowData = result;
+					$scope.flowData.taskDetail = angular.fromJson($scope.flowData.taskDetail);
+					$state.go($scope.flowItem[index]);
+				});
+
+			}else{
 				$state.go($scope.flowItem[index]);
-			});
+			}
 		}		
 	});
 	$scope.$on('prev-step',function(event,data){
@@ -156,7 +161,7 @@ app.controller('TaskFlowCtrl',['$scope','$state','flowDatas','$stateParams','$lo
 	};
 }]);
 //选择任务类型
-app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskTypes', 'platforms','tasks','$location','$modal', function($scope,flowDatas,sellerShops,taskTypes,platforms,tasks,$location,$modal){
+app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskTypes', 'platforms','tasks','$location','$modal','toaster', function($scope,flowDatas,sellerShops,taskTypes,platforms,tasks,$location,$modal,toaster){
 	var userId = app.userSession.userId;
 	$scope.thisItem = "app.task.item1";
 	$scope.selectedPlatform = -1;
@@ -178,7 +183,11 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 		$scope.selectedTaksType = $scope.flowData.taskTypeId;
 	});
 	$scope.nextstep = function(){
-		$scope.$emit('next-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });
+		if($scope.selectedShop < 0){
+			toaster.pop('error','错误','请选择店铺' );      		
+			return;
+		}
+		$scope.$emit('next-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });	
 	};
 	$scope.changePlatform = function(platformId){
 		$scope.selectedPlatform = platformId;
@@ -236,19 +245,26 @@ app.controller('TaskFlowItem2Ctrl',['$scope','products', function($scope,product
 	$scope.totalPrice = 0;
 	$scope.$on('flow-ready',function(event,flowData){
 		$scope.flowData = flowData;
-		if(angular.isObject(flowData.taskDetail.productId)){			
-			$scope.product = flowData.taskDetail.productId;	
-			$scope.product.productDesc = angular.fromJson(flowData.taskDetail.productId.productDesc);
+		if(!angular.isObject($scope.flowData.taskDetail)){
+			$scope.flowData.taskDetail = JSON.parse($scope.flowData.taskDetail);
+		}
+		if(angular.isObject($scope.flowData.taskDetail.productId)){			
+			$scope.product = $scope.flowData.taskDetail.productId;	
+			$scope.product.productDesc = angular.fromJson($scope.flowData.taskDetail.productId.productDesc);
 			$scope.countProductTotalPrice();
 		}else{
 			$scope.product = products.newEmpty();	
-			$scope.product.shopId = flowData.taskDetail.shopId;		
+			$scope.product.shopId = $scope.flowData.taskDetail.shopId;		
 		}							
 	});
 	$scope.countProductTotalPrice = function(){
 		$scope.totalPrice = parseFloat($scope.product.productPrice) * parseInt($scope.flowData.taskDetail.productCount);
 	};		
-	$scope.nextstep = function(){
+	$scope.nextstep = function(isValid){
+		if (!isValid) {
+		    toaster.pop('error','错误','表单填写不正确' );
+		    return;
+		}
 		$scope.product.productDesc = angular.toJson($scope.product.productDesc);
 		if($scope.product.productId > 0){			
 			products.save($scope.product.productId,$scope.product).then(function(result){
@@ -297,7 +313,11 @@ app.controller('TaskFlowItem3Ctrl',['$scope','platforms','sellerShops','productL
 		checkProductKeywordCount();	
 		$scope.productLocation = productLocations.getAll();
 	});
-	$scope.nextstep = function(){
+	$scope.nextstep = function(isValid){
+		if (!isValid) {
+		    toaster.pop('error','错误','表单填写不正确' );
+		    return;
+		}
 		$scope.$emit('next-step', { "item" : $scope.thisItem, "flowData" : $scope.flowData });
 	};
 	$scope.prevstep = function(){

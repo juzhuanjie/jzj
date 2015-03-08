@@ -1,17 +1,18 @@
 <div class="wrapper-md no-p-t" ng-controller="TaskFlowItem2Ctrl">  
+  <form role="form" name="item2Form" class="form-horizontal">
   <div class="row wrapper-md no-p-t">
     <h4 class="text-danger">1.填写商品信息</h4>
     <div class="wrapper-xs form-horizontal">
       <div class="row">
         <label class="col-md-2 control-label text-left"><span class="text-danger">*</span>商品链接</label>
         <div class="col-md-4">
-          <input type="text" class="form-control" ng-model="product.productUrl"/>
+          <input type="url" class="form-control" ng-model="product.productUrl" required/>
         </div>
       </div>
       <div class="row m-t">
         <label class="col-md-2 control-label text-left"><span class="text-danger">*</span>商品名称</label>
         <div class="col-md-4">
-          <input type="text" class="form-control" ng-model="product.productName"/>
+          <input type="text" class="form-control" ng-model="product.productName" required/>
         </div>
       </div>      
       <div class="row m-t">
@@ -26,12 +27,12 @@
       <div class="row m-t">
         <label class="col-md-2 control-label text-left"><span class="text-danger">*</span>单品售价</label>
         <div class="col-md-1">
-          <input type="text" class="form-control" ng-model="product.productPrice" ng-change="countProductTotalPrice()"/>
+          <input type="number" class="form-control" ng-model="product.productPrice" ng-change="countProductTotalPrice()" required/>
         </div>
         <label class="col-md-1 text-left control-label" >元</label>
         <label class="col-md-1 text-left control-label"><span class="text-danger">*</span>每单拍</label>
         <div class="col-md-1">
-          <input type="text" class="form-control" ng-model="flowData.taskDetail.productCount" ng-change="countProductTotalPrice()"/>
+          <input type="number" class="form-control" ng-model="flowData.taskDetail.productCount" ng-change="countProductTotalPrice()" required/>
         </div>
         <label class="col-md-1 text-left control-label">件</label>
         <label class="col-md-2 text-left control-label">下单总金额<span class="m-l m-r text-danger" ng-bind="totalPrice"></span>元</label>
@@ -39,7 +40,7 @@
       <div class="row m-t">
         <label class="col-md-2 control-label text-left"><span class="text-danger">&nbsp;</span>搜索页面展示价格</label>
         <div class="col-md-2">
-          <input type="text" class="form-control" ng-model="flowData.taskDetail.productPrice"/>
+          <input type="number" class="form-control" ng-model="flowData.taskDetail.productPrice" required/>
         </div>
         <label class="col-md-4 text-left control-label ">如该商品有满减、促销、多规格等情况，请填写此金额</label>
       </div>
@@ -59,7 +60,7 @@
     <h4 class="text-danger">2.设置商品收取运费的方式</h4>
     <div class="wrapper-xs">
       <div class="row radio">
-        <label class="m-l"><input class="" type="radio" name="fare" value="true" ng-model="flowData.taskDetail.includeShipping"/>商品本身包邮</label><label class="text-muted">买手按照商品实际金额下单</label>
+        <label class="m-l"><input class="" type="radio" name="fare" value="true" ng-model="flowData.taskDetail.includeShipping" checked="checked" />商品本身包邮</label><label class="text-muted">买手按照商品实际金额下单</label>
       </div>
       <div class="line line-dashed b-b line-lg pull-in"></div>
       <div class="row radio">
@@ -68,6 +69,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="wrapper text-center"><button class="btn btn-jzj m-r" ng-click="prevstep()"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button><button class="btn btn-jzj m-l" ng-click="nextstep()"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button></div>
+    <div class="wrapper text-center"><button class="btn btn-jzj m-r" type="button" ng-click="prevstep()"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button><button type="button" class="btn btn-jzj m-l" ng-disabled="item2Form.$invalid" ng-click="nextstep(item2Form.$valid)"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button></div>
   </div>
+  </form>
 </div>

@@ -1,4 +1,5 @@
 <div class="wrapper-md no-p-t" ng-controller="TaskFlowItem3Ctrl">
+  <form role="form" name="item3Form" class="form-horizontal">
   <div class="row wrapper no-p-b">
     <span class="h4 font-bold">填写刷单信息</span>
     <span class="h4 pull-right">已选择：<label class="text-danger">{{platformName}} | {{shopName}} | 订单</label></span>
@@ -11,8 +12,8 @@
       <div class="row m-b b bg-remind wrapper-sm" ng-repeat="keyword in productKeywords">
         <div class="">
           <label><span class="text-danger">*</span>搜索关键词{{$index+1}}：</label>
-          <input type="text" class="w-sm input-control-xs" ng-model="flowData.taskDetail.searchProductKeywords[$index].keyword"/>
-          <input type="text" class="w-xxs input-control-xs" ng-change="countPoint()" ng-model="flowData.taskDetail.searchProductKeywords[$index].orderQuantity"/><label>单</label>
+          <input type="text" class="w-sm input-control-xs" ng-model="flowData.taskDetail.searchProductKeywords[$index].keyword" required/>
+          <input type="number" class="w-xs input-control-xs" ng-change="countPoint()" ng-model="flowData.taskDetail.searchProductKeywords[$index].orderQuantity" required/><label>单</label>
         </div>
         <label class="m-t">当前列表中，告诉买手通过筛选分类找到商品</label>
         <div class="row m-t">        
@@ -94,7 +95,7 @@
    
 
   <div class="row wrapper-md no-p-t">
-    <div class="wrapper text-center"><button class="btn btn-jzj m-r" ng-click="prevstep()"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button><button class="btn btn-jzj m-l" ng-click="nextstep()"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button></div>
+    <div class="wrapper text-center"><button type="button" class="btn btn-jzj m-r" ng-click="prevstep()"><i class="glyphicon glyphicon-chevron-left"></i><span class="m-r">上一步</span></button><button type="button" class="btn btn-jzj m-l" ng-disabled="item3Form.$invalid" ng-click="nextstep(item3Form.$valid)"><span class="m-r">下一步</span><i class="glyphicon glyphicon-chevron-right"></i></button></div>
   </div>
   
   <div class="line b-b"></div> 
@@ -104,5 +105,5 @@
     <p>1. 选择电脑端后，买手会访问淘宝网刷单，将会优化淘宝自然搜索排序；</p>
     <p>2. 选择手机或Pad客户端后，买手会用手机淘宝或Pad APP下单，将会优化商品在手机淘宝的搜索排序。</p>  
   </div>  
-
+  </form>
 </div>

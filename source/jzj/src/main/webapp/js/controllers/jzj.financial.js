@@ -123,7 +123,11 @@ app.controller('RechargeCtrl',['$scope','recharges','bankTypes','toaster','userB
     });
   });
   //充值赚点
-  $scope.rechargePoint = function(){
+  $scope.rechargePoint = function(isValid){
+    if (!isValid) {
+      toaster.pop('error','错误','表单填写不正确' );
+      return;
+    }
     $scope.point.userId = userId;
     $scope.point.isFrozen = false;
     $scope.point.type = 4;    
@@ -135,7 +139,11 @@ app.controller('RechargeCtrl',['$scope','recharges','bankTypes','toaster','userB
     });
   };
   //充值现金
-  $scope.rechargeCash = function(){
+  $scope.rechargeCash = function(isValid){
+    if (!isValid) {
+      toaster.pop('error','错误','表单填写不正确' );
+      return;
+    }
     $scope.cash.userId = userId;
     $scope.cash.isFrozen = false;
     $scope.cash.points = 0;
@@ -148,7 +156,11 @@ app.controller('RechargeCtrl',['$scope','recharges','bankTypes','toaster','userB
     });
   };
   //充值押金
-  $scope.rechargeDeposit = function(){
+  $scope.rechargeDeposit = function(isValid){
+    if (!isValid) {
+      toaster.pop('error','错误','表单填写不正确' );
+      return;
+    }
     $scope.deposit.userId = userId;
     $scope.deposit.isFrozen = true;
     $scope.deposit.points = 0;
@@ -219,11 +231,20 @@ app.controller('CashoutCtrl',['$scope','cashouts','points2cashs','userBanks','ba
     $scope.isVisibelPoints2cash = true;
   };
   $scope.countPoints2cashFee = function(){
-    $scope.points2cash.points = $scope.transPoints;
-    $scope.points2cash.fee = parseInt($scope.points2cash.points) * 0.05;
-    $scope.points2cash.amount = parseInt($scope.points2cash.points) * (1 - 0.05);
+    if($scope.transPoints.length<3){
+      $scope.points2cash.fee = 0;
+      $scope.points2cash.amount = 0;       
+    }else{
+      $scope.points2cash.points = parseInt($scope.transPoints);
+      $scope.points2cash.fee = parseInt($scope.points2cash.points) * 0.05;
+      $scope.points2cash.amount = parseInt($scope.points2cash.points) * (1 - 0.05);  
+    }    
   };  
-  $scope.submitPoints2cash = function(){
+  $scope.submitPoints2cash = function(isValid){
+    if (!isValid) {
+      toaster.pop('error','错误','表单填写不正确' );
+      return;
+    }
     $scope.points2cash.userId = userId;
     $scope.points2cash.type = 5; //变现
     points2cashs.add($scope.points2cash).then(function(result){
@@ -238,13 +259,22 @@ app.controller('CashoutCtrl',['$scope','cashouts','points2cashs','userBanks','ba
     $scope.isVisibelPoints2cash = false;
   };
   $scope.countCashoutFee = function(){
-    $scope.cashout.points = $scope.transCashs;
-    $scope.cashout.fee = parseInt($scope.cashout.points) * 0.003;
-    $scope.cashout.amount = parseInt($scope.cashout.points) * (1 - 0.05);
+    if($scope.transCashs.length<3){
+      $scope.cashout.fee = 0;
+      $scope.cashout.amount = 0;
+    }else{
+      $scope.cashout.points = $scope.transCashs;
+      $scope.cashout.fee = parseInt($scope.cashout.points) * 0.003;
+      $scope.cashout.amount = parseInt($scope.cashout.points) * (1 - 0.05);
+    }    
   };
-  $scope.submitCashout = function(){
+  $scope.submitCashout = function(isValid){
     if($scope.payPassword == ''){
       toaster.pop('error', '申请提现', '请填写支付密码');
+      return;
+    }
+    if (!isValid) {
+      toaster.pop('error','错误','表单填写不正确' );
       return;
     }
     balances.checkPayPassword($scope.payPassword).then(function(result){
