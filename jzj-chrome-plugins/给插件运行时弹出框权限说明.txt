@@ -1,0 +1,8 @@
+1.打开下面连接，给弹出框权限
+chrome://settings/contentExceptions#popups
+规则如下：
+a.天猫 [*.]tmall.com
+b.淘宝 [*.]taobao.com
+c.京东 [*.]jd.com
+
+d.天猫 [*.]tmall.hk

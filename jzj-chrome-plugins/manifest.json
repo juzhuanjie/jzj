@@ -1,0 +1,40 @@
+{ 
+  "manifest_version": 2,
+
+  "name": "聚赚界 - 1.1",
+
+  "version": "1.0.0", 
+
+  "description": "自动做任务", 
+
+  "icons": { "128": "icon_128.png" },
+
+  "permissions": ["tabs","idle","notifications","http://*.tmall.com/","http://*.tmall.hk/","https://*.tmall.com/","http://*.taobao.com/","https://*.taobao.com/","http://*.jd.com/","https://*.jd.com/","http://*.yhd.com/","https://*.yhd.com/","http://*.amazon.com/","https://*.amazon.com/","http://*.dangdang.com/","https://*.dangdang.com/"],
+
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+
+  "browser_action": { 
+
+    "default_icon": "icon.png"    
+  },
+
+  "content_scripts": [{
+
+      "js": ["content.js"],
+
+      "matches": ["http://*/*", "https://*/*"],
+
+      "run_at": "document_end",
+
+      "all_frames": false
+
+   }],
+
+  "background" : {
+
+    "scripts": ["background.js","script/jquery-2.1.1.min.js","script/service.js","script/json.js"]
+
+  },
+
+  "web_accessible_resources": ["background.js","script.js","css/bootstrap.css.map","index.html","script/jquery-2.1.1.min.js","script/json.js","script/post-message.js"]
+} 

@@ -308,13 +308,12 @@ app.controller('YinHangKaCtrl', ['$scope','userBanks','bankTypes','toaster', fun
   $scope.$watch('$viewContentLoaded',function(){
     userBanks.getAllYHKBanks(userId).then(function(result){
       if(result.length > 0){
+        $scope.isEdit = false; 
         angular.forEach(result,function(userBank){
           if(parseInt(userBank.bankType) != 1 && parseInt(userBank.bankType) != 2){
             $scope.account = userBank;  
             $scope.isEdit = true; 
             $scope.getUserBankName(userBank); 
-          }else{
-            $scope.isEdit = false;    
           }          
         });         
       }  

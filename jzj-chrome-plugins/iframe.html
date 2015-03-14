@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>聚赚界</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/main.css" rel="stylesheet">
+
+    <script src="script/jquery-2.1.1.min.js" type="text/javascript"></script>
+    
+    <script src="script/iframe.js" type="text/javascript"></script>
+    <script src="script/service.js" type="text/javascript"></script>
+    
+  </head>
+
+  <body>
+      <div class="container main">
+        <div class="container-fluid">
+            <div class="hideSidebar text-muted"><li class="glyphicon glyphicon-minus" style="overflow: hidden;font-size: 50px;width: 12px;"></li></div>
+            <div class="closeSidebar"></div>
+            <div class="row header">
+                <div class="col-xs-4">
+                    <h5 class="hTab view-new-task">新任务</h5>
+                </div>
+                <div class="col-xs-4">
+                    <h5 class="hTab execute-task active">执行任务</h5>
+                </div>
+                <div class="col-xs-4">
+                    <h5 class="hTab my-account">我的账户</h5>
+                </div>
+            </div>
+            <hr>
+            <!--新任务-->
+            <div class="taskTab tab hide">
+                <div class="row">
+                    <ul class="list-group task-item">
+                      <li class="list-group-item no-radius no-bg no-border hide task-item-template">
+                        <div class="media">
+                          <span class="pull-left thumb-sm"><img class="product-image img-circle" alt="..." src="../icon.png"></span>
+                          <div class="pull-right text-success m-t-sm">
+                            <h5 class="task-delete fa fa-circle"  >删除</h5>
+                            <h5 class="task-id fa fa-circle"  >>></h5>
+                          </div>
+                          <div class="media-body">
+                            <div><h5 class="product-name" >Chris Fox</h5></div>
+                            <small class="product-desc text-muted">about 2 minutes ago</small>
+                          </div>
+                        </div>
+                      </li>                                   
+                    </ul>
+                </div>
+            </div>
+            <!--执行任务-->
+            <div class="executeTab tab">
+                <div class="row">
+                  <ul class="list-group task-item">
+                    <li class="list-group-item no-radius no-bg no-border hide task-item-template">
+                      <div class="media">
+                        <span class="pull-left thumb-sm"><img class="product-image img-circle" alt="..." src="../icon.png"></span>
+                        <div class="media-body">
+                          <div><a class="product-name" href="#">Chris Fox</a></div>
+                          <small class="product-desc text-muted">about 2 minutes ago</small>
+                        </div>
+                      </div>
+                    </li>                
+                  </ul>
+                </div>
+                <h1>执行任务注意事项</h1>
+                <div class="row execute-step list-item">
+                    <h6 class="task-note">1.请确认商品信息是否正确</h6>
+                    <h6 class="task-note">2.请核对价格是否一致</h6>
+                    <h6 class="task-note">3.请安装规定完成购物流程</h6>
+                </div>
+                <h1>任务执行进度</h1>
+                <div class="row execute-step execute-item list-item">
+                    <!-- <h2 class="active">搜索商品</h2>
+                    <h2 class="active">结算</h2> -->
+                </div>
+                <h1>任务执行状态</h1>
+                <div class="row">
+                  <div class="wrapper-statsu-desc">
+                    <label>状态：</label><span class="text-jzj status-light">运行中</span>
+                  </div>
+                  <div class="execute-status-desc wrapper-statsu-desc">
+                    <label>描述：</label><span class="status-desc">...</span>
+                  </div>
+                </div>
+                <hr>
+                <div class="row execute-task m-t wrapper-lr task-start-div" style="display:none;">
+                    <button class="btn btn-md btn-block bg-muted btn-execute" disabled="disabled">开始执行</button>
+                </div>
+                <div class="row execute-task m-t  task-running-div" style="display:none;">
+                    <div class="col-xs-4">
+                      <button class="btn btn-md btn-block bg-muted btn-pause" disabled="disabled">暂停</button>
+                    </div>                    
+                    <div class="col-xs-4">
+                      <button class="btn btn-md btn-block bg-muted btn-continue" disabled="disabled">继续</button>
+                    </div>                    
+                    <div class="col-xs-4">
+                      <button class="btn btn-md btn-block bg-muted btn-stop" disabled="disabled">停止</button>
+                    </div>                    
+                </div>
+            </div>
+            <!--我的账户-->
+            <div class="accountTab tab hide">
+                <div class="row account m-b">
+                    <div class="m-t">
+                        <ul class="ul-t">
+                          <li><span> 赚点余额：</span><span class="font-thin h3 ng-binding text-jzj total-points"></span><span class=""> 点</span><a class="btn-points2cash m-l text-jzj pull-right m-t-xs">变现</a></li>     
+                        </ul>    
+                    </div>
+                    <div>
+                        <ul class="ul-t">
+                          <li><span> 现金余额：</span><span class="font-thin h3 ng-binding text-jzj total-cash"></span><span class=""> 元</span><a class="btn-cashout m-l text-jzj pull-right m-t-xs">提现</a></li>     
+                        </ul>    
+                    </div>
+                </div>
+                <h1>需要处理的任务</h1>
+                <div class="row peding-task m-b">                
+                    <ul class="list-group task-item">
+                      <li class="list-group-item no-radius no-bg no-border">
+                        <div class="media">
+                          <span class="pull-left thumb-sm"><img class="img-circle" alt="..." src="../icon.png"></span>
+                          <div class="pull-right text-success m-t-sm">
+                            <a href="execute.html?id=1" class="text-jzj">已处理</a>
+                          </div>
+                          <div class="media-body">
+                            <div><a href="">Chris Fox</a></div>
+                            <small class="text-muted">about 2 minutes ago</small>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item no-radius no-bg no-border">
+                        <div class="media">
+                          <span class="pull-left thumb-sm"><img class="img-circle" alt="..." src="../icon.png"></span>
+                          <div class="pull-right text-muted m-t-sm">
+                            <a href="execute.html?id=2" class="text-jzj">已处理</a>
+                          </div>
+                          <div class="media-body">
+                            <div><a href="">Amanda Conlan</a></div>
+                            <small class="text-muted">about 2 hours ago</small>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item no-radius no-bg no-border">
+                        <div class="media">
+                          <span class="pull-left thumb-sm"><img class="img-circle" alt="..." src="../icon.png"></span>
+                          <div class="pull-right text-warning m-t-sm">
+                            <a href="execute.html?id=3" class="text-jzj">已处理</a>
+                          </div>
+                          <div class="media-body">
+                            <div><a href="">Dan Doorack</a></div>
+                            <small class="text-muted">3 days ago</small>
+                          </div>
+                        </div>
+                      </li>                  
+                    </ul>
+                </div>
+                <hr>
+                <div class="row execute-task m-t wrapper-lr">
+                    <button class="btn btn-md btn-block bg-jzj btn-logout">注销(<span class="userLogin"></span>)</button>
+                </div>
+            </div>
+        </div>
+      </div>  
+  </body>
+</html>

@@ -216,7 +216,7 @@ app.controller('TaskFlowItem1Ctrl',['$scope','flowDatas','sellerShops','taskType
 		$scope.shopOrderCount = 1;
 	};
 	var loadShop = function(platformId){
-		sellerShops.query(userId, platformId).then(function(result){
+		sellerShops.query(platformId).then(function(result){
 	      $scope.shops = result;
 	      angular.forEach($scope.shops,function(value){
 			  if(value.shopId == $scope.selectedShop){
