@@ -128,17 +128,18 @@ chrome.extension.onRequest.addListener(
 			storage.saveFlowDesc(flow.getFlowDesc());
    			break;
    		case "init":
-   			ajaxGet(getGlobalConfig().API.HOST + '/ShopTask/' + reqMsg.data.taskId, {}, function(data){
-   				flow.init(reqMsg.data.taskId,JSON.parse(data.taskDetail));
+   			var ajax = new ajaxService();
+   			ajax.getTaskData(reqMsg.data.taskId,function(data){
+   				flow.init(reqMsg.data.taskId,JSON.parse(data.taskDetail),getTmallTemplate());
    				storage.clearFlowDesc();
 				storage.saveFlowDesc(flow.getFlowDesc());
-   			},function(error){
-   				console.log(error);
+   			},function(reason){
+   				console.log(reason);
    			}); 
    			break;
    		case "start":
    			//开始购物流程
-   			flow.start();  			
+   			flow.start(reqMsg.data.taskId,reqMsg.data.taskBuyerId);  			
    			break;
    		case "pause":
    			//暂停购物流程
@@ -235,29 +236,26 @@ chrome.extension.onRequest.addListener(
 /*负责执行购物流程代码*/
 function shoppingFlow(){
 
-	var template = JSON.stringify({"pretreatment": [{"url": "http://www.tmall.com/", "desc": "搜索商品，关键字【@keyword】", "define": "", "script": "keywork = \"@keyword\";$(\"input#mq\").val(keywork);$(\"form.mallSearch-form button:submit\").click(function(){ callback({status:STATUS.UNKNOW});}).click();"}, {"url": "#", "desc": "选择类别【@category】", "define": "", "script": "category = \"@category\";$(\"a[title^='\" + category + \"']\").click(function(){ callback({status:STATUS.UNKNOW});}).get(0).click();"}, {"url": "#", "desc": "设定价格范围【@minprice】-【@maxprice】", "define": "", "script": "startPrice = @minprice;endPrice = @maxprice;if(startPrice>=0){ $(\"input[name='start_price']\").val(startPrice);}if(startPrice > 0){ $(\"input[name='end_price']\").val(endPrice);}$(\"#J_FPEnter\").click(function(){ callback({status:STATUS.UNKNOW});}).get(0).click();"}, {"url": "#", "desc": "随机访问4个商品，浏览时间大概3分钟", "define": "", "script": "var p = $(\"p.productTitle a\");p.each(function(){ $(this).attr(\"target\", \"_blank\");});var json = {};var jsList = [];var list = getRandom(p,4);for(var i=0; i<list.length; i++){ p.get(list[i]).click(); jsList.push(p.eq(list[i]).attr(\"href\"));sleep(10*(i+1));}json.url = jsList;run(5);"}, {"url": "#", "desc": "打开指定商品浏览，浏览时间大概3分钟", "define": "", "script": "var real_url = \"@productUrl\";callback({status:STATUS.UNKNOW});window.location.href = real_url;"}, {"url": "#", "desc": "进入店家店铺", "define": "", "script": "$(\"a.enterShop\").removeAttr(\"target\");$(\"a.enterShop\").click(function(){sleep(10);callback({status:STATUS.UNKNOW});}).get(0).click();"}, {"url": "http://@shopName.tmall.com/search.htm?spm=a1z10.5-b.w5842-9363500331.1.qThoFI&search=y", "desc": "打开店内商品列表页", "define": "", "script": "/*$(\"div.navs a.navlist3\").removeAttr(\"target\");$(\"div.navs a.navlist3\").click(function(){ callback({status:STATUS.UNKNOW});}).get(0).click();*/"}, {"url": "#", "desc": "随机打开4个商品，浏览时间大概4分钟", "define": "", "script": "var p = $(\"a.item-name\");p.each(function(){ $(this).attr(\"target\", \"_blank\");});var json = {};var jsList = [];var list = getRandom(p,4);for(var i=0; i<list.length; i++){ p.get(list[i]).click(); jsList.push(p.eq(list[i]).attr(\"href\")); sleep(10*(i+1));}json.url = jsList;go(9);"}, {"url": "#", "desc": "购物流程已暂停。需要人工介入，请跟客服聊天，聊天完毕之后，请点击继续按钮，流程继续。", "define": "", "script": "pause(\"在线客服聊天\");"}], "product": [{"url": "@productUrl", "desc": "打开要购买的商品", "define": "", "script": "document.cookie = \"cart=\" + $(\"a.sn-cart-link\").text().replace(/[^\\d]/g, \"\") + \";\";$(\"div.tb-btn-basket a\").click(function(){ callback({status:STATUS.UNKNOW,delay:5000});}).get(0).click();"}, {"url": "#", "desc": "加入购物车", "define": "", "script": "var list = document.cookie.split(\";\");for(var i=0; i<list.length; i++){ var str = list[i].split(\"=\"); if(str[0].replace(/(^\\s)*|(\\s$)*/g, \"\") == \"cart\"){ if($(\"a.sn-cart-link\").text().replace(/[^\\d]/g, \"\") > str[1].replace(/(^\\s)*|(\\s$)*/g, \"\")){ callback({status:STATUS.UNKNOW}); }else{ callback({status:STATUS.FAIL}); } }}"}], "steps": [{"url": "http://cart.tmall.com/cart.htm", "desc": "查看购物车，准备结算。", "define": "", "script": "$(\"input.J_CheckBoxItem\").first().click();$.wait(function(){ return $(\"#J_Go\").is(\":enabled\"); }).done(function(){ $(\"#J_Go\").click(function(){ callback({statue:STATUS.UNKNOW}); }).get(0).click();}).fail(function(){ callback({status:STATUS.FAIL,message:\"Wait timeout\"});});"}, {"url": "#", "desc": "提交订单。", "define": "", "script": "$.wait(function(){return $(\"#J_Go\").is(\":enabled\"); }).done(function(){ $(\"#J_Go\").click(function(){ callback({statue:STATUS.UNKNOW}); }).get(0).click();}).fail(function(){callback({status:STATUS.FAIL,message:\"Wait timeout\"});});"}, {"url": "#", "desc": "购物流程已暂停。需要人工介入，请支付，支付完成后，请点击继续，流程自动结束完成。", "define": "", "script": "pause(\"支付\");"}], "local": "function getRandom(e,n){ var list = []; if(e.length < n){ n = e.length; } while(list.length < n){ var bl = true; var r = Math.floor(Math.random() * e.length); for(var i=0; i<list.length; i++){ if(list[i] == r){ bl = false; } } if(bl){ list.push(r); } } return list;}", "flowDesc": [{"index": "0", "desc": "搜索商品"}, {"index": "1", "desc": "按类别筛选商品"}, {"index": "2", "desc": "按价格筛选商品"}, {"index": "3", "desc": "随机浏览4个商品"}, {"index": "4", "desc": "浏览商品"}, {"index": "5", "desc": "进入店铺"}, {"index": "6", "desc": "打开店内商品列表页"}, {"index": "7", "desc": "随机浏览4个商品"}, {"index": "8", "desc": "在线客服聊天"}, {"index": "9", "desc": "添加购物车"}, {"index": "10", "desc": "查看购物车"}, {"index": "11", "desc": "提交订单"}, {"index": "12", "desc": "支付"}]});
-
-	
-
-	var _this = this; 
+	var me = this; 
 	var delay = 10 * 1000;
 	var tabId = -1;	
 	var retryTimes = 0;
 	//var isRunning = false;
 	
-	_this.templateData = {};
-	_this.currStepIndex = -1;	
-	_this.currStep = {};
-	_this.status = statusType.READY;
-	_this.taskData = {};
-	_this.taskId = -1;
+	me.templateData = {};
+	me.currStepIndex = -1;	
+	me.currStep = {};
+	me.status = statusType.READY;
+	me.taskData = {};
+	me.taskId = -1;
+	me.taskBuyerId = -1;
 
 	/*设置retry次数*/
-	_this.setRetryTimes = function(value){
+	me.setRetryTimes = function(value){
 		retryTimes = value;
 	};
 	/*获取retry次数*/
-	_this.getRetryTimes = function(){
+	me.getRetryTimes = function(){
 		return retryTimes;
 	};
 	/*把模板的参数调换成真实的值*/
@@ -272,105 +270,107 @@ function shoppingFlow(){
 		return JSON.parse(tplStr);
 	};
 	/*初始化任务数据*/
-	_this.init = function(taskId,data){
-		_this.taskId = taskId;
-		_this.templateData = {};
+	me.init = function(taskId,taskDetails,template){
+		me.taskId = taskId;
+		me.templateData = {};
 		/*保存任务数据，准备开始调换数据*/
-		if(typeof data == "object"){
-			data = JSON.stringify(data);
+		if(typeof taskDetails == "object"){
+			taskDetails = JSON.stringify(taskDetails);
 		}
-		_this.taskData = JSON.parse(data);
-		_this.templateData = replaceTemplate(_this.taskData,template);
+		me.taskData = JSON.parse(taskDetails);
+		me.templateData = replaceTemplate(me.taskData,JSON.stringify(template));
 	};
 	/*开始执行购物流程*/
-	_this.start = function(){
+	me.start = function(taskId,taskBuyerId){
 		if(isRunning()){
 			alert("正在执行任务，如果需要重新开始，请先结束正在执行的任务，然后重试！");
 			return;
 		}	
+		me.taskId = taskId;
+		me.taskBuyerId = taskBuyerId;
 		chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-			chrome.tabs.update(tabs[0].id,{url:_this.currStep.url}, function(tab){
+			chrome.tabs.update(tabs[0].id,{url:me.currStep.url}, function(tab){
 				tabId = tabs[0].id;
-				_this.currStepIndex = -1;	
+				me.currStepIndex = -1;	
 				if(!hasNextStep()){
 					alert("流程已经结束。");
 					return;
 				}
 				
-				_this.status = statusType.RUNNING;	
-				_this.currStep = getNextStep();
-				storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status);
+				me.status = statusType.RUNNING;	
+				me.currStep = getNextStep();
+				storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status);
 				execute();
 			});
 		});
 	};
 	/*暂停购物流程*/
-	_this.pause = function(){
+	me.pause = function(){
 		if(isRunning()){
 			//TODO：暂停购物流程，先把之前的数据暂存起来	
 		}
-		_this.status = statusType.PAUSE;		
-		setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+		me.status = statusType.PAUSE;		
+		setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 	};
 	/*停止购物流程*/
-	_this.stop = function(){		
+	me.stop = function(){		
 		if(isRunning()){
 			//TODO：如果任务正在执行，处理停止过程需要保存的数据
 			
 		}
 		storage.clearFlowDesc();
 		storage.clearFlowData();		
-		_this.status = statusType.STOP;
-		setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+		me.status = statusType.STOP;
+		setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 	};
 	/*停止购物流程*/
-	_this.errorHandler = function(errorMsg){			
-		_this.status = statusType.ERROR;
-		_this.currStep.desc = errorMsg;
-		setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+	me.errorHandler = function(errorMsg){			
+		me.status = statusType.ERROR;
+		me.currStep.desc = errorMsg;
+		setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 	};
 	/*重试当前步购物流程*/
-	_this.retry = function(currIndex){
+	me.retry = function(currIndex){
 		if(isRunning()){
 			alert("正在执行任务，如果需要重试当前步骤，请先结束正在执行的任务，然后重试！");
 			return;
 		}
-		_this.currStepIndex = currIndex - 1;
+		me.currStepIndex = currIndex - 1;
 		if(!hasNextStep()){
-			_this.status = statusType.FINISH
-			setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+			me.status = statusType.FINISH
+			setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 			alert("流程已经结束。");
 			return;
 		}
-		_this.currStep = getNextStep();
+		me.currStep = getNextStep();
 		
-		_this.status = statusType.RUNNING;	
-		setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+		me.status = statusType.RUNNING;	
+		setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 		execute();
 	};
 	/*继续下一步购物流程*/
-	_this.continue = function(currIndex){
+	me.continue = function(currIndex){
 		if(isRunning()){
 			alert("正在执行任务，如果需要继续下一步，请先结束正在执行的任务，然后重试！");
 			return;
 		}
-		_this.currStepIndex = currIndex;
+		me.currStepIndex = currIndex;
 		if(!hasNextStep()){
-			_this.status = statusType.FINISH
-			setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+			me.status = statusType.FINISH
+			setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 			alert("流程已经结束。");
 			return;
 		}
-		_this.currStep = getNextStep();
+		me.currStep = getNextStep();
 		
-		_this.status = statusType.RUNNING;	
-		setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+		me.status = statusType.RUNNING;	
+		setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 
 		execute();
 	};
 	/*下一步购物流程*/
-	_this.next = function(){
-		if(_this.status==statusType.PAUSE){
+	me.next = function(){
+		if(me.status==statusType.PAUSE){
 			return;
 		}
 		if(!isRunning()){
@@ -379,75 +379,81 @@ function shoppingFlow(){
 		}
 
 		if(!hasNextStep()){
-			_this.status = statusType.FINISH
-			setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+			me.status = statusType.FINISH
+			setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 			alert("流程已经结束。");
 			return;
 		}
-		_this.currStep = getNextStep();
+		me.currStep = getNextStep();
 		
-		_this.status = statusType.RUNNING;	
-		setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+		me.status = statusType.RUNNING;	
+		setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 		execute();
 	};
 	/*goto到购物流程的某一步*/
-	_this.go = function(stepIndex){
+	me.go = function(stepIndex){
 		if(!isRunning()){
 			alert("流程已经终止，请重新开始。");
 			return;	
 		}
-		_this.currStepIndex = stepIndex - 1;
+		me.currStepIndex = stepIndex - 1;
 		if(!hasNextStep()){
-			_this.status = statusType.FINISH
-			setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+			me.status = statusType.FINISH
+			setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 			alert("流程已经结束。");
 			return;
 		}
-		_this.status = statusType.RUNNING;
-		_this.currStep = getNextStep();
-		setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+		me.status = statusType.RUNNING;
+		me.currStep = getNextStep();
+		setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 		execute();
 	};
 	/*继续运行购物流程某一步*/
-	_this.run = function(stepIndex){
+	me.run = function(stepIndex){
 		if(!isRunning()){
 			alert("流程已经终止，请重新开始。");
 			return;	
 		}
-		_this.currStepIndex = stepIndex - 1;
+		me.currStepIndex = stepIndex - 1;
 		/* only run script */
 		if(!hasNextStep()){
-			_this.status = statusType.FINISH
-			setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
+			me.status = statusType.FINISH
+			setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
 			alert("流程已经结束。");
 			return;
 		}
-		_this.status = statusType.RUNNING;
-		_this.currStep = getNextStep();
-		setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);
-		_this.currStep.url = '#';
+		me.status = statusType.RUNNING;
+		me.currStep = getNextStep();
+		setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);
+		me.currStep.url = '#';
 		execute();
 	};
 	/*脚本注入不成功重做一次*/
-	_this.resume = function(){
+	me.resume = function(){
 		console.log("resume task");
 		execute();
 	};
-	_this.getStatus = function(){
-		return _this.status;
+	/*更新task状态*/
+	var updateTaskStatus = function(){
+
 	};
+	/*获取流程状态*/
+	me.getStatus = function(){
+		return me.status;
+	};
+	/*判断流程是否running*/
 	var isRunning = function(){
-		return _this.status == statusType.RUNNING;
+		return me.status == statusType.RUNNING;
 	};
 	/*执行购物流程的细节*/
 	var execute = function(){
 		try{
 			/*开始执行脚本*/
-			if(_this.currStep.url != '$' && _this.currStep.url != '#'){
+			if(me.currStep.url != '$' && me.currStep.url != '#'){
 				//打开URL
 				chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-					chrome.tabs.update(tabs[0].id,{url:_this.currStep.url}, function(tab){
-						console.log('open link:' + _this.currStep.url);
+					chrome.tabs.update(tabs[0].id,{url:me.currStep.url}, function(tab){
+						console.log('open link:' + me.currStep.url);
 						insertScript();
 					});
 				});
@@ -456,8 +462,8 @@ function shoppingFlow(){
 				insertScript();
 			}
 		}catch(e){
-			_this.status = statusType.ERROR;
-			setTimeout(function(){ storage.setFlowData(_this.taskId,_this.currStepIndex,_this.currStep,_this.status); },delay);			
+			me.status = statusType.ERROR;
+			setTimeout(function(){ storage.setFlowData(me.taskId,me.taskBuyerId,me.currStepIndex,me.currStep,me.status); },1000);			
 			console.log("流程执行出错：" + e.message);
 		}				
 	};
@@ -477,7 +483,7 @@ function shoppingFlow(){
 			_script.push('var node = document.createElement("script");');
 			_script.push('node.setAttribute("name", "' + name + '");');
 			_script.push('node.setAttribute("type", "text/javascript");');
-			_script.push('node.textContent = "handlerTemplateData(JSON.parse(unescape(\'' + escape(JSON.stringify(_this.currStep))+ '\')))";');			
+			_script.push('node.textContent = "handlerTemplateData(JSON.parse(unescape(\'' + escape(JSON.stringify(me.currStep))+ '\')))";');			
 			_script.push('document.body.appendChild(node);}catch(e){console.error(e)}');			
 
 			function exe(){
@@ -491,7 +497,7 @@ function shoppingFlow(){
 						},function(){
 							/*保存执行信息*/
 							var ajax = new ajaxService();
-							ajax.addTaskBuyerActivityDetail({"tbActivityId":_this.taskId,"stepData":{"stepName":_this.templateData.flowDesc[currStepIndex].desc,"stepDesc":_this.currStep.desc}});
+							ajax.addTaskBuyerActivityDetail({"tbActivityId":me.taskBuyerId,"stepData": JSON.stringify({"stepName":me.templateData.flowDesc[me.currStepIndex].desc,"stepDesc":me.currStep.desc})});
 						});	
 						console.log("end insert javascript");
 					}else{
@@ -509,23 +515,23 @@ function shoppingFlow(){
 	};
 	/*判断是否有下一步*/
 	var hasNextStep = function(){
-		return _this.currStepIndex < (_this.templateData.pretreatment.length + _this.templateData.product.length + _this.templateData.steps.length - 1);
+		return me.currStepIndex < (me.templateData.pretreatment.length + me.templateData.product.length + me.templateData.steps.length - 1);
 	};
 	/*获取下一步执行数据*/
 	var getNextStep = function(){
 		/*如果执行下一步，说明retry可能成功，清除计数器*/
-		_this.setRetryTimes(0);
-		_this.currStepIndex++;
-		if(_this.currStepIndex < _this.templateData.pretreatment.length){
-			return _this.templateData.pretreatment[_this.currStepIndex];
-		}else if(_this.currStepIndex < _this.templateData.product.length + _this.templateData.pretreatment.length){
-			return _this.templateData.product[_this.currStepIndex - _this.templateData.pretreatment.length];
+		me.setRetryTimes(0);
+		me.currStepIndex++;
+		if(me.currStepIndex < me.templateData.pretreatment.length){
+			return me.templateData.pretreatment[me.currStepIndex];
+		}else if(me.currStepIndex < me.templateData.product.length + me.templateData.pretreatment.length){
+			return me.templateData.product[me.currStepIndex - me.templateData.pretreatment.length];
 		}else{
-			return _this.templateData.steps[_this.currStepIndex - _this.templateData.product.length - _this.templateData.pretreatment.length];
+			return me.templateData.steps[me.currStepIndex - me.templateData.product.length - me.templateData.pretreatment.length];
 		}		
 	};
-	_this.getFlowDesc = function(){
-		return _this.templateData.flowDesc;
+	me.getFlowDesc = function(){
+		return me.templateData.flowDesc;
 	};
 
 }
@@ -543,12 +549,12 @@ function storageService(){
 		}
 	};
 	/*保存流程信息*/
-	this.setFlowData = function(taskId,currStepIndex,currStep,status){
+	this.setFlowData = function(taskId,taskBuyerId,currStepIndex,currStep,status){
 		var flowData = window.localStorage.getItem("flowData");
 		if(flowData!=null&&flowData!=undefined){
 			window.localStorage.removeItem("flowData");
 		}
-		var jsonFlowData = {"taskId":taskId,"currStepIndex":currStepIndex,"currStep":currStep,"status":status};
+		var jsonFlowData = {"taskId":taskId,"taskBuyerId":taskBuyerId,"currStepIndex":currStepIndex,"currStep":currStep,"status":status};
 		console.log("jsonFlowData:" + JSON.stringify(jsonFlowData));
 		window.localStorage.setItem("flowData", JSON.stringify(jsonFlowData));
 	};

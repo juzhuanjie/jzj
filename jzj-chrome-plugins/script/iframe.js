@@ -13,31 +13,27 @@ $(function(){
 	initAccount();
 
 	/*初始化Task列表*/
-	function initTaskList(){		
-		ajaxGet(getGlobalConfig().API.HOST + '/VWShopTask/getTaskForBuyer', { },				
-			function success(data,status,xhr){	
-				$('.taskTab .task-item .task-item-li').remove();
-				$.each(data,function(i,n){
-					var $taskItem = $('.taskTab .task-item');
-					var $li = $taskItem.find('.task-item-template').clone();
-					$li.removeClass('hide').removeClass('task-item-template').addClass('task-item-li');
-					var $pImage = $li.find('.product-image');
-					var $tbId = $li.find('.task-id');
-					var $tbDeleteId = $li.find('.task-delete');
-					var $pName= $li.find('.product-name');
-					var $pDesc = $li.find('.product-desc');
-					//$pImage.attr('src',n.productImage);
-					$tbId.bind("click",function(){ goToExecute(n.taskId); });
-					//TODO: 只是为了测试用，后期需要删除
-					$tbDeleteId.bind("click",function(){ deleteTask(n.taskId); });
-					$pName.text(n.productName).bind("click",function(){ goToExecute(n.taskId); });
-					$pDesc.text('颜色：' + JSON.parse(n.productDesc).color + ' | 尺寸：' + JSON.parse(n.productDesc).size);
-					$taskItem.append($li);
-				});
-			},function error(error){
-
-			}
-		);
+	function initTaskList(){	
+		ajax.getTaskForBuyer(function(data){
+			$('.taskTab .task-item .task-item-li').remove();
+			$.each(data,function(i,n){
+				var $taskItem = $('.taskTab .task-item');
+				var $li = $taskItem.find('.task-item-template').clone();
+				$li.removeClass('hide').removeClass('task-item-template').addClass('task-item-li');
+				var $pImage = $li.find('.product-image');
+				var $tbId = $li.find('.task-id');
+				var $tbDeleteId = $li.find('.task-delete');
+				var $pName= $li.find('.product-name');
+				var $pDesc = $li.find('.product-desc');
+				//$pImage.attr('src',n.productImage);
+				$tbId.bind("click",function(){ goToExecute(n.taskId); });
+				//TODO: 只是为了测试用，后期需要删除
+				$tbDeleteId.bind("click",function(){ deleteTask(n.taskId); });
+				$pName.text(n.productName).bind("click",function(){ goToExecute(n.taskId); });
+				$pDesc.text('颜色：' + JSON.parse(n.productDesc).color + ' | 尺寸：' + JSON.parse(n.productDesc).size);
+				$taskItem.append($li);
+			});
+		});	
 	};
 	/*跳转到执行tab*/
 	function goToExecute(id){
@@ -76,55 +72,45 @@ $(function(){
 		var $totalPoints = $(".total-points");
 		var $totalCash = $(".total-cash");
 		$userLogin.text(userLogin);
-		ajaxGet(getGlobalConfig().API.HOST + '/query/balance', { },				
-			function success(data,status,xhr){	
-				$totalPoints.text(data.points);
-				$totalCash.text(data.cash);
-			},function error(error){
-
-			}
-		);
+		ajax.queryBalance(function(data){
+			$totalPoints.text(data.points);
+			$totalCash.text(data.cash);
+		});
 	};
 	/*初始化准备执行信息*/
 	function initExecuteTask(taskId){
-		//var taskId = getQueryString('id');
-		ajaxGet(getGlobalConfig().API.HOST + '/VWShopTask/getTaskForBuyer', { },				
-			function success(data,status,xhr){	
-				$('.executeTab .task-item li.curr-item').remove();
-				$.each(data,function(i,n){			
-					if(n.taskId == taskId){
-						var $taskItem = $('.executeTab .task-item');						
-						var $li = $taskItem.find('.task-item-template').clone();
-						$li.removeClass('hide').removeClass('task-item-template').addClass('curr-item');
-						var $pImage = $li.find('.product-image');
-						var $pName= $li.find('.product-name');
-						var $pDesc = $li.find('.product-desc');
-						//$pImage.attr('src',n.productImage);					
-						$pName.attr("taskid",n.taskId).text(n.productName);
-						$pDesc.text('颜色：' + JSON.parse(n.productDesc).color + ' | 尺寸：' + JSON.parse(n.productDesc).size);						
-						$taskItem.append($li);
-						chrome.extension.sendRequest({command:"init",message: "",data:{"taskId":n.taskId}}, function(response) {
-							setTimeout(function(){
-								var flowDesc = flowStorage.getFlowDesc();	
-								console.log(flowDesc);
-								if(flowDesc==null&&flowDesc==undefined){
-									/*准备开始执行任务，初始化flowitem*/
-									chrome.extension.sendRequest({command:"getFlowDesc",message: "",data:""}, function(response) {
-										/*获取流程的执行描述信息*/
-										refreshFlowData();
-									});
-								}else{
+		ajax.getTaskForBuyer(function(data){
+			$('.executeTab .task-item li.curr-item').remove();
+			$.each(data,function(i,n){			
+				if(n.taskId == taskId){
+					var $taskItem = $('.executeTab .task-item');						
+					var $li = $taskItem.find('.task-item-template').clone();
+					$li.removeClass('hide').removeClass('task-item-template').addClass('curr-item');
+					var $pImage = $li.find('.product-image');
+					var $pName= $li.find('.product-name');
+					var $pDesc = $li.find('.product-desc');
+					//$pImage.attr('src',n.productImage);					
+					$pName.attr("taskid",n.taskId).text(n.productName);
+					$pDesc.text('颜色：' + JSON.parse(n.productDesc).color + ' | 尺寸：' + JSON.parse(n.productDesc).size);						
+					$taskItem.append($li);
+					chrome.extension.sendRequest({command:"init",message: "",data:{"taskId":n.taskId}}, function(response) {
+						setTimeout(function(){
+							var flowDesc = flowStorage.getFlowDesc();	
+							console.log(flowDesc);
+							if(flowDesc==null&&flowDesc==undefined){
+								/*准备开始执行任务，初始化flowitem*/
+								chrome.extension.sendRequest({command:"getFlowDesc",message: "",data:""}, function(response) {
+									/*获取流程的执行描述信息*/
 									refreshFlowData();
-								}
-							},3000);														
-						});
-					}					
-				});
-			},function error(error){
-
-			}
-		);		
-
+								});
+							}else{
+								refreshFlowData();
+							}
+						},3000);														
+					});
+				}					
+			});
+		});
 	};
 	/*加载执行任务的步骤信息*/
 	function refreshFlowData(){
@@ -212,8 +198,9 @@ $(function(){
 	/*{id : 5, name : "已完成"}	*/
 	$('.btn-execute').click(function(){
 		var taskid = $(".task-item li.curr-item:first").find(".product-name").attr("taskid");
-		ajax.addTaskBuyer({"userId":userId,"taskId":taskid,"statusId":1},function(data){
-			chrome.extension.sendRequest({command:"start",message: "",data:{"taskId":taskid}}, function(response) {
+		ajax.addTaskBuyer({"userId":userId,"taskId":taskid,"statusId":1},function(taskBuyerData){
+			//TODO: 需要这个taskBuyerId去提交数据
+			chrome.extension.sendRequest({command:"start",message: "",data:{"taskId":taskid,"taskBuyerId":taskBuyerData.taskBuyerId}}, function(response) {
 				deactiveBtn($('.btn-execute'));
 			});
 		},function(reason){

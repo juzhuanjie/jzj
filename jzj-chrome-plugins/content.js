@@ -3,22 +3,6 @@
 
 (function() {
 
-	// function insertIframe(){
-	// 	/*注入Iframe*/
-	// 	var iframe = document.createElement("iframe");
-	// 	iframe.setAttribute("id","step-iframe");
-	// 	iframe.style.position = "fixed";
-	// 	iframe.style.right = "5px";
-	// 	iframe.style.top = "5px";
-	// 	iframe.style.width = "320px";
-	// 	iframe.style.height = "600px";
-	// 	iframe.style.background = "#2F373D";		
-	// 	iframe.style.zIndex = "10000";		
-	// 	iframe.style.border = "2px solid #ccc";		
-	// 	iframe.setAttribute("src",chrome.extension.getURL("index.html"));
-	// 	document.body.appendChild(iframe);
-	// };
-
 	function init(){
 		if (!document.getElementById("jzj_cdn_jquery")) {
 			/*注入处理任务流程的script*/
